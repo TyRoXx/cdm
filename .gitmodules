@@ -1,0 +1,3 @@
+[submodule "dependencies/silicium"]
+	path = dependencies/silicium
+	url = https://github.com/TyRoXx/silicium.git

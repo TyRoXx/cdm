@@ -12,6 +12,7 @@ clone_depth: 1
 os: Windows Server 2012 R2
 
 before_build:
+  - git submodule update --init
   - mkdir build
   - cd build
   - cmake -G "Visual Studio 12" -DBOOST_ROOT=c:\Libraries\boost ..

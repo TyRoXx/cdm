@@ -127,7 +127,7 @@ if(WIN32)
 	add_definitions("-DBOOST_ASIO_HAS_IOCP")
 endif()
 
-set(SILICIUM_INCLUDE_DIR "" CACHE TYPE PATH)
+set(SILICIUM_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/silicium CACHE TYPE PATH)
 include_directories(${SILICIUM_INCLUDE_DIR})
 
 add_definitions("-DSILICIUM_NO_DEPRECATED")
