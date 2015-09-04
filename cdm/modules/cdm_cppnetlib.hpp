@@ -18,14 +18,14 @@ namespace cdm
 		Si::absolute_path const &temporary,
 		Si::absolute_path const &install_root,
 		Si::absolute_path const &cmake_exe,
-		unsigned make_parallelism)
+		unsigned make_parallelism,
+		Si::Sink<char, Si::success>::interface &output)
 	{
 		Si::absolute_path const module_in_cache = install_root / Si::relative_path("cppnetlib");
 		if (!Si::file_exists(module_in_cache, Si::throw_))
 		{
 			Si::absolute_path const &build_dir = temporary;
 			Si::create_directories(build_dir, Si::throw_);
-			auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
 			{
 				std::vector<Si::os_string> arguments;
 				arguments.push_back(cppnetlib_source.c_str());

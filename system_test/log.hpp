@@ -1,0 +1,70 @@
+#ifndef CDM_SYSTEM_TEST_LOG_HPP
+#define CDM_SYSTEM_TEST_LOG_HPP
+
+#include <silicium/sink/append.hpp>
+
+namespace cdm
+{
+	namespace detail
+	{
+		template <class NextSink>
+		struct program_output_printer
+		{
+			typedef char element_type;
+			typedef Si::success error_type;
+
+			explicit program_output_printer(NextSink next)
+				: m_next(std::move(next))
+				, m_needs_indentation(true)
+			{
+			}
+
+			error_type append(Si::iterator_range<element_type const *> data)
+			{
+				auto written = data.begin();
+				for (;;)
+				{
+					if (written == data.end())
+					{
+						return error_type();
+					}
+					if (m_needs_indentation)
+					{
+						Si::append(m_next, '\t');
+						m_needs_indentation = false;
+					}
+					element_type const * const end_of_line = std::find(written, data.end(), '\n');
+					if (end_of_line == data.end())
+					{
+						return m_next.append(Si::make_iterator_range(written, data.end()));
+					}
+					auto write_until = end_of_line + 1;
+					error_type error = m_next.append(Si::make_iterator_range(written, write_until));
+					if (error)
+					{
+						return error;
+					}
+					written = write_until;
+					m_needs_indentation = true;
+				}
+			}
+
+		private:
+
+			NextSink m_next;
+			bool m_needs_indentation;
+		};
+	}
+
+	template <class NextSink>
+	auto make_program_output_printer(NextSink &&next)
+	{
+		return Si::Sink<char, Si::success>::erase(
+			Si::Sink<char, Si::success>::make_box(
+				detail::program_output_printer<typename std::decay<NextSink>::type>(std::forward<NextSink>(next))
+			)
+		);
+	}
+}
+
+#endif

@@ -1,4 +1,5 @@
 #include "../../cdm/building_configure/configure.hpp"
+#include "log.hpp"
 #include <boost/test/unit_test.hpp>
 #include <silicium/file_operations.hpp>
 #include <silicium/sink/ostream_sink.hpp>
@@ -18,7 +19,7 @@ BOOST_AUTO_TEST_CASE(test_run_configure_command_line)
 	Si::recreate_directories(temporary_root, Si::throw_);
 	Si::absolute_path const configure = temporary_root / Si::relative_path("configure");
 	Si::absolute_path const &application = using_gtest_source;
-	auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
+	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
 	Si::absolute_path const modules = temporary_root / Si::relative_path("modules");
 	Si::create_directories(modules, Si::throw_);
 	Si::absolute_path const application_build = temporary_root / Si::relative_path("application_build");

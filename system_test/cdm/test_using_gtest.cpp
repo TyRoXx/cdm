@@ -1,5 +1,6 @@
 #define CDM_CONFIGURE_NAMESPACE t1185ace
 #include "../../cdm/application/using_gtest/cdm.hpp"
+#include "log.hpp"
 #include <boost/test/unit_test.hpp>
 
 namespace
@@ -20,7 +21,7 @@ BOOST_AUTO_TEST_CASE(test_using_gtest)
 	Si::recreate_directories(module_temporaries, Si::throw_);
 	Si::recreate_directories(module_permanent, Si::throw_);
 	Si::recreate_directories(application_build_dir, Si::throw_);
-	auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
+	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
 	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, module_permanent, app_source, application_build_dir, output);
 	{
 		std::vector<Si::os_string> arguments;

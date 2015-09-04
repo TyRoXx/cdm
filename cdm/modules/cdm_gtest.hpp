@@ -36,7 +36,8 @@ namespace cdm
 		Si::absolute_path const &gtest_source,
 		Si::absolute_path const &temporarily_writable,
 		Si::absolute_path const &install_root,
-		Si::absolute_path const &cmake_exe)
+		Si::absolute_path const &cmake_exe,
+		Si::Sink<char, Si::success>::interface &output)
 	{
 		Si::absolute_path const gtest_in_cache = install_root / Si::relative_path("gtest");
 		Si::relative_path const gtest_lib_name = make_static_lib_build_path(*Si::path_segment::create("gtest"));
@@ -45,7 +46,6 @@ namespace cdm
 		{
 			Si::absolute_path const build_dir = temporarily_writable / Si::relative_path("build");
 			Si::create_directories(build_dir, Si::throw_);
-			auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
 			{
 				std::vector<Si::os_string> arguments;
 				arguments.push_back(gtest_source.c_str());

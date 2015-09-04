@@ -26,7 +26,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		}
 
 		Si::absolute_path const gtest_source = *cdm / Si::relative_path("original_sources/gtest-1.7.0");
-		cdm::gtest_paths const gtest_installed = cdm::install_gtest(gtest_source, module_temporaries, module_permanent, Si::cmake_exe);
+		cdm::gtest_paths const gtest_installed = cdm::install_gtest(gtest_source, module_temporaries, module_permanent, Si::cmake_exe, output);
 
 		Si::absolute_path const cppnetlib_source = *cdm / Si::relative_path("original_sources/cpp-netlib-0.11.2-final");
 		Si::recreate_directories(module_temporaries, Si::throw_);
@@ -36,7 +36,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 #else
 			boost::thread::hardware_concurrency();
 #endif
-		cdm::cppnetlib_paths const cppnetlib_installed = cdm::install_cppnetlib(cppnetlib_source, module_temporaries, module_permanent, Si::cmake_exe, parallelism);
+		cdm::cppnetlib_paths const cppnetlib_installed = cdm::install_cppnetlib(cppnetlib_source, module_temporaries, module_permanent, Si::cmake_exe, parallelism, output);
 
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPPNETLIB_PREFIX_PATH=") + to_os_string(cppnetlib_installed.cmake_prefix_path));
