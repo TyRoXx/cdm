@@ -9,14 +9,13 @@
 namespace
 {
 	Si::absolute_path const this_file = *Si::absolute_path::create(__FILE__);
-	Si::absolute_path const test_cdm = *Si::parent(this_file);
-	Si::absolute_path const test = *Si::parent(test_cdm);
-	Si::absolute_path const silicium = *Si::parent(test);
+	Si::absolute_path const test = *Si::parent(this_file);
+	Si::absolute_path const repository = *Si::parent(test);
 }
 
 BOOST_AUTO_TEST_CASE(test_cdm_gtest)
 {
-	Si::absolute_path const source = silicium / Si::relative_path("cdm/original_sources/gtest-1.7.0");
+	Si::absolute_path const source = repository / Si::relative_path("cdm/original_sources/gtest-1.7.0");
 	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_);
 	Si::absolute_path const build_dir = tmp / *Si::path_segment::create("build");
 	Si::absolute_path const install_dir = tmp / *Si::path_segment::create("install");
@@ -32,7 +31,7 @@ BOOST_AUTO_TEST_CASE(test_cdm_gtest)
 
 BOOST_AUTO_TEST_CASE(test_cdm_cppnetlib)
 {
-	Si::absolute_path const source = silicium / Si::relative_path("cdm/original_sources/cpp-netlib-0.11.2-final");
+	Si::absolute_path const source = repository / Si::relative_path("cdm/original_sources/cpp-netlib-0.11.2-final");
 	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_);
 	Si::absolute_path const modules = tmp / *Si::path_segment::create("cdm_modules");
 	Si::recreate_directories(modules, Si::throw_);

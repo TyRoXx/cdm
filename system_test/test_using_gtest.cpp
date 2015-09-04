@@ -6,14 +6,13 @@
 namespace
 {
 	Si::absolute_path const this_file = *Si::absolute_path::create(__FILE__);
-	Si::absolute_path const test_cdm = *Si::parent(this_file);
-	Si::absolute_path const test = *Si::parent(test_cdm);
-	Si::absolute_path const silicium = *Si::parent(test);
+	Si::absolute_path const test = *Si::parent(this_file);
+	Si::absolute_path const repository = *Si::parent(test);
 }
 
 BOOST_AUTO_TEST_CASE(test_using_gtest)
 {
-	Si::absolute_path const app_source = silicium / Si::relative_path("cdm/application/using_gtest");
+	Si::absolute_path const app_source = repository / Si::relative_path("cdm/application/using_gtest");
 	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / *Si::path_segment::create("cdm_test");
 	Si::absolute_path const module_temporaries = tmp / *Si::path_segment::create("module_temporaries");
 	Si::absolute_path const module_permanent = tmp / *Si::path_segment::create("module_permanent");
