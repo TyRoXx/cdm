@@ -49,7 +49,8 @@ namespace
 		{
 			std::vector<Si::os_string> arguments;
 			{
-				Si::absolute_path const silicium = Si::parent(cdm).or_throw([] { throw std::runtime_error("Could not find the silicium directory"); });
+				Si::absolute_path const repository_root = Si::parent(cdm).or_throw([] { throw std::runtime_error("Could not find the silicium directory"); });
+				Si::absolute_path const silicium = repository_root / Si::relative_path("dependencies/silicium");
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DSILICIUM_INCLUDE_DIR=") + Si::to_os_string(silicium));
 			}
 			Si::absolute_path const modules = cdm / Si::relative_path("modules");
