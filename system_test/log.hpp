@@ -58,6 +58,9 @@ namespace cdm
 
 	template <class NextSink>
 	auto make_program_output_printer(NextSink &&next)
+#if !SILICIUM_COMPILER_HAS_AUTO_RETURN_TYPE
+		-> Si::Sink<char, Si::success>::eraser<Si::Sink<char, Si::success>::box>
+#endif
 	{
 		return Si::Sink<char, Si::success>::erase(
 			Si::Sink<char, Si::success>::make_box(
