@@ -1,0 +1,7 @@
+include_directories(.)
+include_directories(../cdm/modules)
+file(GLOB sources "*.cpp")
+file(GLOB_RECURSE headers "../cdm/modules/*.hpp")
+file(GLOB cdmSources "cdm/*.cpp")
+add_executable(system_test ${sources} ${cdmSources} ${headers})
+target_link_libraries(system_test building_configure ${Boost_LIBRARIES})

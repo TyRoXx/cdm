@@ -1,0 +1,6 @@
+include_directories(.)
+add_subdirectory(building_configure)
+add_subdirectory(configure_cmdline)
+add_subdirectory(cdm_cmdline)
+add_subdirectory(application/using_gtest)
+set_target_properties(using_gtest PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)

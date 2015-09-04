@@ -1,0 +1,42 @@
+language: cpp
+os:
+ - linux
+sudo: false
+notifications:
+ email:
+  on_success: change # [always|never|change] # default: change
+  on_failure: always # [always|never|change] # default: always
+
+addons:
+  apt:
+    sources:
+    - boost-latest
+    - ubuntu-toolchain-r-test
+    packages:
+    - g++-5
+    - g++-4.9
+    - g++-4.8
+    - g++-4.7
+    - g++-4.6
+    - libboost1.55-all-dev
+    
+env:
+ - CPP=g++-5   BUILD_TYPE=Release
+ - CPP=g++-5   BUILD_TYPE=Debug
+ - CPP=g++-4.9 BUILD_TYPE=Release
+ - CPP=g++-4.9 BUILD_TYPE=Debug
+ - CPP=g++-4.8 BUILD_TYPE=Release
+ - CPP=g++-4.8 BUILD_TYPE=Debug
+ - CPP=g++-4.7 BUILD_TYPE=Release
+ - CPP=g++-4.7 BUILD_TYPE=Debug
+ - CPP=g++-4.6 BUILD_TYPE=Release
+ - CPP=g++-4.6 BUILD_TYPE=Debug
+
+script:
+ - mkdir build
+ - cd build
+ - CXX=$CPP cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCDM_TESTS_RUNNING_ON_TRAVIS_CI=ON || exit 1
+ - cmake --build . -- -j2 || exit 1
+ - cd system_test
+ - ./system_test || exit 1
+ - valgrind --leak-check=full --error-exitcode=1 ./system_test || exit 1

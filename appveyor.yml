@@ -1,0 +1,34 @@
+# version format
+version: 0.1.{build}-{branch}
+
+branches:
+  except:
+    - gh_pages
+
+skip_tags: true
+
+clone_depth: 1
+
+os: Windows Server 2012 R2
+
+before_build:
+  - mkdir build
+  - cd build
+  - cmake -G "Visual Studio 12" -DBOOST_ROOT=c:\Libraries\boost ..
+
+build_script:
+  - cmake --build . --config Release
+
+after_build:
+
+before_test:
+
+test_script:
+  - cd system_test
+  - Release\system_test.exe
+
+after_test:
+
+on_success:
+on_failure:
+on_finish:
