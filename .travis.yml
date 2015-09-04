@@ -19,6 +19,7 @@ addons:
     - g++-4.7
     - g++-4.6
     - libboost1.55-all-dev
+    - valgrind
     
 env:
  - CPP=g++-5   BUILD_TYPE=Release
