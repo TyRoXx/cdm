@@ -19,7 +19,6 @@ addons:
     - g++-4.7
     - g++-4.6
     - libboost1.55-all-dev
-    - valgrind
     
 env:
  - CPP=g++-5   BUILD_TYPE=Release
@@ -43,4 +42,3 @@ script:
  - cmake --build . -- -j2 || exit 1
  - cd system_test
  - ./system_test || exit 1
- - valgrind --leak-check=full --error-exitcode=1 ./system_test || exit 1
