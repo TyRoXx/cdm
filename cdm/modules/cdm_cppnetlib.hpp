@@ -18,6 +18,7 @@ namespace cdm
 		Si::absolute_path const &temporary,
 		Si::absolute_path const &install_root,
 		Si::absolute_path const &cmake_exe,
+		Si::optional<Si::absolute_path> const &boost_root,
 		unsigned make_parallelism,
 		Si::Sink<char, Si::success>::interface &output)
 	{
@@ -30,7 +31,11 @@ namespace cdm
 				std::vector<Si::os_string> arguments;
 				arguments.push_back(cppnetlib_source.c_str());
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCMAKE_INSTALL_PREFIX=") + to_os_string(module_in_cache));
+#ifdef _MSC_VER
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_SHARED_LIBS=OFF"));
+#else
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_SHARED_LIBS=ON"));
+#endif
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_TESTS=OFF"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_EXPERIMENTS=OFF"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_EXAMPLES=OFF"));
@@ -38,6 +43,10 @@ namespace cdm
 				//TODO: deal with OpenSSL later..
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_ENABLE_HTTPS=OFF"));
 #endif
+				if (boost_root)
+				{
+					arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + to_os_string(*boost_root));
+				}
 				int const rc = Si::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{
@@ -45,29 +54,52 @@ namespace cdm
 				}
 			}
 			{
+#ifdef _MSC_VER
+				boost::ignore_unused_variable_warning(make_parallelism);
+				std::vector<Si::os_string> arguments;
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("CPP-NETLIB.sln"));
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("/build"));
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("Debug"));
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("/project"));
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("INSTALL"));
+				int const rc = Si::run_process(
+					*Si::absolute_path::create(L"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe"),
+					arguments, build_dir, output).get();
+				if (rc != 0)
+				{
+					throw std::runtime_error("cmake build failed");
+				}
+#else
 				std::vector<Si::os_string> arguments;
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("."));
-#ifndef _WIN32
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("--"));
+#ifndef _WIN32
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-j" + boost::lexical_cast<Si::os_string>(make_parallelism)));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("install"));
 #else
 				boost::ignore_unused_variable_warning(make_parallelism);
 #endif
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("install"));
 				int const rc = Si::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");
 				}
+#endif
 			}
 		}
 		cppnetlib_paths result;
-		result.cmake_prefix_path = module_in_cache / Si::relative_path("lib/"
-#ifndef CDM_TESTS_RUNNING_ON_TRAVIS_CI
-																	   "x86_64-linux-gnu/"
+		result.cmake_prefix_path = module_in_cache / Si::relative_path(
+#ifdef __linux__
+			"lib/"
+#if !defined(CDM_TESTS_RUNNING_ON_TRAVIS_CI)
+			"x86_64-linux-gnu/"
 #endif
-																	   "cmake");
+			"cmake"
+#else
+			"CMake"
+#endif
+		);
 		return std::move(result);
 	}
 }

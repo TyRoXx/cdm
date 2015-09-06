@@ -8,6 +8,7 @@ namespace
 	Si::absolute_path build_configure(
 		Si::absolute_path const &application_source,
 		Si::absolute_path const &temporary,
+		Si::optional<Si::absolute_path> const &boost_root,
 		Si::Sink<char, Si::success>::interface &output)
 	{
 		Si::absolute_path const cdm = Si::parent(
@@ -51,7 +52,11 @@ namespace
 			{
 				Si::absolute_path const repository_root = Si::parent(cdm).or_throw([] { throw std::runtime_error("Could not find the silicium directory"); });
 				Si::absolute_path const silicium = repository_root / Si::relative_path("dependencies/silicium");
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DSILICIUM_INCLUDE_DIR=") + Si::to_os_string(silicium));
+				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DSILICIUM_INCLUDE_DIR=") + to_os_string(silicium));
+			}
+			if (boost_root)
+			{
+				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + to_os_string(*boost_root));
 			}
 			Si::absolute_path const modules = cdm / Si::relative_path("modules");
 			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DCDM_CONFIGURE_INCLUDE_DIRS=") + Si::to_os_string(application_source) + SILICIUM_SYSTEM_LITERAL(";") + Si::to_os_string(modules));
@@ -105,10 +110,11 @@ namespace cdm
 		Si::absolute_path const &module_permanent,
 		Si::absolute_path const &application_source,
 		Si::absolute_path const &application_build_dir,
+		Si::optional<Si::absolute_path> const &boost_root,
 		Si::Sink<char, Si::success>::interface &output
 	)
 	{
-		Si::absolute_path const configure_executable = build_configure(application_source, temporary, output);
+		Si::absolute_path const configure_executable = build_configure(application_source, temporary, boost_root, output);
 		run_configure(configure_executable, module_permanent, application_source, application_build_dir, output);
 	}
 }

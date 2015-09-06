@@ -58,7 +58,7 @@ int main(int argc, char **argv)
 		);
 		Si::absolute_path const temporary_root = Si::temporary_directory(Si::throw_) / Si::relative_path("cdm_cmdline");
 		auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
-		cdm::do_configure(temporary_root, module_permanent, application_source, application_build, output);
+		cdm::do_configure(temporary_root, module_permanent, application_source, application_build, Si::none, output);
 		LOG("Your application has been configured.");
 	}
 	catch (std::exception const &ex)

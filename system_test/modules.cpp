@@ -5,6 +5,7 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/thread/thread.hpp>
 #include "log.hpp"
+#include "boost_root.hpp"
 
 namespace
 {
@@ -16,7 +17,7 @@ namespace
 BOOST_AUTO_TEST_CASE(test_cdm_gtest)
 {
 	Si::absolute_path const source = repository / Si::relative_path("cdm/original_sources/gtest-1.7.0");
-	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_);
+	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / Si::relative_path("test_cdm_gtest");
 	Si::absolute_path const build_dir = tmp / *Si::path_segment::create("build");
 	Si::absolute_path const install_dir = tmp / *Si::path_segment::create("install");
 	Si::recreate_directories(build_dir, Si::throw_);
@@ -32,7 +33,7 @@ BOOST_AUTO_TEST_CASE(test_cdm_gtest)
 BOOST_AUTO_TEST_CASE(test_cdm_cppnetlib)
 {
 	Si::absolute_path const source = repository / Si::relative_path("cdm/original_sources/cpp-netlib-0.11.2-final");
-	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_);
+	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / Si::relative_path("test_cdm_cppnetlib");
 	Si::absolute_path const modules = tmp / *Si::path_segment::create("cdm_modules");
 	Si::recreate_directories(modules, Si::throw_);
 	unsigned const make_parallelism =
@@ -44,9 +45,21 @@ BOOST_AUTO_TEST_CASE(test_cdm_cppnetlib)
 	Si::absolute_path const build_dir = tmp / *Si::path_segment::create("build");
 	Si::recreate_directories(build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
-	cdm::cppnetlib_paths const built = cdm::install_cppnetlib(source, build_dir, modules, Si::cmake_exe, make_parallelism, output);
-	BOOST_CHECK(Si::file_exists(built.cmake_prefix_path / Si::relative_path("cppnetlib/cppnetlibConfig.cmake"), Si::throw_));
-	BOOST_CHECK(Si::file_exists(built.cmake_prefix_path / Si::relative_path("cppnetlib/cppnetlibConfigVersion.cmake"), Si::throw_));
-	BOOST_CHECK(Si::file_exists(built.cmake_prefix_path / Si::relative_path("cppnetlib/cppnetlibTargets.cmake"), Si::throw_));
-	BOOST_CHECK(Si::file_exists(built.cmake_prefix_path / Si::relative_path("cppnetlib/cppnetlibTargets-noconfig.cmake"), Si::throw_));
+	cdm::cppnetlib_paths const built = cdm::install_cppnetlib(source, build_dir, modules, Si::cmake_exe, CDM_BOOST_ROOT_FOR_TESTING, make_parallelism, output);
+	Si::absolute_path const cmake_directory = built.cmake_prefix_path
+#ifndef _MSC_VER
+		/ Si::relative_path("cppnetlib")
+#endif
+		;
+	BOOST_CHECK(Si::file_exists(cmake_directory / Si::relative_path("cppnetlibConfig.cmake"), Si::throw_));
+	BOOST_CHECK(Si::file_exists(cmake_directory / Si::relative_path("cppnetlibTargets.cmake"), Si::throw_));
+	BOOST_CHECK(Si::file_exists(cmake_directory / Si::relative_path("cppnetlibConfigVersion.cmake"), Si::throw_));
+	Si::relative_path const targets(
+#ifdef _MSC_VER
+		"cppnetlibTargets-debug.cmake"
+#else
+		"cppnetlibTargets-noconfig.cmake"
+#endif
+		);
+	BOOST_CHECK(Si::file_exists(cmake_directory / targets, Si::throw_));
 }

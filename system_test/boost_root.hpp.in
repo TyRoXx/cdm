@@ -1,0 +1,8 @@
+#ifndef CDM_BOOST_ROOT_HPP
+#define CDM_BOOST_ROOT_HPP
+
+#include <silicium/absolute_path.hpp>
+
+#cmakedefine CDM_BOOST_ROOT_FOR_TESTING (::Si::absolute_path::create("@CDM_BOOST_ROOT_FOR_TESTING@"))
+
+#endif

@@ -23,5 +23,5 @@ BOOST_AUTO_TEST_CASE(test_run_configure_command_line)
 	Si::create_directories(modules, Si::throw_);
 	Si::absolute_path const application_build = temporary_root / Si::relative_path("application_build");
 	Si::create_directories(application_build, Si::throw_);
-	cdm::do_configure(temporary_root, modules, application, application_build, output);
+	cdm::do_configure(temporary_root, modules, application, application_build, Si::none, output);
 }

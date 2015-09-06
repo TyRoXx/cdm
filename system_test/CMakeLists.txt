@@ -2,5 +2,11 @@ include_directories(.)
 include_directories(../cdm/modules)
 file(GLOB sources "*.cpp" "*.hpp")
 file(GLOB_RECURSE headers "../cdm/modules/*.hpp")
-add_executable(system_test ${sources} ${headers})
+
+set(CDM_BOOST_ROOT_FOR_TESTING "" CACHE TYPE PATH)
+STRING(REGEX REPLACE "\\\\" "/" CDM_BOOST_ROOT_FOR_TESTING ${CDM_BOOST_ROOT_FOR_TESTING})
+configure_file(boost_root.hpp.in boost_root.hpp ESCAPE_QUOTES @ONLY)
+include_directories(${CMAKE_CURRENT_BINARY_DIR})
+
+add_executable(system_test ${sources} ${headers} ${CMAKE_CURRENT_BINARY_DIR}/boost_root.hpp)
 target_link_libraries(system_test building_configure ${Boost_LIBRARIES})
