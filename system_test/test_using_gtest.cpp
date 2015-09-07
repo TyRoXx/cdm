@@ -14,7 +14,7 @@ namespace
 BOOST_AUTO_TEST_CASE(test_using_gtest)
 {
 	Si::absolute_path const app_source = repository / Si::relative_path("cdm/application/using_gtest");
-	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / *Si::path_segment::create("cdm_test");
+	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / *Si::path_segment::create("cdm_test_using_gtest");
 	Si::absolute_path const module_temporaries = tmp / *Si::path_segment::create("module_temporaries");
 	Si::absolute_path const module_permanent = tmp / *Si::path_segment::create("module_permanent");
 	Si::absolute_path const application_build_dir = tmp / *Si::path_segment::create("application_build_dir");
@@ -31,6 +31,15 @@ BOOST_AUTO_TEST_CASE(test_using_gtest)
 	}
 	{
 		std::vector<Si::os_string> arguments;
-		BOOST_REQUIRE_EQUAL(0, Si::run_process(application_build_dir / *Si::path_segment::create("using_gtest"), arguments, application_build_dir, output));
+		Si::relative_path const relative(
+#ifdef _MSC_VER
+			SILICIUM_SYSTEM_LITERAL("Debug/")
+#endif
+			SILICIUM_SYSTEM_LITERAL("using_gtest")
+#ifdef _MSC_VER
+			SILICIUM_SYSTEM_LITERAL(".exe")
+#endif
+		);
+		BOOST_REQUIRE_EQUAL(0, Si::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}
 }
