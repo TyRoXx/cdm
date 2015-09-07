@@ -49,6 +49,7 @@ namespace cdm
 #ifdef _MSC_VER
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DBUILD_SHARED_LIBS=OFF"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-Dgtest_force_shared_crt=ON"));
+				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif
 				arguments.push_back(gtest_source.c_str());
 				int rc = Si::run_process(cmake_exe, arguments, build_dir, output).get();

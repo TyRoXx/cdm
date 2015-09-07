@@ -29,7 +29,6 @@ namespace cdm
 			Si::create_directories(build_dir, Si::throw_);
 			{
 				std::vector<Si::os_string> arguments;
-				arguments.push_back(cppnetlib_source.c_str());
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCMAKE_INSTALL_PREFIX=") + to_os_string(module_in_cache));
 #ifdef _MSC_VER
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_SHARED_LIBS=OFF"));
@@ -47,6 +46,10 @@ namespace cdm
 				{
 					arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + to_os_string(*boost_root));
 				}
+#ifdef _MSC_VER
+				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+#endif
+				arguments.push_back(cppnetlib_source.c_str());
 				int const rc = Si::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{
@@ -63,7 +66,7 @@ namespace cdm
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("/project"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("INSTALL"));
 				int const rc = Si::run_process(
-					*Si::absolute_path::create(L"C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe"),
+					*Si::absolute_path::create(L"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\Common7\\IDE\\devenv.exe"),
 					arguments, build_dir, output).get();
 				if (rc != 0)
 				{
