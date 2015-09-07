@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib)
 	Si::recreate_directories(module_permanent, Si::throw_);
 	Si::recreate_directories(application_build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
-	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, module_permanent, app_source, application_build_dir, CDM_BOOST_ROOT_FOR_TESTING, output);
+	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, module_permanent, app_source, application_build_dir, cdm::get_boost_root_for_testing(), output);
 	{
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));

@@ -3,6 +3,19 @@
 
 #include <silicium/absolute_path.hpp>
 
-#cmakedefine CDM_BOOST_ROOT_FOR_TESTING (::Si::absolute_path::create("@CDM_BOOST_ROOT_FOR_TESTING@"))
+#cmakedefine CDM_BOOST_ROOT_FOR_TESTING SILICIUM_SYSTEM_LITERAL("@CDM_BOOST_ROOT_FOR_TESTING@")
+
+namespace cdm
+{
+	inline Si::optional<Si::absolute_path> get_boost_root_for_testing()
+	{
+#ifdef CDM_BOOST_ROOT_FOR_TESTING
+		Si::optional<Si::absolute_path> checked = Si::absolute_path::create(CDM_BOOST_ROOT_FOR_TESTING);
+		assert(checked);
+		return checked;
+#endif
+		return Si::none;
+	}
+}
 
 #endif

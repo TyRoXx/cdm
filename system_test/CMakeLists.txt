@@ -4,7 +4,9 @@ file(GLOB sources "*.cpp" "*.hpp")
 file(GLOB_RECURSE headers "../cdm/modules/*.hpp")
 
 set(CDM_BOOST_ROOT_FOR_TESTING "" CACHE TYPE PATH)
-STRING(REGEX REPLACE "\\\\" "/" CDM_BOOST_ROOT_FOR_TESTING ${CDM_BOOST_ROOT_FOR_TESTING})
+if(CDM_BOOST_ROOT_FOR_TESTING)
+	string(REGEX REPLACE "\\\\" "/" CDM_BOOST_ROOT_FOR_TESTING ${CDM_BOOST_ROOT_FOR_TESTING})
+endif()
 configure_file(boost_root.hpp.in boost_root.hpp ESCAPE_QUOTES @ONLY)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
