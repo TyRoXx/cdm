@@ -31,6 +31,15 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib)
 	}
 	{
 		std::vector<Si::os_string> arguments;
-		BOOST_REQUIRE_EQUAL(0, Si::run_process(application_build_dir / *Si::path_segment::create("using_cppnetlib"), arguments, application_build_dir, output));
+		Si::relative_path const relative(
+#ifdef _WIN32
+			SILICIUM_SYSTEM_LITERAL("Debug/")
+#endif
+			SILICIUM_SYSTEM_LITERAL("using_cppnetlib")
+#ifdef _WIN32
+			SILICIUM_SYSTEM_LITERAL(".exe")
+#endif
+		);
+		BOOST_REQUIRE_EQUAL(0, Si::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}
 }

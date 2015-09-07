@@ -36,8 +36,12 @@ namespace
 			cmakeListsFile << "    add_definitions(-std=c++0x)\n";
 			cmakeListsFile << "  endif()\n";
 			cmakeListsFile << "endif()\n";
+			cmakeListsFile << "if(MSVC)\n";
+			cmakeListsFile << "	set(Boost_USE_STATIC_LIBS ON)\n";
+			cmakeListsFile << "endif()\n";
 			cmakeListsFile << "find_package(Boost REQUIRED filesystem coroutine program_options thread context system)\n";
-			cmakeListsFile << "include_directories(${SILICIUM_INCLUDE_DIR} ${BOOST_INCLUDE_DIR} ${CDM_CONFIGURE_INCLUDE_DIRS})\n";
+			cmakeListsFile << "include_directories(SYSTEM ${SILICIUM_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${CDM_CONFIGURE_INCLUDE_DIRS})\n";
+			cmakeListsFile << "link_directories(${Boost_LIBRARY_DIR})\n";
 			cmakeListsFile << "add_executable(configure main.cpp)\n";
 			cmakeListsFile << "target_link_libraries(configure ${Boost_LIBRARIES})\n";
 			if (!cmakeListsFile)
@@ -61,6 +65,9 @@ namespace
 			Si::absolute_path const modules = cdm / Si::relative_path("modules");
 			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DCDM_CONFIGURE_INCLUDE_DIRS=") + Si::to_os_string(application_source) + SILICIUM_SYSTEM_LITERAL(";") + Si::to_os_string(modules));
 			arguments.emplace_back(Si::to_os_string(source));
+#ifdef _MSC_VER
+			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+#endif
 			if (Si::run_process(Si::cmake_exe, arguments, build, output).get() != 0)
 			{
 				throw std::runtime_error("Could not CMake-configure the cdm configure executable");
@@ -75,7 +82,15 @@ namespace
 				throw std::runtime_error("Could not CMake --build the cdm configure executable");
 			}
 		}
-		Si::absolute_path built_executable = build / Si::relative_path("configure");
+		Si::absolute_path built_executable = build / Si::relative_path(
+#ifdef _MSC_VER
+			SILICIUM_SYSTEM_LITERAL("Debug/")
+#endif
+			SILICIUM_SYSTEM_LITERAL("configure")
+#ifdef _WIN32
+			SILICIUM_SYSTEM_LITERAL(".exe")
+#endif
+		);
 		return built_executable;
 	}
 
