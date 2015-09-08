@@ -73,7 +73,7 @@ namespace cdm
 					"project(sqlite3)\n"
 					"include_directories("
 				);
-				encode_cmake_string_literal(Si::make_contiguous_range(Si::to_os_string(original_source)), writer);
+				encode_cmake_string_literal(Si::make_contiguous_range(Si::to_utf8_string(original_source)), writer);
 				Si::append(
 					writer,
 					")\n"
@@ -81,7 +81,7 @@ namespace cdm
 				);
 				{
 					Si::absolute_path const sqlite3_c = original_source / Si::relative_path("sqlite3.c");
-					encode_cmake_string_literal(Si::make_contiguous_range(Si::to_os_string(sqlite3_c)), writer);
+					encode_cmake_string_literal(Si::make_contiguous_range(Si::to_utf8_string(sqlite3_c)), writer);
 				}
 				Si::append(
 					writer,
