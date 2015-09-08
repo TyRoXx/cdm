@@ -29,14 +29,11 @@ namespace cdm
 			{
 				std::vector<Si::os_string> arguments;
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCMAKE_INSTALL_PREFIX=") + to_os_string(module_in_cache));
-#ifdef _MSC_VER
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DBUILD_SHARED_LIBS=OFF"));
-#else
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DBUILD_SHARED_LIBS=ON"));
-#endif
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DBUILD_CLAR=OFF"));
 #ifdef _MSC_VER
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DSTATIC_CRT=OFF"));
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif
 				arguments.push_back(to_os_string(original_source));
 				int const rc = Si::run_process(cmake_exe, arguments, build_dir, output).get();
