@@ -102,7 +102,7 @@ namespace cdm
 			"CMake"
 #endif
 		);
-		return std::move(result);
+		return result;
 	}
 }
 

@@ -1,3 +1,4 @@
+#define CDM_CONFIGURE_NAMESPACE a0038875
 #include "../../cdm/application/using_sqlite/cdm.hpp"
 #include "log.hpp"
 #include "boost_root.hpp"
