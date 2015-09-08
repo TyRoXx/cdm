@@ -1,0 +1,8 @@
+cmake_minimum_required(VERSION 2.8)
+project(using_sqlite)
+include_directories(${SQLITE3_INCLUDE_DIRS})
+add_executable(using_sqlite using_sqlite.cpp cdm.hpp)
+target_link_libraries(using_sqlite ${SQLITE3_LIBRARIES})
+if(UNIX)
+	target_link_libraries(using_sqlite pthread dl)
+endif()

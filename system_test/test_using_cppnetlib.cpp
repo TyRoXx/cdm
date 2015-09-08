@@ -3,6 +3,7 @@
 #include "log.hpp"
 #include "boost_root.hpp"
 #include <boost/test/unit_test.hpp>
+#include <silicium/sink/ostream_sink.hpp>
 
 namespace
 {

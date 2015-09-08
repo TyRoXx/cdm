@@ -6,6 +6,7 @@
 #include <boost/thread/thread.hpp>
 #include "log.hpp"
 #include "boost_root.hpp"
+#include <silicium/sink/ostream_sink.hpp>
 
 namespace
 {
