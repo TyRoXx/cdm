@@ -34,7 +34,7 @@ namespace cdm
 	}
 
 	template <class Sink>
-	void encode_cmake_string_literal(Si::memory_range const &string, Sink &&out)
+	void encode_cmake_path_literal(Si::memory_range const &string, Sink &&out)
 	{
 		Si::append(out, '"');
 		BOOST_FOREACH (char c, string)
@@ -42,11 +42,18 @@ namespace cdm
 			switch (c)
 			{
 			case '"':
-			case '\\':
 				Si::append(out, '\\');
+				Si::append(out, c);
+				break;
+
+			case '\\':
+				Si::append(out, '/');
+				break;
+
+			default:
+				Si::append(out, c);
 				break;
 			}
-			Si::append(out, c);
 		}
 		Si::append(out, '"');
 	}
@@ -71,17 +78,11 @@ namespace cdm
 					writer,
 					"cmake_minimum_required(VERSION 2.8)\n"
 					"project(sqlite3)\n"
-					"include_directories("
-				);
-				encode_cmake_string_literal(Si::make_contiguous_range(Si::to_utf8_string(original_source)), writer);
-				Si::append(
-					writer,
-					")\n"
 					"add_library(sqlite3 "
 				);
 				{
 					Si::absolute_path const sqlite3_c = original_source / Si::relative_path("sqlite3.c");
-					encode_cmake_string_literal(Si::make_contiguous_range(Si::to_utf8_string(sqlite3_c)), writer);
+					encode_cmake_path_literal(Si::make_contiguous_range(Si::to_utf8_string(sqlite3_c)), writer);
 				}
 				Si::append(
 					writer,
