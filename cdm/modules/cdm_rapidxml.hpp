@@ -8,7 +8,6 @@ namespace cdm
 	struct rapidxml_paths
 	{
 		Si::absolute_path include;
-		Si::absolute_path library;
 	};
 
 	inline rapidxml_paths install_rapidxml(
