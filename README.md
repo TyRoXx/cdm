@@ -7,6 +7,8 @@ Libraries to try:
 * most important
   * Boost
   * rapidjson (header-only)
+  * silicium
+  * Catch
 * libclang
 * Lua
 * Luabind
@@ -17,7 +19,8 @@ Libraries to try:
 * eggs-cpp/variant (header-only)
 * CURL
 * ZLib
-* OpenSSL?
+* OpenSSL
+* LibreSSL
 * Boost.Fiber
 * Boost.Hana (header-only)
 * sqlpp11
@@ -27,6 +30,19 @@ Libraries to try:
 * Crypto++
 * SDL
 * SDL2
+* Boost.Http
+* SFML
+* ericniebler/range-v3
+* actor-framework
+* Ogre3D
+* Irrlicht
+* Intel TBB
+* Cap’n Proto
+* casablanca.codeplex.com
+* Protocol Buffers
+* cereal
+* CppUnit
+* AngelScript
 
 # Continuous Integration
 * GCC on Ubuntu 12.04: [![Build Status](https://travis-ci.org/TyRoXx/cdm.svg)](https://travis-ci.org/TyRoXx/cdm)
