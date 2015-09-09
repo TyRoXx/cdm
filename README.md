@@ -6,9 +6,7 @@ libraries.
 Libraries to try:
 * most important
   * Boost
-  * WebSocket++ (header-only)
   * rapidjson (header-only)
-  * rapidxml (header-only)
 * libclang
 * Lua
 * Luabind
@@ -25,6 +23,10 @@ Libraries to try:
 * sqlpp11
 * hpx
 * served (https://github.com/datasift/served)
+* folly
+* Crypto++
+* SDL
+* SDL2
 
 # Continuous Integration
 * GCC on Ubuntu 12.04: [![Build Status](https://travis-ci.org/TyRoXx/cdm.svg)](https://travis-ci.org/TyRoXx/cdm)
