@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project(using_rapidxml)
+include_directories(${RAPIDXML_INCLUDE_DIR})
+add_executable(using_rapidxml using_rapidxml.cpp cdm.hpp)
+set_target_properties(using_rapidxml PROPERTIES FOLDER cdm)
