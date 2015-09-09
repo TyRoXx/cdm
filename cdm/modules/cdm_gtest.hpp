@@ -83,7 +83,7 @@ namespace cdm
 		auto lib_dir = gtest_in_cache / *Si::path_segment::create("lib");
 		result.library = lib_dir / make_static_lib_install_path(*Si::path_segment::create(L"gtest"));
 		result.library_main = lib_dir / make_static_lib_install_path(*Si::path_segment::create(L"gtest_main"));
-		return std::move(result);
+		return result;
 	}
 }
 
