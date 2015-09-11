@@ -6,17 +6,18 @@ libraries.
 Libraries to try:
 * most important
   * Boost
-  * rapidjson (header-only)
+  * rapidjson
   * silicium
   * Catch
+  * github.com/chriskohlhoff/urdl
 * libclang
 * Lua
 * Luabind
 * LuaJIT
-* Boost.Outcome (header-only)
+* Boost.Outcome
 * Boost.AFIO
 * stand-alone ASIO
-* eggs-cpp/variant (header-only)
+* eggs-cpp/variant
 * CURL
 * ZLib
 * OpenSSL
@@ -25,7 +26,7 @@ Libraries to try:
 * Boost.Hana (header-only)
 * sqlpp11
 * hpx
-* served (https://github.com/datasift/served)
+* github.com/datasift/served
 * folly
 * Crypto++
 * SDL
@@ -43,6 +44,7 @@ Libraries to try:
 * cereal
 * CppUnit
 * AngelScript
+* uriparser
 
 # Continuous Integration
 * GCC on Ubuntu 12.04: [![Build Status](https://travis-ci.org/TyRoXx/cdm.svg)](https://travis-ci.org/TyRoXx/cdm)
