@@ -11,14 +11,14 @@ namespace
 		Si::optional<Si::absolute_path> const &boost_root,
 		Si::Sink<char, Si::success>::interface &output)
 	{
-		Si::absolute_path const cdm = Si::parent(
+		Si::absolute_path const repository = Si::parent(
 			Si::parent(*Si::absolute_path::create(__FILE__)).or_throw(
 				[]{ throw std::runtime_error("Could not find parent directory of this file: " __FILE__); }
 			)
 		).or_throw(
-			[]{ throw std::runtime_error("Could not find the cdm directory"); }
+			[]{ throw std::runtime_error("Could not find the repository directory"); }
 		);
-		Si::absolute_path const original_main_cpp = cdm / Si::relative_path("configure_cmdline/main.cpp");
+		Si::absolute_path const original_main_cpp = repository / Si::relative_path("configure_cmdline/main.cpp");
 		Si::absolute_path const source = temporary / Si::relative_path("source");
 		Si::recreate_directories(source, Si::throw_);
 		Si::absolute_path const copied_main_cpp = source / Si::relative_path("main.cpp");
@@ -55,15 +55,14 @@ namespace
 		{
 			std::vector<Si::os_string> arguments;
 			{
-				Si::absolute_path const repository_root = Si::parent(cdm).or_throw([] { throw std::runtime_error("Could not find the silicium directory"); });
-				Si::absolute_path const silicium = repository_root / Si::relative_path("dependencies/silicium");
+				Si::absolute_path const silicium = repository / Si::relative_path("dependencies/silicium");
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DSILICIUM_INCLUDE_DIR=") + to_os_string(silicium));
 			}
 			if (boost_root)
 			{
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + to_os_string(*boost_root));
 			}
-			Si::absolute_path const modules = cdm / Si::relative_path("modules");
+			Si::absolute_path const modules = repository / Si::relative_path("modules");
 			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DCDM_CONFIGURE_INCLUDE_DIRS=") + Si::to_os_string(application_source) + SILICIUM_SYSTEM_LITERAL(";") + Si::to_os_string(modules));
 			arguments.emplace_back(Si::to_os_string(source));
 #ifdef _MSC_VER

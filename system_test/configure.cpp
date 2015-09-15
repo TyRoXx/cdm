@@ -10,7 +10,7 @@ namespace
 	Si::absolute_path const this_file = *Si::absolute_path::create(__FILE__);
 	Si::absolute_path const test = *Si::parent(this_file);
 	Si::absolute_path const repository = *Si::parent(test);
-	Si::absolute_path const using_gtest_source = repository / Si::relative_path("cdm/application/using_gtest");
+	Si::absolute_path const using_gtest_source = repository / Si::relative_path("application/using_gtest");
 }
 
 BOOST_AUTO_TEST_CASE(test_run_configure_command_line)

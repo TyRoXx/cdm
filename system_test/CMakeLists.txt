@@ -1,7 +1,7 @@
 include_directories(.)
-include_directories(../cdm/modules)
+include_directories(../modules)
 file(GLOB sources "*.cpp" "*.hpp")
-file(GLOB_RECURSE headers "../cdm/modules/*.hpp")
+file(GLOB_RECURSE headers "../modules/*.hpp")
 
 set(CDM_BOOST_ROOT_FOR_TESTING "" CACHE TYPE PATH)
 if(CDM_BOOST_ROOT_FOR_TESTING)

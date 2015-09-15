@@ -17,7 +17,7 @@ namespace
 
 BOOST_AUTO_TEST_CASE(test_cdm_gtest)
 {
-	Si::absolute_path const source = repository / Si::relative_path("cdm/original_sources/gtest-1.7.0");
+	Si::absolute_path const source = repository / Si::relative_path("original_sources/gtest-1.7.0");
 	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / Si::relative_path("test_cdm_gtest");
 	Si::absolute_path const build_dir = tmp / *Si::path_segment::create("build");
 	Si::absolute_path const install_dir = tmp / *Si::path_segment::create("install");
@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(test_cdm_gtest)
 
 BOOST_AUTO_TEST_CASE(test_cdm_cppnetlib)
 {
-	Si::absolute_path const source = repository / Si::relative_path("cdm/original_sources/cpp-netlib-0.11.2-final");
+	Si::absolute_path const source = repository / Si::relative_path("original_sources/cpp-netlib-0.11.2-final");
 	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / Si::relative_path("test_cdm_cppnetlib");
 	Si::absolute_path const modules = tmp / *Si::path_segment::create("cdm_modules");
 	Si::recreate_directories(modules, Si::throw_);
