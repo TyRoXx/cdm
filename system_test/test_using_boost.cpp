@@ -8,6 +8,8 @@
 
 #ifdef _WIN32
 #include <shlobj.h>
+#else
+#include <pwd.h>
 #endif
 
 namespace
@@ -36,6 +38,12 @@ namespace
 		std::unique_ptr<wchar_t, CoTaskMemFreeDeleter> raii_path(path);
 		return Si::absolute_path::create(raii_path.get()).or_throw([] { throw std::runtime_error("Windows returned a non-absolute path for home"); });
 	}
+#else
+	Si::absolute_path get_home()
+	{
+		return *Si::absolute_path::create(getpwuid(getuid())->pw_dir);
+	}
+
 #endif
 }
 
@@ -46,13 +54,7 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 	Si::recreate_directories(tmp, Si::throw_);
 	Si::absolute_path const module_temporaries = tmp / *Si::path_segment::create("build");
 	Si::create_directories(module_temporaries, Si::throw_);
-	Si::absolute_path const module_permanent =
-#ifdef _WIN32
-		get_home() / Si::relative_path(".cdm_cache")
-#else
-		tmp / *Si::path_segment::create("perm")
-#endif
-		;
+	Si::absolute_path const module_permanent = get_home() / Si::relative_path(".cdm_cache");
 	Si::absolute_path const application_build_dir = tmp / *Si::path_segment::create("app_build");
 	Si::create_directories(application_build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
