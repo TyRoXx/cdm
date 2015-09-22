@@ -43,7 +43,6 @@ namespace
 	{
 		return *Si::absolute_path::create(getpwuid(getuid())->pw_dir);
 	}
-
 #endif
 }
 
