@@ -43,7 +43,9 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 {
 	Si::absolute_path const app_source = repository / Si::relative_path("application/using_boost");
 	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / *Si::path_segment::create("cdm_b");
+	Si::recreate_directories(tmp, Si::throw_);
 	Si::absolute_path const module_temporaries = tmp / *Si::path_segment::create("build");
+	Si::create_directories(module_temporaries, Si::throw_);
 	Si::absolute_path const module_permanent =
 #ifdef _WIN32
 		get_home() / Si::relative_path(".cdm_cache")
@@ -52,9 +54,7 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 #endif
 		;
 	Si::absolute_path const application_build_dir = tmp / *Si::path_segment::create("app_build");
-	Si::recreate_directories(module_temporaries, Si::throw_);
-	Si::recreate_directories(module_permanent, Si::throw_);
-	Si::recreate_directories(application_build_dir, Si::throw_);
+	Si::create_directories(application_build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
 	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, module_permanent, app_source, application_build_dir, cdm::get_boost_root_for_testing(), output);
 	{
