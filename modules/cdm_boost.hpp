@@ -20,7 +20,7 @@ namespace cdm
 		unsigned make_parallelism,
 		Si::Sink<char, Si::success>::interface &output)
 	{
-		boost::ignore_unused(cmake_exe);
+		boost::ignore_unused_variable_warning(cmake_exe);
 
 		Si::absolute_path const module_in_cache = install_root / Si::relative_path("boost");
 		if (!Si::file_exists(module_in_cache, Si::throw_))
