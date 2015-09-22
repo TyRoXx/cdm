@@ -2,6 +2,10 @@
 An experimental application for managing C or C++ headers and pre-built
 libraries.
 
+# Continuous Integration
+* GCC on Ubuntu 12.04: [![Build Status](https://travis-ci.org/TyRoXx/cdm.svg)](https://travis-ci.org/TyRoXx/cdm)
+* Visual C++ 2013: [![Build status](https://ci.appveyor.com/api/projects/status/gicp12vo9mldy1fa?svg=true)](https://ci.appveyor.com/project/TyRoXx/cdm)
+
 # Roadmap
 Libraries to try:
 * most important
@@ -46,7 +50,3 @@ Libraries to try:
 * CppUnit
 * AngelScript
 * uriparser
-
-# Continuous Integration
-* GCC on Ubuntu 12.04: [![Build Status](https://travis-ci.org/TyRoXx/cdm.svg)](https://travis-ci.org/TyRoXx/cdm)
-* Visual C++ 2013: [![Build status](https://ci.appveyor.com/api/projects/status/gicp12vo9mldy1fa?svg=true)](https://ci.appveyor.com/project/TyRoXx/cdm)
