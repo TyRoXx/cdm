@@ -5,6 +5,17 @@
 #include <silicium/run_process.hpp>
 #include <boost/lexical_cast.hpp>
 
+//Boost is so large that the output of cp exceeds the 4 MB log limit of travis
+//which aborts the build job then.
+//On Windows, the console is so slow (especially in Virtualbox) that we want
+//to avoid the megabytes of output from the Boost build process.
+//TODO: Buffer the output in memory and save it somewhere if something fails.
+#if defined(CDM_TESTS_RUNNING_ON_TRAVIS_CI) || defined(_WIN32)
+#	define CDM_AVOID_CONSOLE_OUTPUT 1
+#else
+#	define CDM_AVOID_CONSOLE_OUTPUT 0
+#endif
+
 namespace cdm
 {
 	struct boost_paths
@@ -28,9 +39,7 @@ namespace cdm
 			Si::absolute_path const copy_of_boost = temporary / Si::relative_path("boost-copy");
 			Si::copy_recursively(
 				source, copy_of_boost,
-#ifdef CDM_TESTS_RUNNING_ON_TRAVIS_CI
-				//Boost is so large that the output of cp exceeds the 4 MB log limit of travis
-				//which aborts the build job then.
+#if CDM_AVOID_CONSOLE_OUTPUT
 				nullptr
 #else
 				&output
@@ -55,7 +64,7 @@ namespace cdm
 			}
 
 			{
-#ifdef CDM_TESTS_RUNNING_ON_TRAVIS_CI
+#if CDM_AVOID_CONSOLE_OUTPUT
 				auto null_output = Si::Sink<char, Si::success>::erase(Si::null_sink<char, Si::success>());
 #endif
 				std::vector<Si::os_string> arguments;
@@ -69,7 +78,7 @@ namespace cdm
 					".exe"
 #endif
 					, arguments, copy_of_boost,
-#ifdef CDM_TESTS_RUNNING_ON_TRAVIS_CI
+#if CDM_AVOID_CONSOLE_OUTPUT
 					null_output
 #else
 					output
