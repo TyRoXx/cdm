@@ -17,7 +17,7 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 {
 	Si::absolute_path const app_source = repository / Si::relative_path("application/using_boost");
 	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / *Si::path_segment::create("cdm_test_using_boost");
-	Si::absolute_path const module_temporaries = tmp / *Si::path_segment::create("module_temporaries");
+	Si::absolute_path const module_temporaries = tmp / *Si::path_segment::create("module_tmp");
 	Si::absolute_path const module_permanent = tmp / *Si::path_segment::create("module_permanent");
 	Si::absolute_path const application_build_dir = tmp / *Si::path_segment::create("application_build_dir");
 	Si::recreate_directories(module_temporaries, Si::throw_);

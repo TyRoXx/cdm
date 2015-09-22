@@ -39,10 +39,15 @@ namespace cdm
 
 			{
 				std::vector<Si::os_string> arguments;
+#ifdef _MSC_VER
+				Si::absolute_path const exe = copy_of_boost / "bootstrap.bat";
+#else
+				Si::absolute_path const exe = *Si::absolute_path::create("/usr/bin/env");
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("bash"));
 				arguments.push_back(Si::to_os_string(copy_of_boost / "bootstrap.sh"));
+#endif
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("--prefix=") + Si::to_os_string(module_in_cache));
-				int const rc = Si::run_process(*Si::absolute_path::create("/usr/bin/env"), arguments, copy_of_boost, output).get();
+				int const rc = Si::run_process(exe, arguments, copy_of_boost, output).get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("bootstrap failed");
@@ -51,9 +56,16 @@ namespace cdm
 
 			{
 				std::vector<Si::os_string> arguments;
+#ifdef _MSC_VER
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("toolset=msvc-12.0"));
+#endif
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-j ") + boost::lexical_cast<Si::os_string>(make_parallelism));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("install"));
-				int const rc = Si::run_process(copy_of_boost / "b2", arguments, copy_of_boost, output).get();
+				int const rc = Si::run_process(copy_of_boost / "b2"
+#ifdef _WIN32
+					".exe"
+#endif
+					, arguments, copy_of_boost, output).get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("b2 failed");
