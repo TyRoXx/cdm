@@ -55,6 +55,9 @@ namespace cdm
 			}
 
 			{
+#ifdef CDM_TESTS_RUNNING_ON_TRAVIS_CI
+				auto null_output = Si::Sink<char, Si::success>::erase(Si::null_sink<char, Si::success>());
+#endif
 				std::vector<Si::os_string> arguments;
 #ifdef _MSC_VER
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("toolset=msvc-12.0"));
@@ -65,7 +68,13 @@ namespace cdm
 #ifdef _WIN32
 					".exe"
 #endif
-					, arguments, copy_of_boost, output).get();
+					, arguments, copy_of_boost,
+#ifdef CDM_TESTS_RUNNING_ON_TRAVIS_CI
+					null_output
+#else
+					output
+#endif
+					).get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("b2 failed");
