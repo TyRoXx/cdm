@@ -26,7 +26,16 @@ namespace cdm
 		if (!Si::file_exists(module_in_cache, Si::throw_))
 		{
 			Si::absolute_path const copy_of_boost = temporary / Si::relative_path("boost-copy");
-			Si::copy_recursively(source, copy_of_boost, &output, Si::throw_);
+			Si::copy_recursively(
+				source, copy_of_boost,
+#ifdef CDM_TESTS_RUNNING_ON_TRAVIS_CI
+				//Boost is so large that the output of cp exceeds the 4 MB log limit of travis
+				//which aborts the build job then.
+				nullptr
+#else
+				&output
+#endif
+				, Si::throw_);
 
 			{
 				std::vector<Si::os_string> arguments;
