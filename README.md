@@ -10,6 +10,7 @@ Libraries to try:
   * silicium
   * Catch
   * github.com/chriskohlhoff/urdl
+  * github.com/Microsoft/GSL
 * libclang
 * Lua
 * Luabind
