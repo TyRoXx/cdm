@@ -34,6 +34,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, module_temporaries, module_permanent, Si::cmake_exe, parallelism, output);
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=")) + to_os_string(boost_installed.root));
+		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_ADDITIONAL_VERSIONS=1.59.0 1.59"));
 #ifdef _MSC_VER
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif
