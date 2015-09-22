@@ -138,6 +138,7 @@ if(CDM_TESTS_RUNNING_ON_TRAVIS_CI)
 endif()
 
 include_directories(".")
+include_directories("modules")
 
 add_subdirectory("system_test")
 include_directories(.)

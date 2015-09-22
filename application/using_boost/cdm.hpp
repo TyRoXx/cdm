@@ -1,3 +1,4 @@
+#include "cdm_boost.hpp"
 #include <silicium/cmake.hpp>
 #include <silicium/run_process.hpp>
 
@@ -12,8 +13,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::Sink<char, Si::success>::interface &output
 		)
 	{
-		boost::ignore_unused_variable_warning(module_temporaries);
-		boost::ignore_unused_variable_warning(module_permanent);
+		boost::ignore_unused_variable_warning(boost_root);
 		Si::optional<Si::absolute_path> const applications = Si::parent(application_source);
 		if (!applications)
 		{
@@ -24,11 +24,16 @@ namespace CDM_CONFIGURE_NAMESPACE
 		{
 			throw std::runtime_error("expected the applications dir to have a parent");
 		}
+		Si::absolute_path const boost_source = *cdm / Si::relative_path("original_sources/boost_1_59_0");
+		unsigned const parallelism =
+#ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
+			2;
+#else
+			boost::thread::hardware_concurrency();
+#endif
+		cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, module_temporaries, module_permanent, Si::cmake_exe, parallelism, output);
 		std::vector<Si::os_string> arguments;
-		if (boost_root)
-		{
-			arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=")) + to_os_string(*boost_root));
-		}
+		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=")) + to_os_string(boost_installed.root));
 #ifdef _MSC_VER
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif
