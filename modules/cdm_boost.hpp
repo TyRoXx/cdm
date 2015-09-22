@@ -58,7 +58,6 @@ namespace cdm
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("bash"));
 				arguments.push_back(Si::to_os_string(copy_of_boost / "bootstrap.sh"));
 #endif
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("--prefix=") + Si::to_os_string(module_in_cache));
 				int const rc = Si::run_process(exe, arguments, copy_of_boost, output).get();
 				if (rc != 0)
 				{
@@ -72,6 +71,10 @@ namespace cdm
 #endif
 				std::vector<Si::os_string> arguments;
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("install"));
+				{
+					Si::os_string const install_argument = SILICIUM_SYSTEM_LITERAL("--prefix=") + Si::to_os_string(module_in_cache);
+					arguments.push_back(install_argument);
+				}
 #ifdef _MSC_VER
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("toolset=msvc-12.0"));
 #endif
