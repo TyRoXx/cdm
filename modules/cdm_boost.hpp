@@ -36,15 +36,18 @@ namespace cdm
 		Si::absolute_path const module_in_cache = install_root / Si::relative_path("boost");
 		if (!Si::file_exists(module_in_cache, Si::throw_))
 		{
-			Si::absolute_path const copy_of_boost = temporary / Si::relative_path("boost-copy");
+			Si::absolute_path const copy_of_boost = temporary / Si::relative_path("src");
 			Si::copy_recursively(
-				source, copy_of_boost,
+				source,
+				copy_of_boost,
 #if CDM_AVOID_CONSOLE_OUTPUT
 				nullptr
 #else
 				&output
 #endif
 				, Si::throw_);
+
+			Si::create_directories(module_in_cache, Si::throw_);
 
 			{
 				std::vector<Si::os_string> arguments;
@@ -68,11 +71,11 @@ namespace cdm
 				auto null_output = Si::Sink<char, Si::success>::erase(Si::null_sink<char, Si::success>());
 #endif
 				std::vector<Si::os_string> arguments;
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("install"));
 #ifdef _MSC_VER
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("toolset=msvc-12.0"));
 #endif
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-j ") + boost::lexical_cast<Si::os_string>(make_parallelism));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("install"));
 				int const rc = Si::run_process(copy_of_boost / "b2"
 #ifdef _WIN32
 					".exe"
