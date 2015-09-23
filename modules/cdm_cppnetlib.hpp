@@ -29,11 +29,7 @@ namespace cdm
 			{
 				std::vector<Si::os_string> arguments;
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCMAKE_INSTALL_PREFIX=") + to_os_string(module_in_cache));
-#ifdef _MSC_VER
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_SHARED_LIBS=OFF"));
-#else
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_SHARED_LIBS=ON"));
-#endif
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_TESTS=OFF"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_EXPERIMENTS=OFF"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_EXAMPLES=OFF"));
