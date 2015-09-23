@@ -10,11 +10,9 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::absolute_path const &module_permanent,
 		Si::absolute_path const &application_source,
 		Si::absolute_path const &application_build_dir,
-		Si::optional<Si::absolute_path> const &boost_root,
 		Si::Sink<char, Si::success>::interface &output
 		)
 	{
-		boost::ignore_unused_variable_warning(boost_root);
 		Si::optional<Si::absolute_path> const applications = Si::parent(application_source);
 		if (!applications)
 		{
@@ -32,7 +30,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 #else
 			boost::thread::hardware_concurrency();
 #endif
-		cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, module_temporaries, module_permanent, Si::cmake_exe, parallelism, output);
+		cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, module_temporaries, module_permanent, parallelism, output);
 		std::vector<Si::os_string> arguments;
 		Si::os_string const our_boost_root = to_os_string(boost_installed.root);
 		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=")) + our_boost_root);

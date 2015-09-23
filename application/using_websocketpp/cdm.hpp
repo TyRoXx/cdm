@@ -9,11 +9,9 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::absolute_path const &module_permanent,
 		Si::absolute_path const &application_source,
 		Si::absolute_path const &application_build_dir,
-		Si::optional<Si::absolute_path> const &boost_root,
 		Si::Sink<char, Si::success>::interface &output
 		)
 	{
-		boost::ignore_unused_variable_warning(boost_root);
 		Si::optional<Si::absolute_path> const applications = Si::parent(application_source);
 		if (!applications)
 		{
@@ -25,13 +23,12 @@ namespace CDM_CONFIGURE_NAMESPACE
 			throw std::runtime_error("expected the applications dir to have a parent");
 		}
 		Si::absolute_path const original_source = *cdm / Si::relative_path("original_sources/websocketpp-c5510d6de04917812b910a8dd44735c1f17061d9");
-		cdm::websocketpp_paths const installed = cdm::install_websocketpp(original_source, module_temporaries, module_permanent, output);
+		Si::absolute_path const boost_source = *cdm / Si::relative_path("original_sources/boost_1_59_0");
+		cdm::websocketpp_paths const installed = cdm::install_websocketpp(original_source, boost_source, module_temporaries, module_permanent, output);
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DWEBSOCKETPP_INCLUDE_DIR=")) + to_os_string(installed.include));
-		if (boost_root)
-		{
-			arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=")) + to_os_string(*boost_root));
-		}
+		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=")) + to_os_string(installed.boost_root));
+		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_ADDITIONAL_VERSIONS=1.59"));
 #ifdef _MSC_VER
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif

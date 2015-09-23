@@ -27,12 +27,9 @@ namespace cdm
 		Si::absolute_path const &source,
 		Si::absolute_path const &temporary,
 		Si::absolute_path const &install_root,
-		Si::absolute_path const &cmake_exe,
 		unsigned make_parallelism,
 		Si::Sink<char, Si::success>::interface &output)
 	{
-		boost::ignore_unused_variable_warning(cmake_exe);
-
 		Si::absolute_path const module_in_cache = install_root / Si::relative_path("boost");
 		if (!Si::file_exists(module_in_cache, Si::throw_))
 		{

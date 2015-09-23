@@ -39,7 +39,8 @@ namespace cdm
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_ENABLE_HTTPS=OFF"));
 #endif
 				Si::absolute_path const boost_temp = temporary / Si::relative_path("boost");
-				cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, boost_temp, install_root, cmake_exe, make_parallelism, output);
+				Si::create_directories(boost_temp, Si::throw_);
+				cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, boost_temp, install_root, make_parallelism, output);
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + Si::to_os_string(boost_installed.root));
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_ADDITIONAL_VERSIONS=1.59"));
 #ifdef _MSC_VER

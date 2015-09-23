@@ -11,7 +11,6 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::absolute_path const &module_permanent,
 		Si::absolute_path const &application_source,
 		Si::absolute_path const &application_build_dir,
-		Si::optional<Si::absolute_path> const &boost_root,
 		Si::Sink<char, Si::success>::interface &output
 	);
 }

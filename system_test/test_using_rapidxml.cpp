@@ -1,7 +1,6 @@
 #define CDM_CONFIGURE_NAMESPACE a0038879
 #include "../../cdm/application/using_rapidxml/cdm.hpp"
 #include "log.hpp"
-#include "boost_root.hpp"
 #include <boost/test/unit_test.hpp>
 #include <silicium/sink/ostream_sink.hpp>
 #include <silicium/file_operations.hpp>
@@ -23,7 +22,7 @@ BOOST_AUTO_TEST_CASE(test_using_rapidxml)
 	Si::recreate_directories(module_temporaries, Si::throw_);
 	Si::recreate_directories(application_build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
-	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir, cdm::get_boost_root_for_testing(), output);
+	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir, output);
 	{
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
