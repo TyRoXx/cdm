@@ -20,16 +20,17 @@ namespace cdm
 		Si::Sink<char, Si::success>::interface &output)
 	{
 		websocketpp_paths result;
+		{
+			Si::absolute_path const boost_temp = temporarily_writable / Si::relative_path("boost");
+			Si::create_directories(boost_temp, Si::throw_);
+			unsigned make_parallelism = 2;
+			cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, boost_temp, install_root, make_parallelism, output);
+			result.boost_root = boost_installed.root;
+		}
+
 		Si::absolute_path const in_cache = install_root / Si::relative_path("websocketpp");
 		if (!Si::file_exists(in_cache, Si::throw_))
 		{
-			{
-				Si::absolute_path const boost_temp = temporarily_writable / Si::relative_path("boost");
-				Si::create_directories(boost_temp, Si::throw_);
-				unsigned make_parallelism = 2;
-				cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, boost_temp, install_root, make_parallelism, output);
-				result.boost_root = boost_installed.root;
-			}
 			Si::absolute_path const construction = temporarily_writable / Si::relative_path("websocketpp");
 			Si::absolute_path const construction_include = construction / Si::relative_path("include");
 			Si::create_directories(construction_include, Si::throw_);
