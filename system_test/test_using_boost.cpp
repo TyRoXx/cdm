@@ -42,6 +42,14 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 			SILICIUM_SYSTEM_LITERAL(".exe")
 #endif
 		);
-		BOOST_REQUIRE_EQUAL(0, Si::run_process(application_build_dir / relative, arguments, application_build_dir, output));
+		std::vector<std::pair<Si::os_char const *, Si::os_char const *>> environment;
+		BOOST_REQUIRE_EQUAL(0, Si::run_process(
+			application_build_dir / relative,
+			arguments,
+			application_build_dir,
+			output,
+			environment,
+			Si::environment_inheritance::inherit
+		));
 	}
 }
