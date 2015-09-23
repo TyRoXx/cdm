@@ -5,7 +5,6 @@
 #include <boost/test/unit_test.hpp>
 #include <boost/thread/thread.hpp>
 #include "log.hpp"
-#include "boost_root.hpp"
 #include <silicium/sink/ostream_sink.hpp>
 #include <cdm/locate_cache.hpp>
 
@@ -44,7 +43,8 @@ BOOST_AUTO_TEST_CASE(test_cdm_cppnetlib)
 	Si::absolute_path const build_dir = tmp / *Si::path_segment::create("build");
 	Si::recreate_directories(build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
-	cdm::cppnetlib_paths const built = cdm::install_cppnetlib(source, build_dir, cdm::locate_cache(), Si::cmake_exe, cdm::get_boost_root_for_testing(), make_parallelism, output);
+	Si::absolute_path const boost_source = repository / Si::relative_path("original_sources/boost_1_59_0");
+	cdm::cppnetlib_paths const built = cdm::install_cppnetlib(source, boost_source, build_dir, cdm::locate_cache(), Si::cmake_exe, make_parallelism, output);
 	Si::absolute_path const cmake_directory = built.cmake_prefix_path
 #ifndef _MSC_VER
 		/ Si::relative_path("cppnetlib")

@@ -1,6 +1,7 @@
 #ifndef CDM_CPPNETLIB_HPP
 #define CDM_CPPNETLIB_HPP
 
+#include "cdm_boost.hpp"
 #include <silicium/file_operations.hpp>
 #include <silicium/run_process.hpp>
 #include <boost/lexical_cast.hpp>
@@ -14,10 +15,10 @@ namespace cdm
 
 	inline cppnetlib_paths install_cppnetlib(
 		Si::absolute_path const &cppnetlib_source,
+		Si::absolute_path const &boost_source,
 		Si::absolute_path const &temporary,
 		Si::absolute_path const &install_root,
 		Si::absolute_path const &cmake_exe,
-		Si::optional<Si::absolute_path> const &boost_root,
 		unsigned make_parallelism,
 		Si::Sink<char, Si::success>::interface &output)
 	{
@@ -37,10 +38,10 @@ namespace cdm
 				//TODO: deal with OpenSSL later..
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_ENABLE_HTTPS=OFF"));
 #endif
-				if (boost_root)
-				{
-					arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + to_os_string(*boost_root));
-				}
+				Si::absolute_path const boost_temp = temporary / Si::relative_path("boost");
+				cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, boost_temp, install_root, cmake_exe, make_parallelism, output);
+				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + Si::to_os_string(boost_installed.root));
+				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_ADDITIONAL_VERSIONS=1.59"));
 #ifdef _MSC_VER
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif

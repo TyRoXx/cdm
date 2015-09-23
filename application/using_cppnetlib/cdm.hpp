@@ -16,6 +16,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::Sink<char, Si::success>::interface &output
 		)
 	{
+		boost::ignore_unused_variable_warning(boost_root);
 		Si::optional<Si::absolute_path> const applications = Si::parent(application_source);
 		if (!applications)
 		{
@@ -38,7 +39,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 #else
 			boost::thread::hardware_concurrency();
 #endif
-		cdm::cppnetlib_paths const cppnetlib_installed = cdm::install_cppnetlib(cppnetlib_source, module_temporaries, module_permanent, Si::cmake_exe, boost_root, parallelism, output);
+		Si::absolute_path const boost_source = *cdm / Si::relative_path("original_sources/boost_1_59_0");
+		cdm::cppnetlib_paths const cppnetlib_installed = cdm::install_cppnetlib(cppnetlib_source, boost_source, module_temporaries, module_permanent, Si::cmake_exe, parallelism, output);
 
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPPNETLIB_PREFIX_PATH=") + to_os_string(cppnetlib_installed.cmake_prefix_path));
