@@ -63,7 +63,12 @@ namespace
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + to_os_string(*boost_root));
 			}
 			Si::absolute_path const modules = repository / Si::relative_path("modules");
-			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DCDM_CONFIGURE_INCLUDE_DIRS=") + Si::to_os_string(application_source) + SILICIUM_SYSTEM_LITERAL(";") + Si::to_os_string(modules));
+			arguments.emplace_back(
+				SILICIUM_SYSTEM_LITERAL("-DCDM_CONFIGURE_INCLUDE_DIRS=") +
+				Si::to_os_string(application_source) + SILICIUM_SYSTEM_LITERAL(";") +
+				Si::to_os_string(modules) + SILICIUM_SYSTEM_LITERAL(";") +
+				Si::to_os_string(repository)
+			);
 			arguments.emplace_back(Si::to_os_string(source));
 #ifdef _MSC_VER
 			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));

@@ -5,6 +5,7 @@
 #include <boost/test/unit_test.hpp>
 #include <silicium/sink/ostream_sink.hpp>
 #include <silicium/file_operations.hpp>
+#include <cdm/locate_cache.hpp>
 
 namespace
 {
@@ -20,11 +21,10 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 	Si::recreate_directories(tmp, Si::throw_);
 	Si::absolute_path const module_temporaries = tmp / *Si::path_segment::create("build");
 	Si::create_directories(module_temporaries, Si::throw_);
-	Si::absolute_path const module_permanent = Si::get_home() / Si::relative_path(".cdm_cache");
 	Si::absolute_path const application_build_dir = tmp / *Si::path_segment::create("app_build");
 	Si::create_directories(application_build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
-	cdm::configure_result const configured = CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, module_permanent, app_source, application_build_dir, cdm::get_boost_root_for_testing(), output);
+	cdm::configure_result const configured = CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir, cdm::get_boost_root_for_testing(), output);
 	{
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
