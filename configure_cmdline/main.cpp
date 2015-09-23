@@ -39,7 +39,6 @@ int main(int argc, char **argv)
 	std::string module_permanent_argument;
 	std::string application_source_argument;
 	std::string application_build_argument;
-	std::string boost_root;
 
 	boost::program_options::options_description options("options");
 	options.add_options()
@@ -47,7 +46,6 @@ int main(int argc, char **argv)
 		("modules,m", boost::program_options::value(&module_permanent_argument), "absolute path to the permanent module binary cache")
 		("application,a", boost::program_options::value(&application_source_argument), "absolute path to the root of your application source code")
 		("build,b", boost::program_options::value(&application_build_argument), "absolute path to the CMake build directory of your application")
-		("boost", boost::program_options::value(&boost_root), "basically BOOST_ROOT for the configure script (optional)")
 		;
 	boost::program_options::positional_options_description positional;
 	boost::program_options::variables_map variables;
@@ -84,7 +82,7 @@ int main(int argc, char **argv)
 		);
 		auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
 		cdm::configure_result const result = CDM_CONFIGURE_NAMESPACE::configure(
-			module_temporaries, module_permanent, application_source, application_build, Si::absolute_path::create(boost_root.c_str()), output);
+			module_temporaries, module_permanent, application_source, application_build, output);
 		for (Si::absolute_path const &dir : result.shared_library_directories)
 		{
 			std::cerr << dir << '\n';

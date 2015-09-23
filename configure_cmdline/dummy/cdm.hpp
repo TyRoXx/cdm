@@ -8,7 +8,6 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::absolute_path const &module_permanent,
 		Si::absolute_path const &application_source,
 		Si::absolute_path const &application_build_dir,
-		Si::optional<Si::absolute_path> const &boost_root,
 		Si::Sink<char, Si::success>::interface &output
 		)
 	{
@@ -16,7 +15,6 @@ namespace CDM_CONFIGURE_NAMESPACE
 		boost::ignore_unused_variable_warning(module_permanent);
 		boost::ignore_unused_variable_warning(application_source);
 		boost::ignore_unused_variable_warning(application_build_dir);
-		boost::ignore_unused_variable_warning(boost_root);
 		boost::ignore_unused_variable_warning(output);
 		return cdm::configure_result();
 	}
