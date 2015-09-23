@@ -6,44 +6,11 @@
 #include <silicium/sink/ostream_sink.hpp>
 #include <silicium/file_operations.hpp>
 
-#ifdef _WIN32
-#include <shlobj.h>
-#else
-#include <pwd.h>
-#endif
-
 namespace
 {
 	Si::absolute_path const this_file = *Si::absolute_path::create(__FILE__);
 	Si::absolute_path const test = *Si::parent(this_file);
 	Si::absolute_path const repository = *Si::parent(test);
-
-#ifdef _WIN32
-	struct CoTaskMemFreeDeleter
-	{
-		void operator()(void *memory) const
-		{
-			CoTaskMemFree(memory);
-		}
-	};
-
-	Si::absolute_path get_home()
-	{
-		PWSTR path;
-		HRESULT rc = SHGetKnownFolderPath(FOLDERID_LocalAppData, KF_FLAG_CREATE, NULL, &path);
-		if (rc != S_OK)
-		{
-			throw std::runtime_error("Could not get home");
-		}
-		std::unique_ptr<wchar_t, CoTaskMemFreeDeleter> raii_path(path);
-		return Si::absolute_path::create(raii_path.get()).or_throw([] { throw std::runtime_error("Windows returned a non-absolute path for home"); });
-	}
-#else
-	Si::absolute_path get_home()
-	{
-		return *Si::absolute_path::create(getpwuid(getuid())->pw_dir);
-	}
-#endif
 }
 
 BOOST_AUTO_TEST_CASE(test_using_boost)
@@ -53,7 +20,7 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 	Si::recreate_directories(tmp, Si::throw_);
 	Si::absolute_path const module_temporaries = tmp / *Si::path_segment::create("build");
 	Si::create_directories(module_temporaries, Si::throw_);
-	Si::absolute_path const module_permanent = get_home() / Si::relative_path(".cdm_cache");
+	Si::absolute_path const module_permanent = Si::get_home() / Si::relative_path(".cdm_cache");
 	Si::absolute_path const application_build_dir = tmp / *Si::path_segment::create("app_build");
 	Si::create_directories(application_build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
