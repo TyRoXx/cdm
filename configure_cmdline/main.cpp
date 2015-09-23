@@ -1,11 +1,12 @@
 #include <silicium/absolute_path.hpp>
 #include <silicium/sink/sink.hpp>
+#include <cdm/configure_result.hpp>
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
 	//The forward declaration for the function that has to be implemented by the header
 	//which is #included next.
-	void configure(
+	cdm::configure_result configure(
 		Si::absolute_path const &module_temporaries,
 		Si::absolute_path const &module_permanent,
 		Si::absolute_path const &application_source,
@@ -83,8 +84,12 @@ int main(int argc, char **argv)
 			[]{ throw std::invalid_argument("The application build directory argument must be an absolute path."); }
 		);
 		auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
-		CDM_CONFIGURE_NAMESPACE::configure(
+		cdm::configure_result const result = CDM_CONFIGURE_NAMESPACE::configure(
 			module_temporaries, module_permanent, application_source, application_build, Si::absolute_path::create(boost_root.c_str()), output);
+		for (Si::absolute_path const &dir : result.shared_library_directories)
+		{
+			std::cerr << dir << '\n';
+		}
 	}
 	catch (std::exception const &ex)
 	{

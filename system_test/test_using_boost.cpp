@@ -24,7 +24,7 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 	Si::absolute_path const application_build_dir = tmp / *Si::path_segment::create("app_build");
 	Si::create_directories(application_build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
-	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, module_permanent, app_source, application_build_dir, cdm::get_boost_root_for_testing(), output);
+	cdm::configure_result const configured = CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, module_permanent, app_source, application_build_dir, cdm::get_boost_root_for_testing(), output);
 	{
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
@@ -43,6 +43,18 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 #endif
 		);
 		std::vector<std::pair<Si::os_char const *, Si::os_char const *>> environment;
+#ifndef _WIN32
+		Si::os_string library_paths;
+		for (Si::absolute_path const &path : configured.shared_library_directories)
+		{
+			if (!library_paths.empty())
+			{
+				library_paths += ";";
+			}
+			library_paths += path.c_str();
+		}
+		environment.emplace_back("LD_LIBRARY_PATH", library_paths.c_str());
+#endif
 		BOOST_REQUIRE_EQUAL(0, Si::run_process(
 			application_build_dir / relative,
 			arguments,

@@ -3,10 +3,11 @@
 #include <silicium/cmake.hpp>
 #include <silicium/file_operations.hpp>
 #include <boost/thread/thread.hpp>
+#include <cdm/configure_result.hpp>
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
-	void configure(
+	cdm::configure_result configure(
 		Si::absolute_path const &module_temporaries,
 		Si::absolute_path const &module_permanent,
 		Si::absolute_path const &application_source,
@@ -51,5 +52,6 @@ namespace CDM_CONFIGURE_NAMESPACE
 		{
 			throw std::runtime_error("CMake configure failed");
 		}
+		return cdm::configure_result();
 	}
 }

@@ -1,8 +1,9 @@
 #include <silicium/absolute_path.hpp>
+#include <cdm/configure_result.hpp>
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
-	void configure(
+	cdm::configure_result configure(
 		Si::absolute_path const &module_temporaries,
 		Si::absolute_path const &module_permanent,
 		Si::absolute_path const &application_source,
@@ -17,5 +18,6 @@ namespace CDM_CONFIGURE_NAMESPACE
 		boost::ignore_unused_variable_warning(application_build_dir);
 		boost::ignore_unused_variable_warning(boost_root);
 		boost::ignore_unused_variable_warning(output);
+		return cdm::configure_result();
 	}
 }
