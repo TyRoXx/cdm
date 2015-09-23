@@ -41,26 +41,11 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 			SILICIUM_SYSTEM_LITERAL(".exe")
 #endif
 		);
-		std::vector<std::pair<Si::os_char const *, Si::os_char const *>> environment;
-#ifndef _WIN32
-		Si::os_string library_paths;
-		for (Si::absolute_path const &path : configured.shared_library_directories)
-		{
-			if (!library_paths.empty())
-			{
-				library_paths += ":";
-			}
-			library_paths += path.c_str();
-		}
-		environment.emplace_back("LD_LIBRARY_PATH", library_paths.c_str());
-#endif
 		BOOST_REQUIRE_EQUAL(0, Si::run_process(
 			application_build_dir / relative,
 			arguments,
 			application_build_dir,
-			output,
-			environment,
-			Si::environment_inheritance::inherit
+			output
 		));
 	}
 }
