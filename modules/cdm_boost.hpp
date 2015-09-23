@@ -75,6 +75,7 @@ namespace cdm
 					Si::os_string const install_argument = SILICIUM_SYSTEM_LITERAL("--prefix=") + Si::to_os_string(module_in_cache);
 					arguments.push_back(install_argument);
 				}
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("link=static"));
 #ifdef _MSC_VER
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("toolset=msvc-12.0"));
 #endif
