@@ -43,6 +43,7 @@ namespace cdm
 				cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, boost_temp, install_root, make_parallelism, output);
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + Si::to_os_string(boost_installed.root));
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_ADDITIONAL_VERSIONS=1.59"));
+				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_NO_SYSTEM_PATHS=ON"));
 #ifdef _MSC_VER
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif

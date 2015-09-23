@@ -29,6 +29,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DWEBSOCKETPP_INCLUDE_DIR=")) + to_os_string(installed.include));
 		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=")) + to_os_string(installed.boost_root));
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_ADDITIONAL_VERSIONS=1.59"));
+		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_NO_SYSTEM_PATHS=ON"));
 #ifdef _MSC_VER
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif

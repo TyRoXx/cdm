@@ -63,6 +63,7 @@ namespace
 			if (boost_root)
 			{
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + to_os_string(*boost_root));
+				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_NO_SYSTEM_PATHS=ON"));
 			}
 			Si::absolute_path const modules = repository / Si::relative_path("modules");
 			arguments.emplace_back(
