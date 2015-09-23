@@ -40,6 +40,7 @@ namespace
 			cmakeListsFile << "	set(Boost_USE_STATIC_LIBS ON)\n";
 			cmakeListsFile << "	set(CMAKE_EXE_LINKER_FLAGS \"${CMAKE_EXE_LINKER_FLAGS} /SAFESEH:NO\")\n";
 			cmakeListsFile << "	add_definitions(-D_WIN32_WINDOWS)\n";
+			cmakeListsFile << "	add_definitions(-DBOOST_ASIO_HAS_IOCP)\n";
 			cmakeListsFile << "endif()\n";
 			cmakeListsFile << "find_package(Boost REQUIRED filesystem coroutine program_options thread context system)\n";
 			cmakeListsFile << "include_directories(SYSTEM ${SILICIUM_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${CDM_CONFIGURE_INCLUDE_DIRS})\n";
