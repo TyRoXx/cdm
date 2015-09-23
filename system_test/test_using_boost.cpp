@@ -49,7 +49,7 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 		{
 			if (!library_paths.empty())
 			{
-				library_paths += ";";
+				library_paths += ":";
 			}
 			library_paths += path.c_str();
 		}
