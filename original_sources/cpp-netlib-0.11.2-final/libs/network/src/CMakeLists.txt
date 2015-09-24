@@ -47,6 +47,9 @@ endif ()
 if (Boost_FOUND)
     target_link_libraries(cppnetlib-client-connections ${Boost_LIBRARIES})
 endif ()
+if(UNIX AND NOT APPLE)
+    target_link_libraries(cppnetlib-client-connections rt)
+endif()
 install(TARGETS cppnetlib-client-connections
     EXPORT cppnetlibTargets
     PUBLIC_HEADER DESTINATION ${CMAKE_INSTALL_FULL_INCLUDEDIR}
