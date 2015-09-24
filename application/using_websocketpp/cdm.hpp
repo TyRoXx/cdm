@@ -9,6 +9,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::absolute_path const &module_permanent,
 		Si::absolute_path const &application_source,
 		Si::absolute_path const &application_build_dir,
+		unsigned cpu_parallelism,
 		Si::Sink<char, Si::success>::interface &output
 		)
 	{
@@ -24,7 +25,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		}
 		Si::absolute_path const original_source = *cdm / Si::relative_path("original_sources/websocketpp-c5510d6de04917812b910a8dd44735c1f17061d9");
 		Si::absolute_path const boost_source = *cdm / Si::relative_path("original_sources/boost_1_59_0");
-		cdm::websocketpp_paths const installed = cdm::install_websocketpp(original_source, boost_source, module_temporaries, module_permanent, output);
+		cdm::websocketpp_paths const installed = cdm::install_websocketpp(original_source, boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DWEBSOCKETPP_INCLUDE_DIR=")) + to_os_string(installed.include));
 		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=")) + to_os_string(installed.boost_root));

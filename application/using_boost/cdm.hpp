@@ -10,6 +10,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::absolute_path const &module_permanent,
 		Si::absolute_path const &application_source,
 		Si::absolute_path const &application_build_dir,
+		unsigned cpu_parallelism,
 		Si::Sink<char, Si::success>::interface &output
 		)
 	{
@@ -24,13 +25,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 			throw std::runtime_error("expected the applications dir to have a parent");
 		}
 		Si::absolute_path const boost_source = *cdm / Si::relative_path("original_sources/boost_1_59_0");
-		unsigned const parallelism =
-#ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
-			2;
-#else
-			boost::thread::hardware_concurrency();
-#endif
-		cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, module_temporaries, module_permanent, parallelism, output);
+		cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
 		std::vector<Si::os_string> arguments;
 		Si::os_string const our_boost_root = to_os_string(boost_installed.root);
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + our_boost_root);

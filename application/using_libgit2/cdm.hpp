@@ -9,6 +9,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::absolute_path const &module_permanent,
 		Si::absolute_path const &application_source,
 		Si::absolute_path const &application_build_dir,
+		unsigned cpu_parallelism,
 		Si::Sink<char, Si::success>::interface &output
 		)
 	{
@@ -23,13 +24,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 			throw std::runtime_error("expected the applications dir to have a parent");
 		}
 		Si::absolute_path const original_source = *cdm / Si::relative_path("original_sources/libgit2-0.23.2");
-		unsigned const parallelism =
-#ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
-			2;
-#else
-			boost::thread::hardware_concurrency();
-#endif
-		cdm::libgit2_paths const installed = cdm::install_libgit2(original_source, module_temporaries, module_permanent, Si::cmake_exe, parallelism, output);
+		cdm::libgit2_paths const installed = cdm::install_libgit2(original_source, module_temporaries, module_permanent, Si::cmake_exe, cpu_parallelism, output);
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DLIBGIT2_INCLUDE_DIR=")) + to_os_string(installed.include));
 		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DLIBGIT2_LIBRARY_DIR=")) + to_os_string(installed.library_dir));

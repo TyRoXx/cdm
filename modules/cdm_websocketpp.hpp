@@ -17,14 +17,14 @@ namespace cdm
 		Si::absolute_path const &boost_source,
 		Si::absolute_path const &temporarily_writable,
 		Si::absolute_path const &install_root,
+		unsigned cpu_parallelism,
 		Si::Sink<char, Si::success>::interface &output)
 	{
 		websocketpp_paths result;
 		{
 			Si::absolute_path const boost_temp = temporarily_writable / Si::relative_path("boost");
 			Si::create_directories(boost_temp, Si::throw_);
-			unsigned make_parallelism = 2;
-			cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, boost_temp, install_root, make_parallelism, output);
+			cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, boost_temp, install_root, cpu_parallelism, output);
 			result.boost_root = boost_installed.root;
 		}
 

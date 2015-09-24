@@ -22,7 +22,13 @@ BOOST_AUTO_TEST_CASE(test_using_rapidxml)
 	Si::recreate_directories(module_temporaries, Si::throw_);
 	Si::recreate_directories(application_build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
-	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir, output);
+	unsigned const cpu_parallelism =
+		#ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
+				2;
+		#else
+				boost::thread::hardware_concurrency();
+		#endif
+	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir, cpu_parallelism, output);
 	{
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));

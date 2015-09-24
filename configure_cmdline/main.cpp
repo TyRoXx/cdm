@@ -81,8 +81,14 @@ int main(int argc, char **argv)
 			[]{ throw std::invalid_argument("The application build directory argument must be an absolute path."); }
 		);
 		auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
+		unsigned const cpu_parallelism =
+		#ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
+				2;
+		#else
+				boost::thread::hardware_concurrency();
+		#endif
 		cdm::configure_result const result = CDM_CONFIGURE_NAMESPACE::configure(
-			module_temporaries, module_permanent, application_source, application_build, output);
+			module_temporaries, module_permanent, application_source, application_build, cpu_parallelism, output);
 		for (Si::absolute_path const &dir : result.shared_library_directories)
 		{
 			std::cerr << dir << '\n';
