@@ -18,7 +18,7 @@ namespace
 BOOST_AUTO_TEST_CASE(test_cdm_gtest)
 {
 	Si::absolute_path const source = repository / Si::relative_path("original_sources/gtest-1.7.0");
-	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / Si::relative_path("test_cdm_gtest");
+	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / Si::relative_path("cdm");
 	Si::absolute_path const build_dir = tmp / *Si::path_segment::create("build");
 	Si::recreate_directories(build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
