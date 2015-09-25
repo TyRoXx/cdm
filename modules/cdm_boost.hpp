@@ -94,7 +94,7 @@ namespace cdm
 				{
 #if CDM_AVOID_CONSOLE_OUTPUT
 					//TODO: do not buffer more characters than necessary
-					std::size_t const max_output = 10000;
+					std::size_t const max_output = 3500 * 1000;
 					std::size_t const actual_output = (std::min)(max_output, output_buffer.size());
 					char const * const end = output_buffer.data() + output_buffer.size();
 					Si::append_range(output, Si::make_iterator_range(end - actual_output, end));
