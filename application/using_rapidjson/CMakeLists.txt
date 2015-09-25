@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project(using_rapidjson)
+include_directories(${RAPIDJSON_INCLUDE_DIR})
+add_executable(using_rapidjson using_rapidjson.cpp cdm.hpp)
+set_target_properties(using_rapidjson PROPERTIES FOLDER cdm)

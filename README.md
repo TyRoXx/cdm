@@ -9,7 +9,6 @@ libraries.
 # Roadmap
 Libraries to try:
 * most important
-  * rapidjson
   * silicium
   * Catch
   * github.com/chriskohlhoff/urdl
