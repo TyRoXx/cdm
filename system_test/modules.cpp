@@ -33,7 +33,7 @@ BOOST_AUTO_TEST_CASE(test_cdm_gtest)
 BOOST_AUTO_TEST_CASE(test_cdm_cppnetlib)
 {
 	Si::absolute_path const source = repository / Si::relative_path("original_sources/cpp-netlib-0.11.2-final");
-	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / Si::relative_path("test_cdm_cppnetlib");
+	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / Si::relative_path("cdm");
 	unsigned const make_parallelism =
 #ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
 		2;
