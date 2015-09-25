@@ -19,6 +19,9 @@ addons:
     - g++-4.7
     - g++-4.6
     - libboost1.55-all-dev
+    #dependencies of Boost.Iostreams:
+    - zlib1g-dev
+    - libbz2-dev
     
 env:
  - CPP=g++-5   BUILD_TYPE=Release
