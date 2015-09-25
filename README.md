@@ -9,7 +9,6 @@ libraries.
 # Roadmap
 Libraries to try:
 * most important
-  * Boost
   * rapidjson
   * silicium
   * Catch
