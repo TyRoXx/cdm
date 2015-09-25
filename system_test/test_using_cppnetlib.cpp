@@ -15,9 +15,9 @@ namespace
 BOOST_AUTO_TEST_CASE(test_using_cppnetlib)
 {
 	Si::absolute_path const app_source = repository / Si::relative_path("application/using_cppnetlib");
-	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / *Si::path_segment::create("cdm_test_using_cppnetlib");
-	Si::absolute_path const module_temporaries = tmp / *Si::path_segment::create("module_temporaries");
-	Si::absolute_path const application_build_dir = tmp / *Si::path_segment::create("application_build_dir");
+	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / *Si::path_segment::create("cdm");
+	Si::absolute_path const module_temporaries = tmp / *Si::path_segment::create("mod");
+	Si::absolute_path const application_build_dir = tmp / *Si::path_segment::create("app");
 	Si::recreate_directories(module_temporaries, Si::throw_);
 	Si::recreate_directories(application_build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
