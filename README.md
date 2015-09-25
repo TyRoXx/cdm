@@ -10,7 +10,6 @@ libraries.
 Libraries to try:
 * most important
   * silicium
-  * Catch
   * github.com/chriskohlhoff/urdl
   * github.com/Microsoft/GSL
 * libclang
