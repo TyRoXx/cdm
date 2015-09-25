@@ -41,4 +41,4 @@ script:
  - CXX=$CPP cmake .. -DCMAKE_BUILD_TYPE=$BUILD_TYPE -DCDM_TESTS_RUNNING_ON_TRAVIS_CI=ON || exit 1
  - cmake --build . -- -j2 || exit 1
  - cd system_test
- - ./system_test || exit 1
+ - ./system_test --catch_system_errors=no || exit 1
