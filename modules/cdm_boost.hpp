@@ -82,6 +82,8 @@ namespace cdm
 				//GCC 4.6 crashes when compiling Boost.Log on travis probably due to lack of RAM.
 				//Thus we do not parallelize the build on travis so that the compiler can use all of the memory available to the machine.
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-j ") + boost::lexical_cast<Si::os_string>(make_parallelism));
+#else
+				boost::ignore_unused_variable_warning(make_parallelism);
 #endif
 				int const rc = Si::run_process(copy_of_boost / "b2"
 #ifdef _WIN32
