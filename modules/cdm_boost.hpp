@@ -3,6 +3,7 @@
 
 #include <silicium/file_operations.hpp>
 #include <silicium/run_process.hpp>
+#include <silicium/sink/iterator_sink.hpp>
 #include <boost/lexical_cast.hpp>
 
 //Boost is so large that the output of cp exceeds the 4 MB log limit of travis
@@ -64,7 +65,8 @@ namespace cdm
 
 			{
 #if CDM_AVOID_CONSOLE_OUTPUT
-				auto null_output = Si::Sink<char, Si::success>::erase(Si::null_sink<char, Si::success>());
+				std::vector<char> output_buffer;
+				auto buffering = Si::Sink<char, Si::success>::erase(Si::make_container_sink(output_buffer));
 #endif
 				std::vector<Si::os_string> arguments;
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("install"));
@@ -83,13 +85,19 @@ namespace cdm
 #endif
 					, arguments, copy_of_boost,
 #if CDM_AVOID_CONSOLE_OUTPUT
-					null_output
+					buffering
 #else
 					output
 #endif
 					).get();
 				if (rc != 0)
 				{
+#if CDM_AVOID_CONSOLE_OUTPUT
+					std::size_t const max_output = 10000;
+					std::size_t const actual_output = (std::min)(max_output, output_buffer.size());
+					char const * const end = output_buffer.data() + output_buffer.size();
+					Si::append_range(output, Si::make_iterator_range(end - actual_output, end));
+#endif
 					throw std::runtime_error("b2 failed");
 				}
 			}
