@@ -1,5 +1,5 @@
-#ifndef CDM_RAPIDXML_HPP
-#define CDM_RAPIDXML_HPP
+#ifndef CDM_CATCH_HPP
+#define CDM_CATCH_HPP
 
 #include <silicium/file_operations.hpp>
 

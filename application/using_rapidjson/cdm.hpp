@@ -27,7 +27,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::absolute_path const source = *cdm / Si::relative_path("original_sources/rapidjson-1.0.2");
 		cdm::rapidjson_paths const installed = cdm::install_rapidjson(source, module_temporaries, module_permanent, output);
 		std::vector<Si::os_string> arguments;
-		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DRAPIDJSON_INCLUDE_DIR=")) + to_os_string(installed.include));
+		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DRAPIDJSON_INCLUDE_DIR=") + to_os_string(installed.include));
 #ifdef _MSC_VER
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif

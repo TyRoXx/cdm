@@ -15,22 +15,25 @@ namespace cdm
 		Si::absolute_path library;
 	};
 
-	inline Si::relative_path make_static_lib_build_path(Si::path_segment const &name_base)
+	namespace sqlite3
 	{
+		inline Si::relative_path make_static_lib_build_path(Si::path_segment const &name_base)
+		{
 #ifdef _WIN32
-		return Si::relative_path(L"Debug") / (name_base + *Si::path_segment::create(L".lib"));
+			return Si::relative_path(L"Debug") / (name_base + *Si::path_segment::create(L".lib"));
 #else
-		return Si::relative_path("lib" + name_base.underlying() + ".a");
+			return Si::relative_path("lib" + name_base.underlying() + ".a");
 #endif
-	}
+		}
 
-	inline Si::relative_path make_static_lib_install_path(Si::path_segment const &name_base)
-	{
+		inline Si::relative_path make_static_lib_install_path(Si::path_segment const &name_base)
+		{
 #ifdef _WIN32
-		return Si::relative_path(name_base + *Si::path_segment::create(L".lib"));
+			return Si::relative_path(name_base + *Si::path_segment::create(L".lib"));
 #else
-		return Si::relative_path("lib" + name_base.underlying() + ".a");
+			return Si::relative_path("lib" + name_base.underlying() + ".a");
 #endif
+		}
 	}
 
 	template <class Sink>
@@ -118,7 +121,7 @@ namespace cdm
 			{
 				Si::absolute_path const lib_dir = construction_site / Si::relative_path("lib");
 				Si::create_directories(lib_dir, Si::throw_);
-				Si::copy(build_dir / make_static_lib_build_path(*Si::path_segment::create("sqlite3")), lib_dir / make_static_lib_install_path(*Si::path_segment::create(L"sqlite3")), Si::throw_);
+				Si::copy(build_dir / sqlite3::make_static_lib_build_path(*Si::path_segment::create("sqlite3")), lib_dir / sqlite3::make_static_lib_install_path(*Si::path_segment::create(L"sqlite3")), Si::throw_);
 				Si::absolute_path const include_dir = construction_site / Si::relative_path("include");
 				Si::create_directories(include_dir, Si::throw_);
 				Si::copy(original_source / *Si::path_segment::create("sqlite3.h"), include_dir / Si::relative_path("sqlite3.h"), Si::throw_);
@@ -128,7 +131,7 @@ namespace cdm
 		}
 		sqlite_paths result;
 		result.include = in_cache / *Si::path_segment::create("include");
-		result.library = in_cache / *Si::path_segment::create("lib") / make_static_lib_install_path(*Si::path_segment::create(L"sqlite3"));
+		result.library = in_cache / *Si::path_segment::create("lib") / sqlite3::make_static_lib_install_path(*Si::path_segment::create(L"sqlite3"));
 		return std::move(result);
 	}
 }

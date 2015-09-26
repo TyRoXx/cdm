@@ -13,22 +13,25 @@ namespace cdm
 		Si::absolute_path library_main;
 	};
 
-	inline Si::relative_path make_static_lib_build_path(Si::path_segment const &name_base)
+	namespace gtest
 	{
+		inline Si::relative_path make_static_lib_build_path(Si::path_segment const &name_base)
+		{
 #ifdef _WIN32
-		return Si::relative_path(L"Debug") / (name_base + *Si::path_segment::create(L".lib"));
+			return Si::relative_path(L"Debug") / (name_base + *Si::path_segment::create(L".lib"));
 #else
-		return Si::relative_path("lib" + name_base.underlying() + ".a");
+			return Si::relative_path("lib" + name_base.underlying() + ".a");
 #endif
-	}
+		}
 
-	inline Si::relative_path make_static_lib_install_path(Si::path_segment const &name_base)
-	{
+		inline Si::relative_path make_static_lib_install_path(Si::path_segment const &name_base)
+		{
 #ifdef _WIN32
-		return Si::relative_path(name_base + *Si::path_segment::create(L".lib"));
+			return Si::relative_path(name_base + *Si::path_segment::create(L".lib"));
 #else
-		return Si::relative_path("lib" + name_base.underlying() + ".a");
+			return Si::relative_path("lib" + name_base.underlying() + ".a");
 #endif
+		}
 	}
 
 	inline gtest_paths install_gtest(
@@ -72,8 +75,8 @@ namespace cdm
 			{
 				Si::absolute_path const lib_dir = construction_site / Si::relative_path("lib");
 				Si::create_directories(lib_dir, Si::throw_);
-				Si::copy(build_dir / make_static_lib_build_path(*Si::path_segment::create("gtest")), lib_dir / make_static_lib_install_path(*Si::path_segment::create(L"gtest")), Si::throw_);
-				Si::copy(build_dir / make_static_lib_build_path(*Si::path_segment::create("gtest_main")), lib_dir / make_static_lib_install_path(*Si::path_segment::create(L"gtest_main")), Si::throw_);
+				Si::copy(build_dir / gtest::make_static_lib_build_path(*Si::path_segment::create("gtest")), lib_dir / gtest::make_static_lib_install_path(*Si::path_segment::create(L"gtest")), Si::throw_);
+				Si::copy(build_dir / gtest::make_static_lib_build_path(*Si::path_segment::create("gtest_main")), lib_dir / gtest::make_static_lib_install_path(*Si::path_segment::create(L"gtest_main")), Si::throw_);
 				Si::copy_recursively(gtest_source / *Si::path_segment::create("include"), construction_site / Si::relative_path("include"), &output, Si::throw_);
 			}
 			Si::rename(construction_site, gtest_in_cache, Si::throw_);
@@ -81,8 +84,8 @@ namespace cdm
 		gtest_paths result;
 		result.include = gtest_in_cache / *Si::path_segment::create("include");
 		auto lib_dir = gtest_in_cache / *Si::path_segment::create("lib");
-		result.library = lib_dir / make_static_lib_install_path(*Si::path_segment::create(L"gtest"));
-		result.library_main = lib_dir / make_static_lib_install_path(*Si::path_segment::create(L"gtest_main"));
+		result.library = lib_dir / gtest::make_static_lib_install_path(*Si::path_segment::create(L"gtest"));
+		result.library_main = lib_dir /gtest::make_static_lib_install_path(*Si::path_segment::create(L"gtest_main"));
 		return result;
 	}
 }

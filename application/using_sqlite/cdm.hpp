@@ -27,8 +27,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::absolute_path const original_source = *cdm / Si::relative_path("original_sources/sqlite-autoconf-3081101");
 		cdm::sqlite_paths const installed = cdm::install_sqlite(original_source, module_temporaries, module_permanent, Si::cmake_exe, output);
 		std::vector<Si::os_string> arguments;
-		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DSQLITE3_INCLUDE_DIRS=")) + to_os_string(installed.include));
-		arguments.push_back(Si::os_string(SILICIUM_SYSTEM_LITERAL("-DSQLITE3_LIBRARIES=")) + to_os_string(installed.library));
+		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DSQLITE3_INCLUDE_DIRS=") + to_os_string(installed.include));
+		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DSQLITE3_LIBRARIES=") + to_os_string(installed.library));
 #ifdef _MSC_VER
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif
