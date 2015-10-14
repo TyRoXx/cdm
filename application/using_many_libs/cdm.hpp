@@ -57,12 +57,10 @@ namespace CDM_CONFIGURE_NAMESPACE
 		cdm::websocketpp_paths const websocketpp_installed = cdm::install_websocketpp(websocketpp_source, boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
 
 		std::vector<Si::os_string> arguments;
-#if 0
 		Si::os_string const our_boost_root = to_os_string(boost_installed.root);
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + our_boost_root);
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_ADDITIONAL_VERSIONS=1.59"));
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_NO_SYSTEM_PATHS=ON"));
-#endif
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCATCH_INCLUDE_DIRS=") + to_os_string(catch_installed.include));
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPPNETLIB_PREFIX_PATH=") + to_os_string(cppnetlib_installed.cmake_prefix_path));
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DRAPIDJSON_INCLUDE_DIR=") + to_os_string(rapidjson_installed.include));

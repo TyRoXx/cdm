@@ -1,3 +1,6 @@
+#include <websocketpp/server.hpp>
+#include <websocketpp/config/asio_no_tls.hpp>
+#include <boost/network/protocol/http.hpp>
 #define CATCH_CONFIG_MAIN  // This tells Catch to provide a main() - only do this in one cpp file
 #include "catch.hpp"
 #include <boost/filesystem/operations.hpp>
@@ -5,9 +8,6 @@
 #include <iostream>
 #include "rapidxml.hpp"
 #include "rapidjson/document.h"
-#include <websocketpp/server.hpp>
-#include <websocketpp/config/asio_no_tls.hpp>
-#include <boost/network/protocol/http.hpp>
 
 unsigned int Factorial( unsigned int number )
 {
