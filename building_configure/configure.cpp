@@ -42,7 +42,7 @@ namespace
 			cmakeListsFile << "	add_definitions(-D_WIN32_WINDOWS)\n";
 			cmakeListsFile << "	add_definitions(-DBOOST_ASIO_HAS_IOCP)\n";
 			cmakeListsFile << "endif()\n";
-			cmakeListsFile << "find_package(Boost REQUIRED filesystem coroutine program_options thread context system)\n";
+			cmakeListsFile << "find_package(Boost REQUIRED filesystem coroutine date_time program_options thread chrono context regex system)\n";
 			cmakeListsFile << "include_directories(SYSTEM ${SILICIUM_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${CDM_CONFIGURE_INCLUDE_DIRS})\n";
 			cmakeListsFile << "link_directories(${Boost_LIBRARY_DIR})\n";
 			cmakeListsFile << "add_executable(configure main.cpp)\n";
