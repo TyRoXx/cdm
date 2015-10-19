@@ -21,13 +21,14 @@ BOOST_AUTO_TEST_CASE(test_using_catch)
 	ventura::absolute_path const application_build_dir = tmp / *ventura::path_segment::create("app");
 	ventura::recreate_directories(module_temporaries, Si::throw_);
 	ventura::recreate_directories(application_build_dir, Si::throw_);
-	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
+	std::ofstream log_file = cdm::open_log(tmp / ventura::relative_path("test_using_catch.txt"));
+	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(log_file));
 	unsigned const cpu_parallelism =
-		#ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
+#ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
 				2;
-		#else
+#else
 				boost::thread::hardware_concurrency();
-		#endif
+#endif
 	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir, cpu_parallelism, output);
 	{
 		std::vector<Si::os_string> arguments;

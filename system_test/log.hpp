@@ -2,6 +2,8 @@
 #define CDM_SYSTEM_TEST_LOG_HPP
 
 #include <silicium/sink/append.hpp>
+#include <ventura/absolute_path.hpp>
+#include <fstream>
 
 namespace cdm
 {
@@ -67,6 +69,17 @@ namespace cdm
 				detail::program_output_printer<typename std::decay<NextSink>::type>(std::forward<NextSink>(next))
 			)
 		);
+	}
+
+	inline std::ofstream open_log(ventura::absolute_path const &name)
+	{
+		auto utf8_name = to_utf8_string(name);
+		std::ofstream file(utf8_name.c_str());
+		if (!file)
+		{
+			throw std::runtime_error("Could not open file for writing: " + utf8_name);
+		}
+		return file;
 	}
 }
 

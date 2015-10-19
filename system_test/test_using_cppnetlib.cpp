@@ -20,7 +20,8 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib)
 	ventura::absolute_path const application_build_dir = tmp / *ventura::path_segment::create("app");
 	ventura::recreate_directories(module_temporaries, Si::throw_);
 	ventura::recreate_directories(application_build_dir, Si::throw_);
-	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
+	std::ofstream log_file = cdm::open_log(tmp / ventura::relative_path("test_using_cppnetlib.txt"));
+	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(log_file));
 	unsigned const cpu_parallelism =
 #ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
 		2;
