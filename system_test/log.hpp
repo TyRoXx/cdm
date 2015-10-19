@@ -54,7 +54,7 @@ namespace cdm
 				}
 			}
 
-		  private:
+		private:
 			NextSink m_next;
 			bool m_needs_indentation;
 		};
@@ -84,13 +84,13 @@ namespace cdm
 	struct travis_keep_alive_printer
 	{
 		travis_keep_alive_printer()
-			: m_timer(m_dispatcher)
+		    : m_timer(m_dispatcher)
 		{
 			start_timer();
 			m_done = boost::async(boost::launch::async, [this]()
-			{
-				m_dispatcher.run();
-			});
+			                      {
+				                      m_dispatcher.run();
+				                  });
 		}
 
 		~travis_keep_alive_printer()
@@ -100,7 +100,6 @@ namespace cdm
 		}
 
 	private:
-
 		boost::asio::io_service m_dispatcher;
 		boost::asio::basic_waitable_timer<std::chrono::steady_clock> m_timer;
 		boost::unique_future<void> m_done;
@@ -109,10 +108,10 @@ namespace cdm
 		{
 			m_timer.expires_from_now(std::chrono::minutes(1));
 			m_timer.async_wait([this](boost::system::error_code)
-			{
-				std::cerr << "keeping travis alive..\n";
-				start_timer();
-			});
+			                   {
+				                   std::cerr << "keeping travis alive..\n";
+				                   start_timer();
+				               });
 		}
 	};
 }
