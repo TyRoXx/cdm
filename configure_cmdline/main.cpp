@@ -1,4 +1,4 @@
-#include <silicium/absolute_path.hpp>
+#include <ventura/absolute_path.hpp>
 #include <silicium/sink/sink.hpp>
 #include <cdm/configure_result.hpp>
 
@@ -7,10 +7,10 @@ namespace CDM_CONFIGURE_NAMESPACE
 	//The forward declaration for the function that has to be implemented by the header
 	//which is #included next.
 	cdm::configure_result configure(
-		Si::absolute_path const &module_temporaries,
-		Si::absolute_path const &module_permanent,
-		Si::absolute_path const &application_source,
-		Si::absolute_path const &application_build_dir,
+		ventura::absolute_path const &module_temporaries,
+		ventura::absolute_path const &module_permanent,
+		ventura::absolute_path const &application_source,
+		ventura::absolute_path const &application_build_dir,
 		Si::Sink<char, Si::success>::interface &output
 	);
 }
@@ -20,10 +20,10 @@ namespace CDM_CONFIGURE_NAMESPACE
 #include "cdm.hpp"
 
 #include <silicium/os_string.hpp>
-#include <silicium/run_process.hpp>
+#include <ventura/run_process.hpp>
 #include <silicium/sink/ostream_sink.hpp>
 #include <silicium/program_options.hpp>
-#include <silicium/file_operations.hpp>
+#include <ventura/file_operations.hpp>
 #include <iostream>
 
 #ifdef _MSC_VER
@@ -69,15 +69,15 @@ int main(int argc, char **argv)
 
 	try
 	{
-		Si::absolute_path const module_temporaries = Si::temporary_directory(Si::throw_) / *Si::path_segment::create("cdm_modules");
-		Si::recreate_directories(module_temporaries, Si::throw_);
-		Si::absolute_path const module_permanent = Si::absolute_path::create(module_permanent_argument).or_throw(
+		ventura::absolute_path const module_temporaries = ventura::temporary_directory(Si::throw_) / *ventura::path_segment::create("cdm_modules");
+		ventura::recreate_directories(module_temporaries, Si::throw_);
+		ventura::absolute_path const module_permanent = ventura::absolute_path::create(module_permanent_argument).or_throw(
 			[]{ throw std::invalid_argument("The permanent module cache argument must be an absolute path."); }
 		);
-		Si::absolute_path const application_source = Si::absolute_path::create(application_source_argument).or_throw(
+		ventura::absolute_path const application_source = ventura::absolute_path::create(application_source_argument).or_throw(
 			[]{ throw std::invalid_argument("The application source argument must be an absolute path."); }
 		);
-		Si::absolute_path const application_build = Si::absolute_path::create(application_build_argument).or_throw(
+		ventura::absolute_path const application_build = ventura::absolute_path::create(application_build_argument).or_throw(
 			[]{ throw std::invalid_argument("The application build directory argument must be an absolute path."); }
 		);
 		auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
@@ -89,7 +89,7 @@ int main(int argc, char **argv)
 		#endif
 		cdm::configure_result const result = CDM_CONFIGURE_NAMESPACE::configure(
 			module_temporaries, module_permanent, application_source, application_build, cpu_parallelism, output);
-		for (Si::absolute_path const &dir : result.shared_library_directories)
+		for (ventura::absolute_path const &dir : result.shared_library_directories)
 		{
 			std::cerr << dir << '\n';
 		}

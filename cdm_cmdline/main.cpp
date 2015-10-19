@@ -1,6 +1,6 @@
 #include "building_configure/configure.hpp"
 #include <silicium/program_options.hpp>
-#include <silicium/file_operations.hpp>
+#include <ventura/file_operations.hpp>
 #include <silicium/sink/ostream_sink.hpp>
 #include <iostream>
 
@@ -47,16 +47,16 @@ int main(int argc, char **argv)
 
 	try
 	{
-		Si::absolute_path const module_permanent = Si::absolute_path::create(module_permanent_argument).or_throw(
+		ventura::absolute_path const module_permanent = ventura::absolute_path::create(module_permanent_argument).or_throw(
 			[]{ throw std::invalid_argument("The permanent module cache argument must be an absolute path."); }
 		);
-		Si::absolute_path const application_source = Si::absolute_path::create(application_source_argument).or_throw(
+		ventura::absolute_path const application_source = ventura::absolute_path::create(application_source_argument).or_throw(
 			[]{ throw std::invalid_argument("The application source argument must be an absolute path."); }
 		);
-		Si::absolute_path const application_build = Si::absolute_path::create(application_build_argument).or_throw(
+		ventura::absolute_path const application_build = ventura::absolute_path::create(application_build_argument).or_throw(
 			[]{ throw std::invalid_argument("The application build directory argument must be an absolute path."); }
 		);
-		Si::absolute_path const temporary_root = Si::temporary_directory(Si::throw_) / Si::relative_path("cdm_cmdline");
+		ventura::absolute_path const temporary_root = ventura::temporary_directory(Si::throw_) / ventura::relative_path("cdm_cmdline");
 		auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
 		cdm::do_configure(temporary_root, module_permanent, application_source, application_build, Si::none, output);
 		LOG("Your application has been configured.");

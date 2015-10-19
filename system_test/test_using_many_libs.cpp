@@ -3,25 +3,25 @@
 #include "log.hpp"
 #include <boost/test/unit_test.hpp>
 #include <silicium/sink/ostream_sink.hpp>
-#include <silicium/file_operations.hpp>
+#include <ventura/file_operations.hpp>
 #include <cdm/locate_cache.hpp>
 
 namespace
 {
-	Si::absolute_path const this_file = *Si::absolute_path::create(__FILE__);
-	Si::absolute_path const test = *Si::parent(this_file);
-	Si::absolute_path const repository = *Si::parent(test);
+	ventura::absolute_path const this_file = *ventura::absolute_path::create(__FILE__);
+	ventura::absolute_path const test = *ventura::parent(this_file);
+	ventura::absolute_path const repository = *ventura::parent(test);
 }
 
 BOOST_AUTO_TEST_CASE(test_using_many_libs)
 {
-	Si::absolute_path const app_source = repository / Si::relative_path("application/using_many_libs");
-	Si::absolute_path const tmp = Si::temporary_directory(Si::throw_) / *Si::path_segment::create("cdm_b");
-	Si::recreate_directories(tmp, Si::throw_);
-	Si::absolute_path const module_temporaries = tmp / *Si::path_segment::create("build");
-	Si::create_directories(module_temporaries, Si::throw_);
-	Si::absolute_path const application_build_dir = tmp / *Si::path_segment::create("app_build");
-	Si::create_directories(application_build_dir, Si::throw_);
+	ventura::absolute_path const app_source = repository / ventura::relative_path("application/using_many_libs");
+	ventura::absolute_path const tmp = ventura::temporary_directory(Si::throw_) / *ventura::path_segment::create("cdm_b");
+	ventura::recreate_directories(tmp, Si::throw_);
+	ventura::absolute_path const module_temporaries = tmp / *ventura::path_segment::create("build");
+	ventura::create_directories(module_temporaries, Si::throw_);
+	ventura::absolute_path const application_build_dir = tmp / *ventura::path_segment::create("app_build");
+	ventura::create_directories(application_build_dir, Si::throw_);
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
 	unsigned const cpu_parallelism =
 #ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
@@ -34,11 +34,11 @@ BOOST_AUTO_TEST_CASE(test_using_many_libs)
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("."));
-		BOOST_REQUIRE_EQUAL(0, Si::run_process(Si::cmake_exe, arguments, application_build_dir, output));
+		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output));
 	}
 	{
 		std::vector<Si::os_string> arguments;
-		Si::relative_path const relative(
+		ventura::relative_path const relative(
 #ifdef _MSC_VER
 			SILICIUM_SYSTEM_LITERAL("Debug/")
 #endif
@@ -47,7 +47,7 @@ BOOST_AUTO_TEST_CASE(test_using_many_libs)
 			SILICIUM_SYSTEM_LITERAL(".exe")
 #endif
 		);
-		BOOST_REQUIRE_EQUAL(0, Si::run_process(
+		BOOST_REQUIRE_EQUAL(0, ventura::run_process(
 			application_build_dir / relative,
 			arguments,
 			application_build_dir,

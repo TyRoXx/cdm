@@ -7,10 +7,10 @@
 
 namespace cdm
 {
-	inline Si::optional<Si::absolute_path> get_boost_root_for_testing()
+	inline Si::optional<ventura::absolute_path> get_boost_root_for_testing()
 	{
 #ifdef CDM_BOOST_ROOT_FOR_TESTING
-		Si::optional<Si::absolute_path> checked = Si::absolute_path::create(CDM_BOOST_ROOT_FOR_TESTING);
+		Si::optional<ventura::absolute_path> checked = ventura::absolute_path::create(CDM_BOOST_ROOT_FOR_TESTING);
 		assert(checked);
 		return checked;
 #endif
