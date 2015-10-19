@@ -14,6 +14,7 @@ namespace
 
 BOOST_AUTO_TEST_CASE(test_using_cppnetlib)
 {
+	cdm::travis_keep_alive_printer keep_travis_alive;
 	ventura::absolute_path const app_source = repository / ventura::relative_path("application/using_cppnetlib");
 	ventura::absolute_path const tmp = ventura::temporary_directory(Si::throw_) / *ventura::path_segment::create("cdm");
 	ventura::absolute_path const module_temporaries = tmp / *ventura::path_segment::create("mod");

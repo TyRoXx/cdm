@@ -2,8 +2,11 @@
 #define CDM_SYSTEM_TEST_LOG_HPP
 
 #include <silicium/sink/append.hpp>
+#include <silicium/asio/timer.hpp>
 #include <ventura/absolute_path.hpp>
+#include <boost/thread/future.hpp>
 #include <fstream>
+#include <chrono>
 
 namespace cdm
 {
@@ -77,6 +80,41 @@ namespace cdm
 		}
 		return file;
 	}
+
+	struct travis_keep_alive_printer
+	{
+		travis_keep_alive_printer()
+			: m_timer(m_dispatcher)
+		{
+			start_timer();
+			m_done = boost::async(boost::launch::async, [this]()
+			{
+				m_dispatcher.run();
+			});
+		}
+
+		~travis_keep_alive_printer()
+		{
+			m_dispatcher.stop();
+			m_done.get();
+		}
+
+	private:
+
+		boost::asio::io_service m_dispatcher;
+		boost::asio::basic_waitable_timer<std::chrono::steady_clock> m_timer;
+		boost::unique_future<void> m_done;
+
+		void start_timer()
+		{
+			m_timer.expires_from_now(std::chrono::minutes(1));
+			m_timer.async_wait([this](boost::system::error_code)
+			{
+				std::cerr << "keeping travis alive..\n";
+				start_timer();
+			});
+		}
+	};
 }
 
 #endif
