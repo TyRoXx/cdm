@@ -3,10 +3,10 @@
 
 #include <silicium/sink/append.hpp>
 #include <silicium/asio/timer.hpp>
+#include <silicium/steady_clock.hpp>
 #include <ventura/absolute_path.hpp>
 #include <boost/thread/future.hpp>
 #include <fstream>
-#include <chrono>
 
 namespace cdm
 {
@@ -76,7 +76,7 @@ namespace cdm
 		std::unique_ptr<std::ofstream> file = Si::make_unique<std::ofstream>(utf8_name.c_str());
 		if (!*file)
 		{
-			throw std::runtime_error("Could not open file for writing: " + utf8_name);
+			throw std::runtime_error(("Could not open file for writing: " + utf8_name).c_str());
 		}
 		return file;
 	}
@@ -101,7 +101,7 @@ namespace cdm
 
 	private:
 		boost::asio::io_service m_dispatcher;
-		boost::asio::basic_waitable_timer<std::chrono::steady_clock> m_timer;
+		boost::asio::basic_waitable_timer<Si::steady_clock> m_timer;
 		boost::unique_future<void> m_done;
 
 		void start_timer()
