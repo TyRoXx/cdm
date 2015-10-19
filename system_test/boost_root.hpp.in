@@ -1,7 +1,7 @@
 #ifndef CDM_BOOST_ROOT_HPP
 #define CDM_BOOST_ROOT_HPP
 
-#include <silicium/absolute_path.hpp>
+#include <ventura/absolute_path.hpp>
 
 #cmakedefine CDM_BOOST_ROOT_FOR_TESTING SILICIUM_SYSTEM_LITERAL("@CDM_BOOST_ROOT_FOR_TESTING@")
 
@@ -13,8 +13,9 @@ namespace cdm
 		Si::optional<ventura::absolute_path> checked = ventura::absolute_path::create(CDM_BOOST_ROOT_FOR_TESTING);
 		assert(checked);
 		return checked;
-#endif
+#else
 		return Si::none;
+#endif
 	}
 }
 
