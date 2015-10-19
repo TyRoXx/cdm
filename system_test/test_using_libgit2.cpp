@@ -23,11 +23,11 @@ BOOST_AUTO_TEST_CASE(test_using_libgit2)
 	std::unique_ptr<std::ofstream> log_file = cdm::open_log(tmp / ventura::relative_path("test_using_libgit2.txt"));
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(*log_file));
 	unsigned const cpu_parallelism =
-		#ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
-				2;
-		#else
-				boost::thread::hardware_concurrency();
-		#endif
+#ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
+	    2;
+#else
+	    boost::thread::hardware_concurrency();
+#endif
 	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir, cpu_parallelism, output);
 	{
 		std::vector<Si::os_string> arguments;
@@ -39,13 +39,13 @@ BOOST_AUTO_TEST_CASE(test_using_libgit2)
 		std::vector<Si::os_string> arguments;
 		ventura::relative_path const relative(
 #ifdef _WIN32
-			SILICIUM_SYSTEM_LITERAL("Debug/")
+		    SILICIUM_SYSTEM_LITERAL("Debug/")
 #endif
-			SILICIUM_SYSTEM_LITERAL("using_libgit2")
+		        SILICIUM_SYSTEM_LITERAL("using_libgit2")
 #ifdef _WIN32
-			SILICIUM_SYSTEM_LITERAL(".exe")
+		            SILICIUM_SYSTEM_LITERAL(".exe")
 #endif
-		);
+		                );
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}
 }

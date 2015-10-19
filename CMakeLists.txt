@@ -137,6 +137,10 @@ if(CDM_TESTS_RUNNING_ON_TRAVIS_CI)
 	add_definitions("-DCDM_TESTS_RUNNING_ON_TRAVIS_CI")
 endif()
 
+file(GLOB formatted "modules/*.hpp")
+file(GLOB_RECURSE applications "application/**.hpp" "application/**.cpp")
+set(formatted ${formatted} ${applications})
+
 include_directories(".")
 include_directories("modules")
 
@@ -156,3 +160,5 @@ set_target_properties(using_gtest PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEF
 set_target_properties(using_sqlite PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
 set_target_properties(using_rapidjson PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
 set_target_properties(using_rapidxml PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
+
+add_custom_target(clang_format COMMAND clang-format-3.6 -i ${formatted} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})

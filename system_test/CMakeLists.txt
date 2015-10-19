@@ -9,5 +9,6 @@ endif()
 configure_file(boost_root.hpp.in boost_root.hpp ESCAPE_QUOTES @ONLY)
 include_directories(${CMAKE_CURRENT_BINARY_DIR})
 
+set(formatted ${formatted} ${sources} PARENT_SCOPE)
 add_executable(system_test ${sources} ${headers} ${CMAKE_CURRENT_BINARY_DIR}/boost_root.hpp)
 target_link_libraries(system_test building_configure ${Boost_LIBRARIES})

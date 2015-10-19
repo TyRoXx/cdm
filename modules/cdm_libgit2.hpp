@@ -13,13 +13,9 @@ namespace cdm
 		ventura::absolute_path library_dir;
 	};
 
-	inline libgit2_paths install_libgit2(
-		ventura::absolute_path const &original_source,
-		ventura::absolute_path const &temporary,
-		ventura::absolute_path const &install_root,
-		ventura::absolute_path const &cmake_exe,
-		unsigned make_parallelism,
-		Si::Sink<char, Si::success>::interface &output)
+	inline libgit2_paths install_libgit2(ventura::absolute_path const &original_source, ventura::absolute_path const &temporary,
+	                                     ventura::absolute_path const &install_root, ventura::absolute_path const &cmake_exe, unsigned make_parallelism,
+	                                     Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const module_in_cache = install_root / ventura::relative_path("libgit2");
 		if (!ventura::file_exists(module_in_cache, Si::throw_))
@@ -51,9 +47,9 @@ namespace cdm
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("Debug"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("/project"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("INSTALL"));
-				int const rc = ventura::run_process(
-					*ventura::absolute_path::create(L"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\Common7\\IDE\\devenv.exe"),
-					arguments, build_dir, output).get();
+				int const rc = ventura::run_process(*ventura::absolute_path::create(L"C:\\Program Files (x86)\\Microsoft Visual "
+				                                                                    L"Studio 12.0\\Common7\\IDE\\devenv.exe"),
+				                                    arguments, build_dir, output).get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");

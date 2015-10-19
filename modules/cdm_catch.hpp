@@ -10,11 +10,8 @@ namespace cdm
 		ventura::absolute_path include;
 	};
 
-	inline catch_paths install_catch(
-		ventura::absolute_path const &original_source,
-		ventura::absolute_path const &temporarily_writable,
-		ventura::absolute_path const &install_root,
-		Si::Sink<char, Si::success>::interface &output)
+	inline catch_paths install_catch(ventura::absolute_path const &original_source, ventura::absolute_path const &temporarily_writable,
+	                                 ventura::absolute_path const &install_root, Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const in_cache = install_root / ventura::relative_path("catch");
 		if (!ventura::file_exists(in_cache, Si::throw_))

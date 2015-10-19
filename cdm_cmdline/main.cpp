@@ -5,12 +5,17 @@
 #include <iostream>
 
 #ifdef _MSC_VER
-#	define SILICIUM_WHILE_FALSE while (0,0)
+#define SILICIUM_WHILE_FALSE while (0, 0)
 #else
-#	define SILICIUM_WHILE_FALSE while (false)
+#define SILICIUM_WHILE_FALSE while (false)
 #endif
 
-#define LOG(...) do { std::cerr << __VA_ARGS__ << '\n'; } SILICIUM_WHILE_FALSE
+#define LOG(...)                                                                                                                                               \
+	do                                                                                                                                                         \
+	{                                                                                                                                                          \
+		std::cerr << __VA_ARGS__ << '\n';                                                                                                                      \
+	}                                                                                                                                                          \
+	SILICIUM_WHILE_FALSE
 
 int main(int argc, char **argv)
 {
@@ -19,12 +24,10 @@ int main(int argc, char **argv)
 	std::string application_build_argument;
 
 	boost::program_options::options_description options("options");
-	options.add_options()
-		("help,h", "produce help message")
-		("modules,m", boost::program_options::value(&module_permanent_argument), "absolute path to the permanent module binary cache")
-		("application,a", boost::program_options::value(&application_source_argument), "absolute path to the root of your application source code")
-		("build,b", boost::program_options::value(&application_build_argument), "absolute path to the CMake build directory of your application")
-		;
+	options.add_options()("help,h", "produce help message")("modules,m", boost::program_options::value(&module_permanent_argument),
+	                                                        "absolute path to the permanent module binary cache")(
+	    "application,a", boost::program_options::value(&application_source_argument), "absolute path to the root of your application source code")(
+	    "build,b", boost::program_options::value(&application_build_argument), "absolute path to the CMake build directory of your application");
 	boost::program_options::positional_options_description positional;
 	boost::program_options::variables_map variables;
 	try
@@ -47,15 +50,24 @@ int main(int argc, char **argv)
 
 	try
 	{
-		ventura::absolute_path const module_permanent = ventura::absolute_path::create(module_permanent_argument).or_throw(
-			[]{ throw std::invalid_argument("The permanent module cache argument must be an absolute path."); }
-		);
-		ventura::absolute_path const application_source = ventura::absolute_path::create(application_source_argument).or_throw(
-			[]{ throw std::invalid_argument("The application source argument must be an absolute path."); }
-		);
-		ventura::absolute_path const application_build = ventura::absolute_path::create(application_build_argument).or_throw(
-			[]{ throw std::invalid_argument("The application build directory argument must be an absolute path."); }
-		);
+		ventura::absolute_path const module_permanent =
+		    ventura::absolute_path::create(module_permanent_argument)
+		        .or_throw([]
+		                  {
+			                  throw std::invalid_argument("The permanent module cache argument must be an absolute path.");
+			              });
+		ventura::absolute_path const application_source =
+		    ventura::absolute_path::create(application_source_argument)
+		        .or_throw([]
+		                  {
+			                  throw std::invalid_argument("The application source argument must be an absolute path.");
+			              });
+		ventura::absolute_path const application_build =
+		    ventura::absolute_path::create(application_build_argument)
+		        .or_throw([]
+		                  {
+			                  throw std::invalid_argument("The application build directory argument must be an absolute path.");
+			              });
 		ventura::absolute_path const temporary_root = ventura::temporary_directory(Si::throw_) / ventura::relative_path("cdm_cmdline");
 		auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
 		cdm::do_configure(temporary_root, module_permanent, application_source, application_build, Si::none, output);

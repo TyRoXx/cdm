@@ -12,13 +12,9 @@ namespace cdm
 		ventura::absolute_path boost_root;
 	};
 
-	inline websocketpp_paths install_websocketpp(
-		ventura::absolute_path const &original_source,
-		ventura::absolute_path const &boost_source,
-		ventura::absolute_path const &temporarily_writable,
-		ventura::absolute_path const &install_root,
-		unsigned cpu_parallelism,
-		Si::Sink<char, Si::success>::interface &output)
+	inline websocketpp_paths install_websocketpp(ventura::absolute_path const &original_source, ventura::absolute_path const &boost_source,
+	                                             ventura::absolute_path const &temporarily_writable, ventura::absolute_path const &install_root,
+	                                             unsigned cpu_parallelism, Si::Sink<char, Si::success>::interface &output)
 	{
 		websocketpp_paths result;
 		{

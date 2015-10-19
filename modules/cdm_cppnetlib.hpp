@@ -13,14 +13,9 @@ namespace cdm
 		ventura::absolute_path cmake_prefix_path;
 	};
 
-	inline cppnetlib_paths install_cppnetlib(
-		ventura::absolute_path const &cppnetlib_source,
-		ventura::absolute_path const &boost_source,
-		ventura::absolute_path const &temporary,
-		ventura::absolute_path const &install_root,
-		ventura::absolute_path const &cmake_exe,
-		unsigned make_parallelism,
-		Si::Sink<char, Si::success>::interface &output)
+	inline cppnetlib_paths install_cppnetlib(ventura::absolute_path const &cppnetlib_source, ventura::absolute_path const &boost_source,
+	                                         ventura::absolute_path const &temporary, ventura::absolute_path const &install_root,
+	                                         ventura::absolute_path const &cmake_exe, unsigned make_parallelism, Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const module_in_cache = install_root / ventura::relative_path("cppnetlib");
 		if (!ventura::file_exists(module_in_cache, Si::throw_))
@@ -35,7 +30,7 @@ namespace cdm
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_EXPERIMENTS=OFF"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_EXAMPLES=OFF"));
 #ifdef _WIN32
-				//TODO: deal with OpenSSL later..
+				// TODO: deal with OpenSSL later..
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_ENABLE_HTTPS=OFF"));
 #endif
 				ventura::absolute_path const boost_temp = temporary / ventura::relative_path("boost");
@@ -63,9 +58,9 @@ namespace cdm
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("Debug"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("/project"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("INSTALL"));
-				int const rc = ventura::run_process(
-					*ventura::absolute_path::create(L"C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\Common7\\IDE\\devenv.exe"),
-					arguments, build_dir, output).get();
+				int const rc = ventura::run_process(*ventura::absolute_path::create(L"C:\\Program Files (x86)\\Microsoft Visual "
+				                                                                    L"Studio 12.0\\Common7\\IDE\\devenv.exe"),
+				                                    arguments, build_dir, output).get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");
@@ -92,15 +87,15 @@ namespace cdm
 		cppnetlib_paths result;
 		result.cmake_prefix_path = module_in_cache / ventura::relative_path(
 #ifdef __linux__
-			"lib/"
+		                                                 "lib/"
 #if !defined(CDM_TESTS_RUNNING_ON_TRAVIS_CI)
-			"x86_64-linux-gnu/"
+		                                                 "x86_64-linux-gnu/"
 #endif
-			"cmake"
+		                                                 "cmake"
 #else
-			"CMake"
+		                                                 "CMake"
 #endif
-		);
+		                                                 );
 		return result;
 	}
 }

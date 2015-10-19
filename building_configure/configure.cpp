@@ -5,19 +5,19 @@
 
 namespace
 {
-	ventura::absolute_path build_configure(
-		ventura::absolute_path const &application_source,
-		ventura::absolute_path const &temporary,
-		Si::optional<ventura::absolute_path> const &boost_root,
-		Si::Sink<char, Si::success>::interface &output)
+	ventura::absolute_path build_configure(ventura::absolute_path const &application_source, ventura::absolute_path const &temporary,
+	                                       Si::optional<ventura::absolute_path> const &boost_root, Si::Sink<char, Si::success>::interface &output)
 	{
-		ventura::absolute_path const repository = ventura::parent(
-			ventura::parent(*ventura::absolute_path::create(__FILE__)).or_throw(
-				[]{ throw std::runtime_error("Could not find parent directory of this file: " __FILE__); }
-			)
-		).or_throw(
-			[]{ throw std::runtime_error("Could not find the repository directory"); }
-		);
+		ventura::absolute_path const repository =
+		    ventura::parent(ventura::parent(*ventura::absolute_path::create(__FILE__))
+		                        .or_throw([]
+		                                  {
+			                                  throw std::runtime_error("Could not find parent directory of this file: " __FILE__);
+			                              }))
+		        .or_throw([]
+		                  {
+			                  throw std::runtime_error("Could not find the repository directory");
+			              });
 		ventura::absolute_path const original_main_cpp = repository / ventura::relative_path("configure_cmdline/main.cpp");
 		ventura::absolute_path const source = temporary / ventura::relative_path("source");
 		ventura::recreate_directories(source, Si::throw_);
@@ -66,12 +66,8 @@ namespace
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_NO_SYSTEM_PATHS=ON"));
 			}
 			ventura::absolute_path const modules = repository / ventura::relative_path("modules");
-			arguments.emplace_back(
-				SILICIUM_SYSTEM_LITERAL("-DCDM_CONFIGURE_INCLUDE_DIRS=") +
-				to_os_string(application_source) + SILICIUM_SYSTEM_LITERAL(";") +
-				to_os_string(modules) + SILICIUM_SYSTEM_LITERAL(";") +
-				to_os_string(repository)
-			);
+			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DCDM_CONFIGURE_INCLUDE_DIRS=") + to_os_string(application_source) + SILICIUM_SYSTEM_LITERAL(";") +
+			                       to_os_string(modules) + SILICIUM_SYSTEM_LITERAL(";") + to_os_string(repository));
 			arguments.emplace_back(to_os_string(source));
 #ifdef _MSC_VER
 			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
@@ -92,22 +88,19 @@ namespace
 		}
 		ventura::absolute_path built_executable = build / ventura::relative_path(
 #ifdef _MSC_VER
-			SILICIUM_SYSTEM_LITERAL("Debug/")
+		                                                      SILICIUM_SYSTEM_LITERAL("Debug/")
 #endif
-			SILICIUM_SYSTEM_LITERAL("configure")
+		                                                          SILICIUM_SYSTEM_LITERAL("configure")
 #ifdef _WIN32
-			SILICIUM_SYSTEM_LITERAL(".exe")
+		                                                              SILICIUM_SYSTEM_LITERAL(".exe")
 #endif
-		);
+		                                                                  );
 		return built_executable;
 	}
 
-	void run_configure(
-		ventura::absolute_path const &configure_executable,
-		ventura::absolute_path const &module_permanent,
-		ventura::absolute_path const &application_source,
-		ventura::absolute_path const &application_build_dir,
-		Si::Sink<char, Si::success>::interface &output)
+	void run_configure(ventura::absolute_path const &configure_executable, ventura::absolute_path const &module_permanent,
+	                   ventura::absolute_path const &application_source, ventura::absolute_path const &application_build_dir,
+	                   Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::create_directories(module_permanent, Si::throw_);
 		ventura::create_directories(application_build_dir, Si::throw_);
@@ -128,14 +121,9 @@ namespace
 
 namespace cdm
 {
-	void do_configure(
-		ventura::absolute_path const &temporary,
-		ventura::absolute_path const &module_permanent,
-		ventura::absolute_path const &application_source,
-		ventura::absolute_path const &application_build_dir,
-		Si::optional<ventura::absolute_path> const &boost_root,
-		Si::Sink<char, Si::success>::interface &output
-	)
+	void do_configure(ventura::absolute_path const &temporary, ventura::absolute_path const &module_permanent, ventura::absolute_path const &application_source,
+	                  ventura::absolute_path const &application_build_dir, Si::optional<ventura::absolute_path> const &boost_root,
+	                  Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const configure_executable = build_configure(application_source, temporary, boost_root, output);
 		run_configure(configure_executable, module_permanent, application_source, application_build_dir, output);

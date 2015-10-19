@@ -16,8 +16,8 @@ namespace cdm
 			typedef Si::success error_type;
 
 			explicit program_output_printer(NextSink next)
-				: m_next(std::move(next))
-				, m_needs_indentation(true)
+			    : m_next(std::move(next))
+			    , m_needs_indentation(true)
 			{
 			}
 
@@ -35,7 +35,7 @@ namespace cdm
 						Si::append(m_next, '\t');
 						m_needs_indentation = false;
 					}
-					element_type const * const end_of_line = std::find(written, data.end(), '\n');
+					element_type const *const end_of_line = std::find(written, data.end(), '\n');
 					if (end_of_line == data.end())
 					{
 						return m_next.append(Si::make_iterator_range(written, data.end()));
@@ -51,8 +51,7 @@ namespace cdm
 				}
 			}
 
-		private:
-
+		  private:
 			NextSink m_next;
 			bool m_needs_indentation;
 		};
@@ -61,14 +60,11 @@ namespace cdm
 	template <class NextSink>
 	auto make_program_output_printer(NextSink &&next)
 #if !SILICIUM_COMPILER_HAS_AUTO_RETURN_TYPE
-		-> Si::Sink<char, Si::success>::eraser<Si::Sink<char, Si::success>::box>
+	    -> Si::Sink<char, Si::success>::eraser<Si::Sink<char, Si::success>::box>
 #endif
 	{
 		return Si::Sink<char, Si::success>::erase(
-			Si::Sink<char, Si::success>::make_box(
-				detail::program_output_printer<typename std::decay<NextSink>::type>(std::forward<NextSink>(next))
-			)
-		);
+		    Si::Sink<char, Si::success>::make_box(detail::program_output_printer<typename std::decay<NextSink>::type>(std::forward<NextSink>(next))));
 	}
 
 	inline std::unique_ptr<std::ofstream> open_log(ventura::absolute_path const &name)

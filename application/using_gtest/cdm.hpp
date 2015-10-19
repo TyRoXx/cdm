@@ -4,14 +4,9 @@
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
-	cdm::configure_result configure(
-		ventura::absolute_path const &module_temporaries,
-		ventura::absolute_path const &module_permanent,
-		ventura::absolute_path const &application_source,
-		ventura::absolute_path const &application_build_dir,
-		unsigned cpu_parallelism,
-		Si::Sink<char, Si::success>::interface &output
-		)
+	cdm::configure_result configure(ventura::absolute_path const &module_temporaries, ventura::absolute_path const &module_permanent,
+	                                ventura::absolute_path const &application_source, ventura::absolute_path const &application_build_dir,
+	                                unsigned cpu_parallelism, Si::Sink<char, Si::success>::interface &output)
 	{
 		boost::ignore_unused_variable_warning(cpu_parallelism);
 		Si::optional<ventura::absolute_path> const applications = ventura::parent(application_source);
@@ -28,7 +23,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 		cdm::gtest_paths const gtest_installed = cdm::install_gtest(gtest_source, module_temporaries, module_permanent, ventura::cmake_exe, output);
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DGTEST_INCLUDE_DIRS=") + to_os_string(gtest_installed.include));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DGTEST_LIBRARIES=") + to_os_string(gtest_installed.library) + SILICIUM_SYSTEM_LITERAL(";") + to_os_string(gtest_installed.library_main));
+		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DGTEST_LIBRARIES=") + to_os_string(gtest_installed.library) + SILICIUM_SYSTEM_LITERAL(";") +
+		                    to_os_string(gtest_installed.library_main));
 #ifdef _MSC_VER
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif

@@ -26,11 +26,12 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(*log_file));
 	unsigned const cpu_parallelism =
 #ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
-		2;
+	    2;
 #else
-		boost::thread::hardware_concurrency();
+	    boost::thread::hardware_concurrency();
 #endif
-	cdm::configure_result const configured = CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir, cpu_parallelism, output);
+	cdm::configure_result const configured =
+	    CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir, cpu_parallelism, output);
 	{
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
@@ -41,18 +42,13 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 		std::vector<Si::os_string> arguments;
 		ventura::relative_path const relative(
 #ifdef _MSC_VER
-			SILICIUM_SYSTEM_LITERAL("Debug/")
+		    SILICIUM_SYSTEM_LITERAL("Debug/")
 #endif
-			SILICIUM_SYSTEM_LITERAL("using_boost")
+		        SILICIUM_SYSTEM_LITERAL("using_boost")
 #ifdef _MSC_VER
-			SILICIUM_SYSTEM_LITERAL(".exe")
+		            SILICIUM_SYSTEM_LITERAL(".exe")
 #endif
-		);
-		BOOST_REQUIRE_EQUAL(0, ventura::run_process(
-			application_build_dir / relative,
-			arguments,
-			application_build_dir,
-			output
-		));
+		                );
+		BOOST_REQUIRE_EQUAL(0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}
 }

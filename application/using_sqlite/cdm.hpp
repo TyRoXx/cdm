@@ -4,14 +4,9 @@
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
-	cdm::configure_result configure(
-		ventura::absolute_path const &module_temporaries,
-		ventura::absolute_path const &module_permanent,
-		ventura::absolute_path const &application_source,
-		ventura::absolute_path const &application_build_dir,
-		unsigned cpu_parallelism,
-		Si::Sink<char, Si::success>::interface &output
-		)
+	cdm::configure_result configure(ventura::absolute_path const &module_temporaries, ventura::absolute_path const &module_permanent,
+	                                ventura::absolute_path const &application_source, ventura::absolute_path const &application_build_dir,
+	                                unsigned cpu_parallelism, Si::Sink<char, Si::success>::interface &output)
 	{
 		boost::ignore_unused_variable_warning(cpu_parallelism);
 		Si::optional<ventura::absolute_path> const applications = ventura::parent(application_source);
