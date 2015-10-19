@@ -161,4 +161,9 @@ set_target_properties(using_sqlite PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DE
 set_target_properties(using_rapidjson PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
 set_target_properties(using_rapidxml PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_DEFAULT_BUILD 1)
 
-add_custom_target(clang_format COMMAND clang-format-3.6 -i ${formatted} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
+if(WIN32)
+	set(CDM_CLANG_FORMAT "C:/Program Files (x86)/LLVM/bin/clang-format.exe" CACHE TYPE PATH)
+else()
+	set(CDM_CLANG_FORMAT "clang-format-3.6" CACHE TYPE PATH)
+endif()
+add_custom_target(clang_format COMMAND ${CDM_CLANG_FORMAT} -i ${formatted} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
