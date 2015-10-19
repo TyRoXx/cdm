@@ -20,8 +20,8 @@ BOOST_AUTO_TEST_CASE(test_run_configure_command_line)
 	ventura::recreate_directories(temporary_root, Si::throw_);
 	ventura::absolute_path const configure = temporary_root / ventura::relative_path("configure");
 	ventura::absolute_path const &application = using_gtest_source;
-	std::ofstream log_file = cdm::open_log(temporary_root / ventura::relative_path("test_run_configure_command_line.txt"));
-	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(log_file));
+	std::unique_ptr<std::ofstream> log_file = cdm::open_log(temporary_root / ventura::relative_path("test_run_configure_command_line.txt"));
+	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(*log_file));
 	ventura::absolute_path const application_build = temporary_root / ventura::relative_path("application_build");
 	ventura::create_directories(application_build, Si::throw_);
 	cdm::do_configure(temporary_root, cdm::locate_cache(), application, application_build, cdm::get_boost_root_for_testing(), output);

@@ -71,11 +71,11 @@ namespace cdm
 		);
 	}
 
-	inline std::ofstream open_log(ventura::absolute_path const &name)
+	inline std::unique_ptr<std::ofstream> open_log(ventura::absolute_path const &name)
 	{
 		auto utf8_name = to_utf8_string(name);
-		std::ofstream file(utf8_name.c_str());
-		if (!file)
+		std::unique_ptr<std::ofstream> file = Si::make_unique<std::ofstream>(utf8_name.c_str());
+		if (!*file)
 		{
 			throw std::runtime_error("Could not open file for writing: " + utf8_name);
 		}
