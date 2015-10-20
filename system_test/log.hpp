@@ -106,7 +106,7 @@ namespace cdm
 
 		void start_timer()
 		{
-			m_timer.expires_from_now(std::chrono::minutes(1));
+			m_timer.expires_from_now(Si::chrono::minutes(1));
 			m_timer.async_wait([this](boost::system::error_code)
 			                   {
 				                   std::cerr << "keeping travis alive..\n";
