@@ -1,3 +1,6 @@
 [submodule "dependencies/silicium"]
 	path = dependencies/silicium
 	url = https://github.com/TyRoXx/silicium.git
+[submodule "dependencies/ventura"]
+	path = dependencies/ventura
+	url = https://github.com/TyRoXx/ventura.git

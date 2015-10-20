@@ -43,7 +43,7 @@ namespace
 			cmakeListsFile << "	add_definitions(-DBOOST_ASIO_HAS_IOCP)\n";
 			cmakeListsFile << "endif()\n";
 			cmakeListsFile << "find_package(Boost REQUIRED filesystem coroutine date_time program_options thread chrono context regex system)\n";
-			cmakeListsFile << "include_directories(SYSTEM ${SILICIUM_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${CDM_CONFIGURE_INCLUDE_DIRS})\n";
+			cmakeListsFile << "include_directories(SYSTEM ${SILICIUM_INCLUDE_DIR} ${VENTURA_INCLUDE_DIR} ${Boost_INCLUDE_DIR} ${CDM_CONFIGURE_INCLUDE_DIRS})\n";
 			cmakeListsFile << "link_directories(${Boost_LIBRARY_DIR})\n";
 			cmakeListsFile << "add_executable(configure main.cpp)\n";
 			cmakeListsFile << "target_link_libraries(configure ${Boost_LIBRARIES})\n";
@@ -57,8 +57,12 @@ namespace
 		{
 			std::vector<Si::os_string> arguments;
 			{
-				ventura::absolute_path const silicium = repository / ventura::relative_path("dependencies/silicium");
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DSILICIUM_INCLUDE_DIR=") + to_os_string(silicium));
+				ventura::absolute_path const include = repository / ventura::relative_path("dependencies/silicium");
+				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DSILICIUM_INCLUDE_DIR=") + to_os_string(include));
+			}
+			{
+				ventura::absolute_path const include = repository / ventura::relative_path("dependencies/ventura");
+				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DVENTURA_INCLUDE_DIR=") + to_os_string(include));
 			}
 			if (boost_root)
 			{

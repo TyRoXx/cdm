@@ -130,6 +130,9 @@ endif()
 set(SILICIUM_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/silicium CACHE TYPE PATH)
 include_directories(${SILICIUM_INCLUDE_DIR})
 
+set(VENTURA_INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/ventura CACHE TYPE PATH)
+include_directories(${VENTURA_INCLUDE_DIR})
+
 add_definitions("-DSILICIUM_NO_DEPRECATED")
 
 option(CDM_TESTS_RUNNING_ON_TRAVIS_CI "Enable this when running the unit tests on travis-ci.org. It will exclude file system tests that are known to be flaky due to travis issues." OFF)
