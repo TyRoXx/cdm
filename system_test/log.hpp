@@ -66,8 +66,8 @@ namespace cdm
 	    -> Si::Sink<char, Si::success>::eraser<Si::Sink<char, Si::success>::box>
 #endif
 	{
-		return Si::Sink<char, Si::success>::erase(
-		    Si::Sink<char, Si::success>::make_box(detail::program_output_printer<typename std::decay<NextSink>::type>(std::forward<NextSink>(next))));
+		return Si::Sink<char, Si::success>::erase(Si::Sink<char, Si::success>::make_box(
+		    detail::program_output_printer<typename std::decay<NextSink>::type>(std::forward<NextSink>(next))));
 	}
 
 	inline std::unique_ptr<std::ofstream> open_log(ventura::absolute_path const &name)

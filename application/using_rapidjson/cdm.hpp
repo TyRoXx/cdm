@@ -4,9 +4,11 @@
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
-	cdm::configure_result configure(ventura::absolute_path const &module_temporaries, ventura::absolute_path const &module_permanent,
-	                                ventura::absolute_path const &application_source, ventura::absolute_path const &application_build_dir,
-	                                unsigned cpu_parallelism, Si::Sink<char, Si::success>::interface &output)
+	cdm::configure_result configure(ventura::absolute_path const &module_temporaries,
+	                                ventura::absolute_path const &module_permanent,
+	                                ventura::absolute_path const &application_source,
+	                                ventura::absolute_path const &application_build_dir, unsigned cpu_parallelism,
+	                                Si::Sink<char, Si::success>::interface &output)
 	{
 		boost::ignore_unused_variable_warning(cpu_parallelism);
 		Si::optional<ventura::absolute_path> const applications = ventura::parent(application_source);
@@ -20,7 +22,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 			throw std::runtime_error("expected the applications dir to have a parent");
 		}
 		ventura::absolute_path const source = *cdm / ventura::relative_path("original_sources/rapidjson-1.0.2");
-		cdm::rapidjson_paths const installed = cdm::install_rapidjson(source, module_temporaries, module_permanent, output);
+		cdm::rapidjson_paths const installed =
+		    cdm::install_rapidjson(source, module_temporaries, module_permanent, output);
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DRAPIDJSON_INCLUDE_DIR=") + to_os_string(installed.include));
 #ifdef _MSC_VER

@@ -16,7 +16,8 @@ namespace
 BOOST_AUTO_TEST_CASE(test_using_rapidxml)
 {
 	ventura::absolute_path const app_source = repository / ventura::relative_path("application/using_rapidxml");
-	ventura::absolute_path const tmp = ventura::temporary_directory(Si::throw_) / *ventura::path_segment::create("cdm_test_using_rapidxml");
+	ventura::absolute_path const tmp =
+	    ventura::temporary_directory(Si::throw_) / *ventura::path_segment::create("cdm_test_using_rapidxml");
 	ventura::absolute_path const module_temporaries = tmp / *ventura::path_segment::create("module_temporaries");
 	ventura::absolute_path const application_build_dir = tmp / *ventura::path_segment::create("application_build_dir");
 	ventura::recreate_directories(module_temporaries, Si::throw_);
@@ -29,7 +30,8 @@ BOOST_AUTO_TEST_CASE(test_using_rapidxml)
 #else
 	    boost::thread::hardware_concurrency();
 #endif
-	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir, cpu_parallelism, output);
+	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir,
+	                                   cpu_parallelism, output);
 	{
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
@@ -47,6 +49,7 @@ BOOST_AUTO_TEST_CASE(test_using_rapidxml)
 		            SILICIUM_SYSTEM_LITERAL(".exe")
 #endif
 		                );
-		BOOST_REQUIRE_EQUAL(0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
+		BOOST_REQUIRE_EQUAL(
+		    0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}
 }

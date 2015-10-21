@@ -17,7 +17,8 @@ BOOST_AUTO_TEST_CASE(test_using_many_libs)
 {
 	cdm::travis_keep_alive_printer keep_travis_alive;
 	ventura::absolute_path const app_source = repository / ventura::relative_path("application/using_many_libs");
-	ventura::absolute_path const tmp = ventura::temporary_directory(Si::throw_) / *ventura::path_segment::create("cdm_b");
+	ventura::absolute_path const tmp =
+	    ventura::temporary_directory(Si::throw_) / *ventura::path_segment::create("cdm_b");
 	ventura::recreate_directories(tmp, Si::throw_);
 	ventura::absolute_path const module_temporaries = tmp / *ventura::path_segment::create("build");
 	ventura::create_directories(module_temporaries, Si::throw_);
@@ -31,8 +32,8 @@ BOOST_AUTO_TEST_CASE(test_using_many_libs)
 #else
 	    boost::thread::hardware_concurrency();
 #endif
-	cdm::configure_result const configured =
-	    CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir, cpu_parallelism, output);
+	cdm::configure_result const configured = CDM_CONFIGURE_NAMESPACE::configure(
+	    module_temporaries, cdm::locate_cache(), app_source, application_build_dir, cpu_parallelism, output);
 	{
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
@@ -50,6 +51,7 @@ BOOST_AUTO_TEST_CASE(test_using_many_libs)
 		            SILICIUM_SYSTEM_LITERAL(".exe")
 #endif
 		                );
-		BOOST_REQUIRE_EQUAL(0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
+		BOOST_REQUIRE_EQUAL(
+		    0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}
 }

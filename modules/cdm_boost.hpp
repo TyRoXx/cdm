@@ -24,8 +24,9 @@ namespace cdm
 		ventura::absolute_path root;
 	};
 
-	inline boost_paths install_boost(ventura::absolute_path const &source, ventura::absolute_path const &temporary, ventura::absolute_path const &install_root,
-	                                 unsigned make_parallelism, Si::Sink<char, Si::success>::interface &output)
+	inline boost_paths install_boost(ventura::absolute_path const &source, ventura::absolute_path const &temporary,
+	                                 ventura::absolute_path const &install_root, unsigned make_parallelism,
+	                                 Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const module_in_cache = install_root / ventura::relative_path("boost");
 		if (!ventura::file_exists(module_in_cache, Si::throw_))
@@ -66,7 +67,8 @@ namespace cdm
 				std::vector<Si::os_string> arguments;
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("install"));
 				{
-					Si::os_string const install_argument = SILICIUM_SYSTEM_LITERAL("--prefix=") + to_os_string(module_in_cache);
+					Si::os_string const install_argument =
+					    SILICIUM_SYSTEM_LITERAL("--prefix=") + to_os_string(module_in_cache);
 					arguments.push_back(install_argument);
 				}
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("link=static"));
@@ -78,7 +80,8 @@ namespace cdm
 				// to lack of RAM.
 				// Thus we do not parallelize the build on travis so that the
 				// compiler can use all of the memory available to the machine.
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-j ") + boost::lexical_cast<Si::os_string>(make_parallelism));
+				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-j ") +
+				                    boost::lexical_cast<Si::os_string>(make_parallelism));
 #else
 				boost::ignore_unused_variable_warning(make_parallelism);
 #endif

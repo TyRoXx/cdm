@@ -29,7 +29,8 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib)
 #else
 	    boost::thread::hardware_concurrency();
 #endif
-	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir, cpu_parallelism, output);
+	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache(), app_source, application_build_dir,
+	                                   cpu_parallelism, output);
 	{
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
@@ -47,6 +48,7 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib)
 		            SILICIUM_SYSTEM_LITERAL(".exe")
 #endif
 		                );
-		BOOST_REQUIRE_EQUAL(0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
+		BOOST_REQUIRE_EQUAL(
+		    0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}
 }

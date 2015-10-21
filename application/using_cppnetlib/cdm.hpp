@@ -7,9 +7,11 @@
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
-	cdm::configure_result configure(ventura::absolute_path const &module_temporaries, ventura::absolute_path const &module_permanent,
-	                                ventura::absolute_path const &application_source, ventura::absolute_path const &application_build_dir,
-	                                unsigned cpu_parallelism, Si::Sink<char, Si::success>::interface &output)
+	cdm::configure_result configure(ventura::absolute_path const &module_temporaries,
+	                                ventura::absolute_path const &module_permanent,
+	                                ventura::absolute_path const &application_source,
+	                                ventura::absolute_path const &application_build_dir, unsigned cpu_parallelism,
+	                                Si::Sink<char, Si::success>::interface &output)
 	{
 		Si::optional<ventura::absolute_path> const applications = ventura::parent(application_source);
 		if (!applications)
@@ -23,19 +25,23 @@ namespace CDM_CONFIGURE_NAMESPACE
 		}
 
 		ventura::absolute_path const gtest_source = *cdm / ventura::relative_path("original_sources/gtest-1.7.0");
-		cdm::gtest_paths const gtest_installed = cdm::install_gtest(gtest_source, module_temporaries, module_permanent, ventura::cmake_exe, output);
+		cdm::gtest_paths const gtest_installed =
+		    cdm::install_gtest(gtest_source, module_temporaries, module_permanent, ventura::cmake_exe, output);
 
-		ventura::absolute_path const cppnetlib_source = *cdm / ventura::relative_path("original_sources/cpp-netlib-0.11.2-final");
+		ventura::absolute_path const cppnetlib_source =
+		    *cdm / ventura::relative_path("original_sources/cpp-netlib-0.11.2-final");
 		ventura::recreate_directories(module_temporaries, Si::throw_);
 		ventura::absolute_path const boost_source = *cdm / ventura::relative_path("original_sources/boost_1_59_0");
 		cdm::cppnetlib_paths const cppnetlib_installed =
-		    cdm::install_cppnetlib(cppnetlib_source, boost_source, module_temporaries, module_permanent, ventura::cmake_exe, cpu_parallelism, output);
+		    cdm::install_cppnetlib(cppnetlib_source, boost_source, module_temporaries, module_permanent,
+		                           ventura::cmake_exe, cpu_parallelism, output);
 
 		std::vector<Si::os_string> arguments;
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPPNETLIB_PREFIX_PATH=") + to_os_string(cppnetlib_installed.cmake_prefix_path));
+		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPPNETLIB_PREFIX_PATH=") +
+		                    to_os_string(cppnetlib_installed.cmake_prefix_path));
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DGTEST_INCLUDE_DIRS=") + to_os_string(gtest_installed.include));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DGTEST_LIBRARIES=") + to_os_string(gtest_installed.library) + SILICIUM_SYSTEM_LITERAL(";") +
-		                    to_os_string(gtest_installed.library_main));
+		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DGTEST_LIBRARIES=") + to_os_string(gtest_installed.library) +
+		                    SILICIUM_SYSTEM_LITERAL(";") + to_os_string(gtest_installed.library_main));
 #ifdef _MSC_VER
 		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif
