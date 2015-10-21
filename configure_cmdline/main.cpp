@@ -90,7 +90,7 @@ int main(int argc, char **argv)
 			              });
 		auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
 		unsigned const cpu_parallelism =
-#ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
+#if CDM_TESTS_RUNNING_ON_TRAVIS_CI
 		    2;
 #else
 		    boost::thread::hardware_concurrency();

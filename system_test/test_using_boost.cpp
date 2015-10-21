@@ -26,7 +26,7 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 	std::unique_ptr<std::ofstream> log_file = cdm::open_log(tmp / ventura::relative_path("test_using_boost.txt"));
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(*log_file));
 	unsigned const cpu_parallelism =
-#ifdef SILICIUM_TESTS_RUNNING_ON_TRAVIS_CI
+#if CDM_TESTS_RUNNING_ON_TRAVIS_CI
 	    2;
 #else
 	    boost::thread::hardware_concurrency();
