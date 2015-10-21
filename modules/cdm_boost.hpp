@@ -11,7 +11,7 @@
 // On Windows, the console is so slow (especially in Virtualbox) that we want
 // to avoid the megabytes of output from the Boost build process.
 // TODO: Buffer the output in memory and save it somewhere if something fails.
-#if defined(CDM_TESTS_RUNNING_ON_TRAVIS_CI) || defined(_WIN32)
+#if CDM_TESTS_RUNNING_ON_TRAVIS_CI || defined(_WIN32)
 #define CDM_AVOID_CONSOLE_OUTPUT 1
 #else
 #define CDM_AVOID_CONSOLE_OUTPUT 0

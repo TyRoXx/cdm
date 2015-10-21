@@ -88,7 +88,7 @@ namespace cdm
 		result.cmake_prefix_path = module_in_cache / ventura::relative_path(
 #ifdef __linux__
 		                                                 "lib/"
-#if !defined(CDM_TESTS_RUNNING_ON_TRAVIS_CI)
+#if !CDM_TESTS_RUNNING_ON_TRAVIS_CI
 		                                                 "x86_64-linux-gnu/"
 #endif
 		                                                 "cmake"
