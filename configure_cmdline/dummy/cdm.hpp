@@ -12,12 +12,12 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::Sink<char, Si::success>::interface &output
 		)
 	{
-		boost::ignore_unused_variable_warning(module_temporaries);
-		boost::ignore_unused_variable_warning(module_permanent);
-		boost::ignore_unused_variable_warning(application_source);
-		boost::ignore_unused_variable_warning(application_build_dir);
-		boost::ignore_unused_variable_warning(cpu_parallelism);
-		boost::ignore_unused_variable_warning(output);
+		Si::ignore_unused_variable_warning(module_temporaries);
+		Si::ignore_unused_variable_warning(module_permanent);
+		Si::ignore_unused_variable_warning(application_source);
+		Si::ignore_unused_variable_warning(application_build_dir);
+		Si::ignore_unused_variable_warning(cpu_parallelism);
+		Si::ignore_unused_variable_warning(output);
 		return cdm::configure_result();
 	}
 }
