@@ -26,7 +26,7 @@ before_test:
 
 test_script:
   - cd system_test
-  - Release\system_test.exe --report_level=detailed
+  - Release\system_test.exe --report_level=detailed --log_level=all
 
 after_test:
 
