@@ -28,10 +28,10 @@ namespace cdm
 	                                 ventura::absolute_path const &install_root, unsigned make_parallelism,
 	                                 Si::Sink<char, Si::success>::interface &output)
 	{
-		ventura::absolute_path const module_in_cache = install_root / ventura::relative_path("boost");
+		ventura::absolute_path const module_in_cache = install_root / "boost";
 		if (!ventura::file_exists(module_in_cache, Si::throw_))
 		{
-			ventura::absolute_path const copy_of_boost = temporary / ventura::relative_path("src");
+			ventura::absolute_path const copy_of_boost = temporary / "src";
 			ventura::copy_recursively(source, copy_of_boost,
 #if CDM_AVOID_CONSOLE_OUTPUT
 			                          nullptr
@@ -96,7 +96,8 @@ namespace cdm
 #else
 				                                    output
 #endif
-				                                    ).get();
+				                                    )
+				                   .get();
 				if (rc != 0)
 				{
 #if CDM_AVOID_CONSOLE_OUTPUT

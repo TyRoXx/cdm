@@ -15,10 +15,10 @@ namespace cdm
 	                                       ventura::absolute_path const &install_root,
 	                                       Si::Sink<char, Si::success>::interface &output)
 	{
-		ventura::absolute_path const in_cache = install_root / ventura::relative_path("rapidxml");
+		ventura::absolute_path const in_cache = install_root / "rapidxml";
 		if (!ventura::file_exists(in_cache, Si::throw_))
 		{
-			ventura::absolute_path const construction = temporarily_writable / ventura::relative_path("rapidxml");
+			ventura::absolute_path const construction = temporarily_writable / "rapidxml";
 			ventura::copy_recursively(original_source, construction, &output, Si::throw_);
 			ventura::rename(construction, in_cache, Si::throw_);
 		}

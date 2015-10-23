@@ -76,8 +76,7 @@ int main(int argc, char **argv)
 			                  throw std::invalid_argument(
 			                      "The application build directory argument must be an absolute path.");
 			              });
-		ventura::absolute_path const temporary_root =
-		    ventura::temporary_directory(Si::throw_) / ventura::relative_path("cdm_cmdline");
+		ventura::absolute_path const temporary_root = ventura::temporary_directory(Si::throw_) / "cdm_cmdline";
 		auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
 		cdm::do_configure(temporary_root, module_permanent, application_source, application_build, Si::none, output);
 		LOG("Your application has been configured.");

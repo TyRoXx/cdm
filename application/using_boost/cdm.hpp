@@ -21,7 +21,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		{
 			throw std::runtime_error("expected the applications dir to have a parent");
 		}
-		ventura::absolute_path const boost_source = *cdm / ventura::relative_path("original_sources/boost_1_59_0");
+		ventura::absolute_path const boost_source = *cdm / "original_sources/boost_1_59_0";
 		cdm::boost_paths const boost_installed =
 		    cdm::install_boost(boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
 		std::vector<Si::os_string> arguments;
@@ -39,7 +39,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		}
 
 		cdm::configure_result result;
-		result.shared_library_directories.emplace_back(boost_installed.root / ventura::relative_path("lib"));
+		result.shared_library_directories.emplace_back(boost_installed.root / "lib");
 		return result;
 	}
 }

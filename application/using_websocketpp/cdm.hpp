@@ -21,8 +21,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 			throw std::runtime_error("expected the applications dir to have a parent");
 		}
 		ventura::absolute_path const original_source =
-		    *cdm / ventura::relative_path("original_sources/websocketpp-c5510d6de04917812b910a8dd44735c1f17061d9");
-		ventura::absolute_path const boost_source = *cdm / ventura::relative_path("original_sources/boost_1_59_0");
+		    *cdm / "original_sources/websocketpp-c5510d6de04917812b910a8dd44735c1f17061d9";
+		ventura::absolute_path const boost_source = *cdm / "original_sources/boost_1_59_0";
 		cdm::websocketpp_paths const installed = cdm::install_websocketpp(
 		    original_source, boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
 		std::vector<Si::os_string> arguments;

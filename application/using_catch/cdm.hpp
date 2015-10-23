@@ -21,7 +21,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		{
 			throw std::runtime_error("expected the applications dir to have a parent");
 		}
-		ventura::absolute_path const source = *cdm / ventura::relative_path("original_sources/Catch-1.2.1");
+		ventura::absolute_path const source = *cdm / "original_sources/Catch-1.2.1";
 		cdm::catch_paths const installed = cdm::install_catch(source, module_temporaries, module_permanent, output);
 		std::vector<Si::os_string> arguments;
 		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCATCH_INCLUDE_DIRS=") + to_os_string(installed.include));

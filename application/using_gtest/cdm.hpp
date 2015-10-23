@@ -21,7 +21,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		{
 			throw std::runtime_error("expected the applications dir to have a parent");
 		}
-		ventura::absolute_path const gtest_source = *cdm / ventura::relative_path("original_sources/gtest-1.7.0");
+		ventura::absolute_path const gtest_source = *cdm / "original_sources/gtest-1.7.0";
 		cdm::gtest_paths const gtest_installed =
 		    cdm::install_gtest(gtest_source, module_temporaries, module_permanent, ventura::cmake_exe, output);
 		std::vector<Si::os_string> arguments;

@@ -20,7 +20,7 @@ namespace cdm
 	                                         ventura::absolute_path const &cmake_exe, unsigned make_parallelism,
 	                                         Si::Sink<char, Si::success>::interface &output)
 	{
-		ventura::absolute_path const module_in_cache = install_root / ventura::relative_path("cppnetlib");
+		ventura::absolute_path const module_in_cache = install_root / "cppnetlib";
 		if (!ventura::file_exists(module_in_cache, Si::throw_))
 		{
 			ventura::absolute_path const &build_dir = temporary;
@@ -36,7 +36,7 @@ namespace cdm
 				// TODO: deal with OpenSSL later..
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_ENABLE_HTTPS=OFF"));
 #endif
-				ventura::absolute_path const boost_temp = temporary / ventura::relative_path("boost");
+				ventura::absolute_path const boost_temp = temporary / "boost";
 				ventura::create_directories(boost_temp, Si::throw_);
 				cdm::boost_paths const boost_installed =
 				    cdm::install_boost(boost_source, boost_temp, install_root, make_parallelism, output);
@@ -65,7 +65,8 @@ namespace cdm
 				int const rc =
 				    ventura::run_process(*ventura::absolute_path::create(L"C:\\Program Files (x86)\\Microsoft Visual "
 				                                                         L"Studio 12.0\\Common7\\IDE\\devenv.exe"),
-				                         arguments, build_dir, output).get();
+				                         arguments, build_dir, output)
+				        .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");
@@ -91,17 +92,17 @@ namespace cdm
 			}
 		}
 		cppnetlib_paths result;
-		result.cmake_prefix_path = module_in_cache / ventura::relative_path(
+		result.cmake_prefix_path = module_in_cache /
 #ifdef __linux__
-		                                                 "lib/"
+		                           "lib/"
 #if !CDM_TESTS_RUNNING_ON_TRAVIS_CI
-		                                                 "x86_64-linux-gnu/"
+		                           "x86_64-linux-gnu/"
 #endif
-		                                                 "cmake"
+		                           "cmake"
 #else
-		                                                 "CMake"
+		                           "CMake"
 #endif
-		                                                 );
+		    ;
 		return result;
 	}
 }

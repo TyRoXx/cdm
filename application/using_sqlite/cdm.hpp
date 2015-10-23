@@ -21,8 +21,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		{
 			throw std::runtime_error("expected the applications dir to have a parent");
 		}
-		ventura::absolute_path const original_source =
-		    *cdm / ventura::relative_path("original_sources/sqlite-autoconf-3081101");
+		ventura::absolute_path const original_source = *cdm / "original_sources/sqlite-autoconf-3081101";
 		cdm::sqlite_paths const installed =
 		    cdm::install_sqlite(original_source, module_temporaries, module_permanent, ventura::cmake_exe, output);
 		std::vector<Si::os_string> arguments;

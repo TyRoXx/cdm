@@ -11,20 +11,18 @@ namespace
 	ventura::absolute_path const this_file = *ventura::absolute_path::create(__FILE__);
 	ventura::absolute_path const test = *ventura::parent(this_file);
 	ventura::absolute_path const repository = *ventura::parent(test);
-	ventura::absolute_path const using_gtest_source = repository / ventura::relative_path("application/using_gtest");
+	ventura::absolute_path const using_gtest_source = repository / "application/using_gtest";
 }
 
 BOOST_AUTO_TEST_CASE(test_run_configure_command_line)
 {
-	ventura::absolute_path const temporary_root =
-	    ventura::temporary_directory(Si::throw_) / ventura::relative_path("cdm_system_test");
+	ventura::absolute_path const temporary_root = ventura::temporary_directory(Si::throw_) / "cdm_system_test";
 	ventura::recreate_directories(temporary_root, Si::throw_);
-	ventura::absolute_path const configure = temporary_root / ventura::relative_path("configure");
+	ventura::absolute_path const configure = temporary_root / "configure";
 	ventura::absolute_path const &application = using_gtest_source;
-	std::unique_ptr<std::ofstream> log_file =
-	    cdm::open_log(temporary_root / ventura::relative_path("test_run_configure_command_line.txt"));
+	std::unique_ptr<std::ofstream> log_file = cdm::open_log(temporary_root / "test_run_configure_command_line.txt");
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(*log_file));
-	ventura::absolute_path const application_build = temporary_root / ventura::relative_path("application_build");
+	ventura::absolute_path const application_build = temporary_root / "application_build";
 	ventura::create_directories(application_build, Si::throw_);
 	cdm::do_configure(temporary_root, cdm::locate_cache(), application, application_build,
 	                  cdm::get_boost_root_for_testing(), output);

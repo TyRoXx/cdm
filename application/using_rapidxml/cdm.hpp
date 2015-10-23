@@ -21,7 +21,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		{
 			throw std::runtime_error("expected the applications dir to have a parent");
 		}
-		ventura::absolute_path const source = *cdm / ventura::relative_path("original_sources/rapidxml-1.13");
+		ventura::absolute_path const source = *cdm / "original_sources/rapidxml-1.13";
 		cdm::rapidxml_paths const installed =
 		    cdm::install_rapidxml(source, module_temporaries, module_permanent, output);
 		std::vector<Si::os_string> arguments;

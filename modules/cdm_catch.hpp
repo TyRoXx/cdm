@@ -15,12 +15,11 @@ namespace cdm
 	                                 ventura::absolute_path const &install_root,
 	                                 Si::Sink<char, Si::success>::interface &output)
 	{
-		ventura::absolute_path const in_cache = install_root / ventura::relative_path("catch");
+		ventura::absolute_path const in_cache = install_root / "catch";
 		if (!ventura::file_exists(in_cache, Si::throw_))
 		{
-			ventura::absolute_path const construction = temporarily_writable / ventura::relative_path("catch");
-			ventura::copy_recursively(original_source / ventura::relative_path("include"), construction, &output,
-			                          Si::throw_);
+			ventura::absolute_path const construction = temporarily_writable / "catch";
+			ventura::copy_recursively(original_source / "include", construction, &output, Si::throw_);
 			ventura::rename(construction, in_cache, Si::throw_);
 		}
 		catch_paths result;

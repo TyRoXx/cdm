@@ -67,10 +67,10 @@ namespace cdm
 	                                   ventura::absolute_path const &cmake_exe,
 	                                   Si::Sink<char, Si::success>::interface &output)
 	{
-		ventura::absolute_path const in_cache = install_root / ventura::relative_path("sqlite3");
+		ventura::absolute_path const in_cache = install_root / "sqlite3";
 		if (!ventura::file_exists(in_cache, Si::throw_))
 		{
-			ventura::absolute_path const build_dir = temporarily_writable / ventura::relative_path("build");
+			ventura::absolute_path const build_dir = temporarily_writable / "build";
 			ventura::create_directories(build_dir, Si::throw_);
 
 			{
@@ -80,13 +80,13 @@ namespace cdm
 				                   "project(sqlite3)\n"
 				                   "add_library(sqlite3 ");
 				{
-					ventura::absolute_path const sqlite3_c = original_source / ventura::relative_path("sqlite3.c");
+					ventura::absolute_path const sqlite3_c = original_source / "sqlite3.c";
 					encode_cmake_path_literal(Si::make_contiguous_range(to_utf8_string(sqlite3_c)), writer);
 				}
 				Si::append(writer, ")\n");
-				Si::throw_if_error(ventura::write_file(
-				    Si::native_path_string(to_os_string(build_dir / ventura::relative_path("CMakeLists.txt")).c_str()),
-				    Si::make_memory_range(cmakeLists)));
+				Si::throw_if_error(
+				    ventura::write_file(Si::native_path_string(to_os_string(build_dir / "CMakeLists.txt").c_str()),
+				                        Si::make_memory_range(cmakeLists)));
 			}
 
 			{
@@ -111,29 +111,26 @@ namespace cdm
 					throw std::runtime_error("cmake build failed");
 				}
 			}
-			ventura::absolute_path const construction_site =
-			    temporarily_writable / ventura::relative_path("construction");
+			ventura::absolute_path const construction_site = temporarily_writable / "construction";
 			ventura::create_directories(construction_site, Si::throw_);
 			{
-				ventura::absolute_path const lib_dir = construction_site / ventura::relative_path("lib");
+				ventura::absolute_path const lib_dir = construction_site / "lib";
 				ventura::create_directories(lib_dir, Si::throw_);
 				ventura::copy(
 				    build_dir / sqlite3::make_static_lib_build_path(*ventura::path_segment::create("sqlite3")),
 				    lib_dir / sqlite3::make_static_lib_install_path(*ventura::path_segment::create(L"sqlite3")),
 				    Si::throw_);
-				ventura::absolute_path const include_dir = construction_site / ventura::relative_path("include");
+				ventura::absolute_path const include_dir = construction_site / "include";
 				ventura::create_directories(include_dir, Si::throw_);
-				ventura::copy(original_source / *ventura::path_segment::create("sqlite3.h"),
-				              include_dir / ventura::relative_path("sqlite3.h"), Si::throw_);
-				ventura::copy(original_source / *ventura::path_segment::create("sqlite3ext.h"),
-				              include_dir / ventura::relative_path("sqlite3ext.h"), Si::throw_);
+				ventura::copy(original_source / "sqlite3.h", include_dir / "sqlite3.h", Si::throw_);
+				ventura::copy(original_source / "sqlite3ext.h", include_dir / "sqlite3ext.h", Si::throw_);
 			}
 			ventura::rename(construction_site, in_cache, Si::throw_);
 		}
 		sqlite_paths result;
-		result.include = in_cache / *ventura::path_segment::create("include");
-		result.library = in_cache / *ventura::path_segment::create("lib") /
-		                 sqlite3::make_static_lib_install_path(*ventura::path_segment::create(L"sqlite3"));
+		result.include = in_cache / "include";
+		result.library =
+		    in_cache / "lib" / sqlite3::make_static_lib_install_path(*ventura::path_segment::create(L"sqlite3"));
 		return std::move(result);
 	}
 }

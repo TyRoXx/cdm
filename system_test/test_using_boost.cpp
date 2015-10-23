@@ -16,15 +16,14 @@ namespace
 BOOST_AUTO_TEST_CASE(test_using_boost)
 {
 	cdm::travis_keep_alive_printer keep_travis_alive;
-	ventura::absolute_path const app_source = repository / ventura::relative_path("application/using_boost");
-	ventura::absolute_path const tmp =
-	    ventura::temporary_directory(Si::throw_) / *ventura::path_segment::create("cdm_b");
+	ventura::absolute_path const app_source = repository / "application/using_boost";
+	ventura::absolute_path const tmp = ventura::temporary_directory(Si::throw_) / "cdm_b";
 	ventura::recreate_directories(tmp, Si::throw_);
-	ventura::absolute_path const module_temporaries = tmp / *ventura::path_segment::create("build");
+	ventura::absolute_path const module_temporaries = tmp / "build";
 	ventura::create_directories(module_temporaries, Si::throw_);
-	ventura::absolute_path const application_build_dir = tmp / *ventura::path_segment::create("app_build");
+	ventura::absolute_path const application_build_dir = tmp / "app_build";
 	ventura::create_directories(application_build_dir, Si::throw_);
-	std::unique_ptr<std::ofstream> log_file = cdm::open_log(tmp / ventura::relative_path("test_using_boost.txt"));
+	std::unique_ptr<std::ofstream> log_file = cdm::open_log(tmp / "test_using_boost.txt");
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(*log_file));
 	unsigned const cpu_parallelism =
 #if CDM_TESTS_RUNNING_ON_TRAVIS_CI

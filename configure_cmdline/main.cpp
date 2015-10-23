@@ -75,8 +75,7 @@ int main(int argc, char **argv)
 
 	try
 	{
-		ventura::absolute_path const module_temporaries =
-		    ventura::temporary_directory(Si::throw_) / *ventura::path_segment::create("cdm_modules");
+		ventura::absolute_path const module_temporaries = ventura::temporary_directory(Si::throw_) / "cdm_modules";
 		ventura::recreate_directories(module_temporaries, Si::throw_);
 		ventura::absolute_path const module_permanent =
 		    ventura::absolute_path::create(module_permanent_argument)

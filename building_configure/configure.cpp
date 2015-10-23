@@ -21,14 +21,13 @@ namespace
 		                  {
 			                  throw std::runtime_error("Could not find the repository directory");
 			              });
-		ventura::absolute_path const original_main_cpp =
-		    repository / ventura::relative_path("configure_cmdline/main.cpp");
-		ventura::absolute_path const source = temporary / ventura::relative_path("source");
+		ventura::absolute_path const original_main_cpp = repository / "configure_cmdline/main.cpp";
+		ventura::absolute_path const source = temporary / "source";
 		ventura::recreate_directories(source, Si::throw_);
-		ventura::absolute_path const copied_main_cpp = source / ventura::relative_path("main.cpp");
+		ventura::absolute_path const copied_main_cpp = source / "main.cpp";
 		ventura::copy(original_main_cpp, copied_main_cpp, Si::throw_);
 		{
-			ventura::absolute_path const cmakeLists = source / ventura::relative_path("CMakeLists.txt");
+			ventura::absolute_path const cmakeLists = source / "CMakeLists.txt";
 			std::ofstream cmakeListsFile(cmakeLists.c_str());
 			cmakeListsFile << "cmake_minimum_required(VERSION 2.8)\n";
 			cmakeListsFile << "project(configure_cmdline_generated)\n";
@@ -60,16 +59,16 @@ namespace
 				throw std::runtime_error(("Could not generate " + to_utf8_string(cmakeLists)).c_str());
 			}
 		}
-		ventura::absolute_path const build = temporary / ventura::relative_path("build");
+		ventura::absolute_path const build = temporary / "build";
 		ventura::recreate_directories(build, Si::throw_);
 		{
 			std::vector<Si::os_string> arguments;
 			{
-				ventura::absolute_path const include = repository / ventura::relative_path("dependencies/silicium");
+				ventura::absolute_path const include = repository / "dependencies/silicium";
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DSILICIUM_INCLUDE_DIR=") + to_os_string(include));
 			}
 			{
-				ventura::absolute_path const include = repository / ventura::relative_path("dependencies/ventura");
+				ventura::absolute_path const include = repository / "dependencies/ventura";
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DVENTURA_INCLUDE_DIR=") + to_os_string(include));
 			}
 			if (boost_root)
@@ -77,7 +76,7 @@ namespace
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + to_os_string(*boost_root));
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_NO_SYSTEM_PATHS=ON"));
 			}
-			ventura::absolute_path const modules = repository / ventura::relative_path("modules");
+			ventura::absolute_path const modules = repository / "modules";
 			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DCDM_CONFIGURE_INCLUDE_DIRS=") +
 			                       to_os_string(application_source) + SILICIUM_SYSTEM_LITERAL(";") +
 			                       to_os_string(modules) + SILICIUM_SYSTEM_LITERAL(";") + to_os_string(repository));

@@ -15,13 +15,13 @@ namespace cdm
 	                                         ventura::absolute_path const &install_root,
 	                                         Si::Sink<char, Si::success>::interface &output)
 	{
-		ventura::absolute_path const in_cache = install_root / ventura::relative_path("rapidjson");
+		ventura::absolute_path const in_cache = install_root / "rapidjson";
 		if (!ventura::file_exists(in_cache, Si::throw_))
 		{
-			ventura::absolute_path const construction = temporarily_writable / ventura::relative_path("rapidjson");
+			ventura::absolute_path const construction = temporarily_writable / "rapidjson";
 			ventura::create_directories(construction, Si::throw_);
-			ventura::copy_recursively(original_source / ventura::relative_path("include/rapidjson"),
-			                          construction / ventura::relative_path("rapidjson"), &output, Si::throw_);
+			ventura::copy_recursively(original_source / "include/rapidjson", construction / "rapidjson", &output,
+			                          Si::throw_);
 			ventura::rename(construction, in_cache, Si::throw_);
 		}
 		rapidjson_paths result;

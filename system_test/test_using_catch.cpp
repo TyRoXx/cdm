@@ -15,13 +15,13 @@ namespace
 
 BOOST_AUTO_TEST_CASE(test_using_catch)
 {
-	ventura::absolute_path const app_source = repository / ventura::relative_path("application/using_catch");
-	ventura::absolute_path const tmp = ventura::temporary_directory(Si::throw_) / *ventura::path_segment::create("cdm");
-	ventura::absolute_path const module_temporaries = tmp / *ventura::path_segment::create("mod");
-	ventura::absolute_path const application_build_dir = tmp / *ventura::path_segment::create("app");
+	ventura::absolute_path const app_source = repository / "application/using_catch";
+	ventura::absolute_path const tmp = ventura::temporary_directory(Si::throw_) / "cdm";
+	ventura::absolute_path const module_temporaries = tmp / "mod";
+	ventura::absolute_path const application_build_dir = tmp / "app";
 	ventura::recreate_directories(module_temporaries, Si::throw_);
 	ventura::recreate_directories(application_build_dir, Si::throw_);
-	std::unique_ptr<std::ofstream> log_file = cdm::open_log(tmp / ventura::relative_path("test_using_catch.txt"));
+	std::unique_ptr<std::ofstream> log_file = cdm::open_log(tmp / "test_using_catch.txt");
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(*log_file));
 	unsigned const cpu_parallelism =
 #if CDM_TESTS_RUNNING_ON_TRAVIS_CI
