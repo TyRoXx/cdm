@@ -46,7 +46,7 @@ namespace cdm
 #ifdef _MSC_VER
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif
-				arguments.push_back(cppnetlib_source.c_str());
+				arguments.push_back(to_os_string(cppnetlib_source));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{

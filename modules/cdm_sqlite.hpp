@@ -85,7 +85,7 @@ namespace cdm
 				}
 				Si::append(writer, ")\n");
 				Si::throw_if_error(ventura::write_file(
-				    Si::native_path_string((build_dir / ventura::relative_path("CMakeLists.txt")).c_str()),
+				    Si::native_path_string(to_os_string(build_dir / ventura::relative_path("CMakeLists.txt")).c_str()),
 				    Si::make_memory_range(cmakeLists)));
 			}
 

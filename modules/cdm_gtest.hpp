@@ -52,7 +52,7 @@ namespace cdm
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-Dgtest_force_shared_crt=ON"));
 				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
 #endif
-				arguments.push_back(gtest_source.c_str());
+				arguments.push_back(to_os_string(gtest_source));
 				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{
