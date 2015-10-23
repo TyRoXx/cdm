@@ -169,6 +169,6 @@ set_target_properties(using_rapidxml PROPERTIES EXCLUDE_FROM_ALL 1 EXCLUDE_FROM_
 if(WIN32)
 	set(CDM_CLANG_FORMAT "C:/Program Files (x86)/LLVM/bin/clang-format.exe" CACHE TYPE PATH)
 else()
-	set(CDM_CLANG_FORMAT "clang-format-3.6" CACHE TYPE PATH)
+	set(CDM_CLANG_FORMAT "clang-format-3.7" CACHE TYPE PATH)
 endif()
 add_custom_target(clang-format COMMAND ${CDM_CLANG_FORMAT} -i ${formatted} WORKING_DIRECTORY ${CMAKE_SOURCE_DIR})
