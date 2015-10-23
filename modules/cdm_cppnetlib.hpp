@@ -63,8 +63,8 @@ namespace cdm
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("/project"));
 				arguments.push_back(SILICIUM_SYSTEM_LITERAL("INSTALL"));
 				int const rc =
-				    ventura::run_process(*ventura::absolute_path::create(L"C:\\Program Files (x86)\\Microsoft Visual "
-				                                                         L"Studio 12.0\\Common7\\IDE\\devenv.exe"),
+				    ventura::run_process(*ventura::absolute_path::create("C:\\Program Files (x86)\\Microsoft Visual "
+				                                                         "Studio 12.0\\Common7\\IDE\\devenv.exe"),
 				                         arguments, build_dir, output)
 				        .get();
 				if (rc != 0)

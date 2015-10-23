@@ -18,7 +18,7 @@ namespace cdm
 		inline ventura::relative_path make_static_lib_build_path(ventura::path_segment const &name_base)
 		{
 #ifdef _WIN32
-			return ventura::relative_path(L"Debug") / (name_base + *ventura::path_segment::create(L".lib"));
+			return ventura::relative_path("Debug") / (name_base + *ventura::path_segment::create(".lib"));
 #else
 			return ventura::relative_path("lib" + name_base.underlying() + ".a");
 #endif
@@ -27,7 +27,7 @@ namespace cdm
 		inline ventura::relative_path make_static_lib_install_path(ventura::path_segment const &name_base)
 		{
 #ifdef _WIN32
-			return ventura::relative_path(name_base + *ventura::path_segment::create(L".lib"));
+			return ventura::relative_path(name_base + *ventura::path_segment::create(".lib"));
 #else
 			return ventura::relative_path("lib" + name_base.underlying() + ".a");
 #endif

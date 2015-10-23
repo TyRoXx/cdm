@@ -20,7 +20,7 @@ namespace cdm
 		inline ventura::relative_path make_static_lib_build_path(ventura::path_segment const &name_base)
 		{
 #ifdef _WIN32
-			return ventura::relative_path(L"Debug") / (name_base + *ventura::path_segment::create(L".lib"));
+			return ventura::relative_path("Debug") / (name_base + *ventura::path_segment::create(".lib"));
 #else
 			return ventura::relative_path("lib" + name_base.underlying() + ".a");
 #endif
@@ -29,7 +29,7 @@ namespace cdm
 		inline ventura::relative_path make_static_lib_install_path(ventura::path_segment const &name_base)
 		{
 #ifdef _WIN32
-			return ventura::relative_path(name_base + *ventura::path_segment::create(L".lib"));
+			return ventura::relative_path(name_base + *ventura::path_segment::create(".lib"));
 #else
 			return ventura::relative_path("lib" + name_base.underlying() + ".a");
 #endif
@@ -118,7 +118,7 @@ namespace cdm
 				ventura::create_directories(lib_dir, Si::throw_);
 				ventura::copy(
 				    build_dir / sqlite3::make_static_lib_build_path(*ventura::path_segment::create("sqlite3")),
-				    lib_dir / sqlite3::make_static_lib_install_path(*ventura::path_segment::create(L"sqlite3")),
+				    lib_dir / sqlite3::make_static_lib_install_path(*ventura::path_segment::create("sqlite3")),
 				    Si::throw_);
 				ventura::absolute_path const include_dir = construction_site / "include";
 				ventura::create_directories(include_dir, Si::throw_);
@@ -130,7 +130,7 @@ namespace cdm
 		sqlite_paths result;
 		result.include = in_cache / "include";
 		result.library =
-		    in_cache / "lib" / sqlite3::make_static_lib_install_path(*ventura::path_segment::create(L"sqlite3"));
+		    in_cache / "lib" / sqlite3::make_static_lib_install_path(*ventura::path_segment::create("sqlite3"));
 		return std::move(result);
 	}
 }
