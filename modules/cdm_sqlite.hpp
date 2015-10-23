@@ -92,9 +92,9 @@ namespace cdm
 			{
 				std::vector<Si::os_string> arguments;
 #ifdef _MSC_VER
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+				arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("."));
+				arguments.emplace_back(SILICIUM_OS_STR("."));
 				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{
@@ -103,8 +103,8 @@ namespace cdm
 			}
 			{
 				std::vector<Si::os_string> arguments;
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("."));
+				arguments.emplace_back(SILICIUM_OS_STR("--build"));
+				arguments.emplace_back(SILICIUM_OS_STR("."));
 				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{

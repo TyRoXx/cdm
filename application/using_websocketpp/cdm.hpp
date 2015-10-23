@@ -26,14 +26,14 @@ namespace CDM_CONFIGURE_NAMESPACE
 		cdm::websocketpp_paths const installed = cdm::install_websocketpp(
 		    original_source, boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
 		std::vector<Si::os_string> arguments;
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DWEBSOCKETPP_INCLUDE_DIR=") + to_os_string(installed.include));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + to_os_string(installed.boost_root));
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_ADDITIONAL_VERSIONS=1.59"));
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_NO_SYSTEM_PATHS=ON"));
+		arguments.emplace_back(SILICIUM_OS_STR("-DWEBSOCKETPP_INCLUDE_DIR=") + to_os_string(installed.include));
+		arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_ROOT=") + to_os_string(installed.boost_root));
+		arguments.emplace_back(SILICIUM_OS_STR("-DBoost_ADDITIONAL_VERSIONS=1.59"));
+		arguments.emplace_back(SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
 #ifdef _MSC_VER
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+		arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
-		arguments.push_back(to_os_string(application_source));
+		arguments.emplace_back(to_os_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");

@@ -27,26 +27,26 @@ namespace cdm
 			ventura::create_directories(build_dir, Si::throw_);
 			{
 				std::vector<Si::os_string> arguments;
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCMAKE_INSTALL_PREFIX=") + to_os_string(module_in_cache));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_SHARED_LIBS=OFF"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_TESTS=OFF"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_EXPERIMENTS=OFF"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_BUILD_EXAMPLES=OFF"));
+				arguments.emplace_back(SILICIUM_OS_STR("-DCMAKE_INSTALL_PREFIX=") + to_os_string(module_in_cache));
+				arguments.emplace_back(SILICIUM_OS_STR("-DCPP-NETLIB_BUILD_SHARED_LIBS=OFF"));
+				arguments.emplace_back(SILICIUM_OS_STR("-DCPP-NETLIB_BUILD_TESTS=OFF"));
+				arguments.emplace_back(SILICIUM_OS_STR("-DCPP-NETLIB_BUILD_EXPERIMENTS=OFF"));
+				arguments.emplace_back(SILICIUM_OS_STR("-DCPP-NETLIB_BUILD_EXAMPLES=OFF"));
 #ifdef _WIN32
 				// TODO: deal with OpenSSL later..
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPP-NETLIB_ENABLE_HTTPS=OFF"));
+				arguments.emplace_back(SILICIUM_OS_STR("-DCPP-NETLIB_ENABLE_HTTPS=OFF"));
 #endif
 				ventura::absolute_path const boost_temp = temporary / "boost";
 				ventura::create_directories(boost_temp, Si::throw_);
 				cdm::boost_paths const boost_installed =
 				    cdm::install_boost(boost_source, boost_temp, install_root, make_parallelism, output);
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + to_os_string(boost_installed.root));
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_ADDITIONAL_VERSIONS=1.59"));
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_NO_SYSTEM_PATHS=ON"));
+				arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_ROOT=") + to_os_string(boost_installed.root));
+				arguments.emplace_back(SILICIUM_OS_STR("-DBoost_ADDITIONAL_VERSIONS=1.59"));
+				arguments.emplace_back(SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
 #ifdef _MSC_VER
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+				arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
-				arguments.push_back(to_os_string(cppnetlib_source));
+				arguments.emplace_back(to_os_string(cppnetlib_source));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{
@@ -57,11 +57,11 @@ namespace cdm
 #ifdef _MSC_VER
 				boost::ignore_unused_variable_warning(make_parallelism);
 				std::vector<Si::os_string> arguments;
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("CPP-NETLIB.sln"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("/build"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("Debug"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("/project"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("INSTALL"));
+				arguments.emplace_back(SILICIUM_OS_STR("CPP-NETLIB.sln"));
+				arguments.emplace_back(SILICIUM_OS_STR("/build"));
+				arguments.emplace_back(SILICIUM_OS_STR("Debug"));
+				arguments.emplace_back(SILICIUM_OS_STR("/project"));
+				arguments.emplace_back(SILICIUM_OS_STR("INSTALL"));
 				int const rc =
 				    ventura::run_process(*ventura::absolute_path::create("C:\\Program Files (x86)\\Microsoft Visual "
 				                                                         "Studio 12.0\\Common7\\IDE\\devenv.exe"),
@@ -73,16 +73,16 @@ namespace cdm
 				}
 #else
 				std::vector<Si::os_string> arguments;
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("."));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("--"));
+				arguments.emplace_back(SILICIUM_OS_STR("--build"));
+				arguments.emplace_back(SILICIUM_OS_STR("."));
+				arguments.emplace_back(SILICIUM_OS_STR("--"));
 #ifndef _WIN32
-				arguments.push_back(
-				    SILICIUM_SYSTEM_LITERAL("-j" + boost::lexical_cast<Si::os_string>(make_parallelism)));
+				arguments.emplace_back(
+				    SILICIUM_OS_STR("-j" + boost::lexical_cast<Si::os_string>(make_parallelism)));
 #else
 				boost::ignore_unused_variable_warning(make_parallelism);
 #endif
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("install"));
+				arguments.emplace_back(SILICIUM_OS_STR("install"));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{

@@ -25,11 +25,11 @@ namespace CDM_CONFIGURE_NAMESPACE
 		cdm::rapidjson_paths const installed =
 		    cdm::install_rapidjson(source, module_temporaries, module_permanent, output);
 		std::vector<Si::os_string> arguments;
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DRAPIDJSON_INCLUDE_DIR=") + to_os_string(installed.include));
+		arguments.emplace_back(SILICIUM_OS_STR("-DRAPIDJSON_INCLUDE_DIR=") + to_os_string(installed.include));
 #ifdef _MSC_VER
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+		arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
-		arguments.push_back(to_os_string(application_source));
+		arguments.emplace_back(to_os_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");

@@ -65,24 +65,24 @@ namespace
 			std::vector<Si::os_string> arguments;
 			{
 				ventura::absolute_path const include = repository / "dependencies/silicium";
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DSILICIUM_INCLUDE_DIR=") + to_os_string(include));
+				arguments.emplace_back(SILICIUM_OS_STR("-DSILICIUM_INCLUDE_DIR=") + to_os_string(include));
 			}
 			{
 				ventura::absolute_path const include = repository / "dependencies/ventura";
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DVENTURA_INCLUDE_DIR=") + to_os_string(include));
+				arguments.emplace_back(SILICIUM_OS_STR("-DVENTURA_INCLUDE_DIR=") + to_os_string(include));
 			}
 			if (boost_root)
 			{
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + to_os_string(*boost_root));
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_NO_SYSTEM_PATHS=ON"));
+				arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_ROOT=") + to_os_string(*boost_root));
+				arguments.emplace_back(SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
 			}
 			ventura::absolute_path const modules = repository / "modules";
-			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DCDM_CONFIGURE_INCLUDE_DIRS=") +
-			                       to_os_string(application_source) + SILICIUM_SYSTEM_LITERAL(";") +
-			                       to_os_string(modules) + SILICIUM_SYSTEM_LITERAL(";") + to_os_string(repository));
+			arguments.emplace_back(SILICIUM_OS_STR("-DCDM_CONFIGURE_INCLUDE_DIRS=") +
+			                       to_os_string(application_source) + SILICIUM_OS_STR(";") +
+			                       to_os_string(modules) + SILICIUM_OS_STR(";") + to_os_string(repository));
 			arguments.emplace_back(to_os_string(source));
 #ifdef _MSC_VER
-			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+			arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
 			if (ventura::run_process(ventura::cmake_exe, arguments, build, output).get() != 0)
 			{
@@ -91,8 +91,8 @@ namespace
 		}
 		{
 			std::vector<Si::os_string> arguments;
-			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("--build"));
-			arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("."));
+			arguments.emplace_back(SILICIUM_OS_STR("--build"));
+			arguments.emplace_back(SILICIUM_OS_STR("."));
 			if (ventura::run_process(ventura::cmake_exe, arguments, build, output).get() != 0)
 			{
 				throw std::runtime_error("Could not CMake --build the cdm configure executable");
@@ -100,11 +100,11 @@ namespace
 		}
 		ventura::absolute_path built_executable = build / ventura::relative_path(
 #ifdef _MSC_VER
-		                                                      SILICIUM_SYSTEM_LITERAL("Debug/")
+		                                                      SILICIUM_OS_STR("Debug/")
 #endif
-		                                                          SILICIUM_SYSTEM_LITERAL("configure")
+		                                                          SILICIUM_OS_STR("configure")
 #ifdef _WIN32
-		                                                              SILICIUM_SYSTEM_LITERAL(".exe")
+		                                                              SILICIUM_OS_STR(".exe")
 #endif
 		                                                                  );
 		return built_executable;
@@ -118,11 +118,11 @@ namespace
 		ventura::create_directories(module_permanent, Si::throw_);
 		ventura::create_directories(application_build_dir, Si::throw_);
 		std::vector<Si::os_string> arguments;
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-m"));
+		arguments.emplace_back(SILICIUM_OS_STR("-m"));
 		arguments.emplace_back(to_os_string(module_permanent));
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-a"));
+		arguments.emplace_back(SILICIUM_OS_STR("-a"));
 		arguments.emplace_back(to_os_string(application_source));
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-b"));
+		arguments.emplace_back(SILICIUM_OS_STR("-b"));
 		arguments.emplace_back(to_os_string(application_build_dir));
 		int const rc = ventura::run_process(configure_executable, arguments, application_build_dir, output).get();
 		if (rc != 0)

@@ -48,11 +48,11 @@ namespace cdm
 			{
 				std::vector<Si::os_string> arguments;
 #ifdef _MSC_VER
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DBUILD_SHARED_LIBS=OFF"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-Dgtest_force_shared_crt=ON"));
-				arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+				arguments.emplace_back(SILICIUM_OS_STR("-DBUILD_SHARED_LIBS=OFF"));
+				arguments.emplace_back(SILICIUM_OS_STR("-Dgtest_force_shared_crt=ON"));
+				arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
-				arguments.push_back(to_os_string(gtest_source));
+				arguments.emplace_back(to_os_string(gtest_source));
 				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{
@@ -61,8 +61,8 @@ namespace cdm
 			}
 			{
 				std::vector<Si::os_string> arguments;
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("."));
+				arguments.emplace_back(SILICIUM_OS_STR("--build"));
+				arguments.emplace_back(SILICIUM_OS_STR("."));
 				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{

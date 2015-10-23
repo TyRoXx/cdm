@@ -26,14 +26,14 @@ namespace cdm
 			ventura::create_directories(build_dir, Si::throw_);
 			{
 				std::vector<Si::os_string> arguments;
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCMAKE_INSTALL_PREFIX=") + to_os_string(module_in_cache));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DBUILD_SHARED_LIBS=OFF"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DBUILD_CLAR=OFF"));
+				arguments.emplace_back(SILICIUM_OS_STR("-DCMAKE_INSTALL_PREFIX=") + to_os_string(module_in_cache));
+				arguments.emplace_back(SILICIUM_OS_STR("-DBUILD_SHARED_LIBS=OFF"));
+				arguments.emplace_back(SILICIUM_OS_STR("-DBUILD_CLAR=OFF"));
 #ifdef _MSC_VER
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DSTATIC_CRT=OFF"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+				arguments.emplace_back(SILICIUM_OS_STR("-DSTATIC_CRT=OFF"));
+				arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
-				arguments.push_back(to_os_string(original_source));
+				arguments.emplace_back(to_os_string(original_source));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{
@@ -44,11 +44,11 @@ namespace cdm
 #ifdef _MSC_VER
 				boost::ignore_unused_variable_warning(make_parallelism);
 				std::vector<Si::os_string> arguments;
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("libgit2.sln"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("/build"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("Debug"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("/project"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("INSTALL"));
+				arguments.emplace_back(SILICIUM_OS_STR("libgit2.sln"));
+				arguments.emplace_back(SILICIUM_OS_STR("/build"));
+				arguments.emplace_back(SILICIUM_OS_STR("Debug"));
+				arguments.emplace_back(SILICIUM_OS_STR("/project"));
+				arguments.emplace_back(SILICIUM_OS_STR("INSTALL"));
 				int const rc =
 				    ventura::run_process(*ventura::absolute_path::create("C:\\Program Files (x86)\\Microsoft Visual "
 				                                                         "Studio 12.0\\Common7\\IDE\\devenv.exe"),
@@ -60,16 +60,16 @@ namespace cdm
 				}
 #else
 				std::vector<Si::os_string> arguments;
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("."));
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("--"));
+				arguments.emplace_back(SILICIUM_OS_STR("--build"));
+				arguments.emplace_back(SILICIUM_OS_STR("."));
+				arguments.emplace_back(SILICIUM_OS_STR("--"));
 #ifndef _WIN32
-				arguments.push_back(
-				    SILICIUM_SYSTEM_LITERAL("-j" + boost::lexical_cast<Si::os_string>(make_parallelism)));
+				arguments.emplace_back(
+				    SILICIUM_OS_STR("-j" + boost::lexical_cast<Si::os_string>(make_parallelism)));
 #else
 				boost::ignore_unused_variable_warning(make_parallelism);
 #endif
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("install"));
+				arguments.emplace_back(SILICIUM_OS_STR("install"));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
 				{

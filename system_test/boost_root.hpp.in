@@ -3,7 +3,7 @@
 
 #include <ventura/absolute_path.hpp>
 
-#cmakedefine CDM_BOOST_ROOT_FOR_TESTING SILICIUM_SYSTEM_LITERAL("@CDM_BOOST_ROOT_FOR_TESTING@")
+#cmakedefine CDM_BOOST_ROOT_FOR_TESTING SILICIUM_OS_STR("@CDM_BOOST_ROOT_FOR_TESTING@")
 
 namespace cdm
 {

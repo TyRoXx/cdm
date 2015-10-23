@@ -49,8 +49,8 @@ namespace cdm
 				ventura::absolute_path const exe = copy_of_boost / "bootstrap.bat";
 #else
 				ventura::absolute_path const exe = *ventura::absolute_path::create("/usr/bin/env");
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("bash"));
-				arguments.push_back(to_os_string(copy_of_boost / "bootstrap.sh"));
+				arguments.emplace_back(SILICIUM_OS_STR("bash"));
+				arguments.emplace_back(to_os_string(copy_of_boost / "bootstrap.sh"));
 #endif
 				int const rc = ventura::run_process(exe, arguments, copy_of_boost, output).get();
 				if (rc != 0)
@@ -65,22 +65,22 @@ namespace cdm
 				auto buffering = Si::Sink<char, Si::success>::erase(Si::make_container_sink(output_buffer));
 #endif
 				std::vector<Si::os_string> arguments;
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("install"));
+				arguments.emplace_back(SILICIUM_OS_STR("install"));
 				{
 					Si::os_string const install_argument =
-					    SILICIUM_SYSTEM_LITERAL("--prefix=") + to_os_string(module_in_cache);
-					arguments.push_back(install_argument);
+					    SILICIUM_OS_STR("--prefix=") + to_os_string(module_in_cache);
+					arguments.emplace_back(install_argument);
 				}
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("link=static"));
+				arguments.emplace_back(SILICIUM_OS_STR("link=static"));
 #ifdef _MSC_VER
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("toolset=msvc-12.0"));
+				arguments.emplace_back(SILICIUM_OS_STR("toolset=msvc-12.0"));
 #endif
 #ifndef CDM_TESTS_RUNNING_ON_TRAVIS_CI
 				// GCC 4.6 crashes when compiling Boost.Log on travis probably due
 				// to lack of RAM.
 				// Thus we do not parallelize the build on travis so that the
 				// compiler can use all of the memory available to the machine.
-				arguments.push_back(SILICIUM_SYSTEM_LITERAL("-j ") +
+				arguments.emplace_back(SILICIUM_OS_STR("-j ") +
 				                    boost::lexical_cast<Si::os_string>(make_parallelism));
 #else
 				boost::ignore_unused_variable_warning(make_parallelism);

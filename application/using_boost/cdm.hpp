@@ -26,13 +26,13 @@ namespace CDM_CONFIGURE_NAMESPACE
 		    cdm::install_boost(boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
 		std::vector<Si::os_string> arguments;
 		Si::os_string const our_boost_root = to_os_string(boost_installed.root);
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + our_boost_root);
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_ADDITIONAL_VERSIONS=1.59"));
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_NO_SYSTEM_PATHS=ON"));
+		arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_ROOT=") + our_boost_root);
+		arguments.emplace_back(SILICIUM_OS_STR("-DBoost_ADDITIONAL_VERSIONS=1.59"));
+		arguments.emplace_back(SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
 #ifdef _MSC_VER
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+		arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
-		arguments.push_back(to_os_string(application_source));
+		arguments.emplace_back(to_os_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");

@@ -65,28 +65,28 @@ namespace CDM_CONFIGURE_NAMESPACE
 
 		std::vector<Si::os_string> arguments;
 		Si::os_string const our_boost_root = to_os_string(boost_installed.root);
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBOOST_ROOT=") + our_boost_root);
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_ADDITIONAL_VERSIONS=1.59"));
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-DBoost_NO_SYSTEM_PATHS=ON"));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCATCH_INCLUDE_DIRS=") + to_os_string(catch_installed.include));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCPPNETLIB_PREFIX_PATH=") +
+		arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_ROOT=") + our_boost_root);
+		arguments.emplace_back(SILICIUM_OS_STR("-DBoost_ADDITIONAL_VERSIONS=1.59"));
+		arguments.emplace_back(SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
+		arguments.emplace_back(SILICIUM_OS_STR("-DCATCH_INCLUDE_DIRS=") + to_os_string(catch_installed.include));
+		arguments.emplace_back(SILICIUM_OS_STR("-DCPPNETLIB_PREFIX_PATH=") +
 		                    to_os_string(cppnetlib_installed.cmake_prefix_path));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DRAPIDJSON_INCLUDE_DIR=") +
+		arguments.emplace_back(SILICIUM_OS_STR("-DRAPIDJSON_INCLUDE_DIR=") +
 		                    to_os_string(rapidjson_installed.include));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DRAPIDXML_INCLUDE_DIR=") +
+		arguments.emplace_back(SILICIUM_OS_STR("-DRAPIDXML_INCLUDE_DIR=") +
 		                    to_os_string(rapidxml_installed.include));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DLIBGIT2_INCLUDE_DIR=") + to_os_string(libgit2installed.include));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DLIBGIT2_LIBRARY_DIR=") +
+		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_INCLUDE_DIR=") + to_os_string(libgit2installed.include));
+		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_LIBRARY_DIR=") +
 		                    to_os_string(libgit2installed.library_dir));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DSQLITE3_INCLUDE_DIRS=") +
+		arguments.emplace_back(SILICIUM_OS_STR("-DSQLITE3_INCLUDE_DIRS=") +
 		                    to_os_string(sqlite3_installed.include));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DSQLITE3_LIBRARIES=") + to_os_string(sqlite3_installed.library));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DWEBSOCKETPP_INCLUDE_DIR=") +
+		arguments.emplace_back(SILICIUM_OS_STR("-DSQLITE3_LIBRARIES=") + to_os_string(sqlite3_installed.library));
+		arguments.emplace_back(SILICIUM_OS_STR("-DWEBSOCKETPP_INCLUDE_DIR=") +
 		                    to_os_string(websocketpp_installed.include));
 #ifdef _MSC_VER
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+		arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
-		arguments.push_back(to_os_string(application_source));
+		arguments.emplace_back(to_os_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");

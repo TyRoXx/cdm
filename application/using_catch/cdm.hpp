@@ -24,11 +24,11 @@ namespace CDM_CONFIGURE_NAMESPACE
 		ventura::absolute_path const source = *cdm / "original_sources/Catch-1.2.1";
 		cdm::catch_paths const installed = cdm::install_catch(source, module_temporaries, module_permanent, output);
 		std::vector<Si::os_string> arguments;
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("-DCATCH_INCLUDE_DIRS=") + to_os_string(installed.include));
+		arguments.emplace_back(SILICIUM_OS_STR("-DCATCH_INCLUDE_DIRS=") + to_os_string(installed.include));
 #ifdef _MSC_VER
-		arguments.emplace_back(SILICIUM_SYSTEM_LITERAL("-G \"Visual Studio 12 2013\""));
+		arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
-		arguments.push_back(to_os_string(application_source));
+		arguments.emplace_back(to_os_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");

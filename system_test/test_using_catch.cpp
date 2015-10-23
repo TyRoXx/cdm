@@ -33,19 +33,19 @@ BOOST_AUTO_TEST_CASE(test_using_catch)
 	                                   cpu_parallelism, output);
 	{
 		std::vector<Si::os_string> arguments;
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("--build"));
-		arguments.push_back(SILICIUM_SYSTEM_LITERAL("."));
+		arguments.emplace_back(SILICIUM_OS_STR("--build"));
+		arguments.emplace_back(SILICIUM_OS_STR("."));
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output));
 	}
 	{
 		std::vector<Si::os_string> arguments;
 		ventura::relative_path const relative(
 #ifdef _MSC_VER
-		    SILICIUM_SYSTEM_LITERAL("Debug/")
+		    SILICIUM_OS_STR("Debug/")
 #endif
-		        SILICIUM_SYSTEM_LITERAL("using_catch")
+		        SILICIUM_OS_STR("using_catch")
 #ifdef _MSC_VER
-		            SILICIUM_SYSTEM_LITERAL(".exe")
+		            SILICIUM_OS_STR(".exe")
 #endif
 		                );
 		BOOST_REQUIRE_EQUAL(
