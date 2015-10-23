@@ -67,8 +67,7 @@ namespace cdm
 				std::vector<Si::os_string> arguments;
 				arguments.emplace_back(SILICIUM_OS_STR("install"));
 				{
-					Si::os_string const install_argument =
-					    SILICIUM_OS_STR("--prefix=") + to_os_string(module_in_cache);
+					Si::os_string const install_argument = SILICIUM_OS_STR("--prefix=") + to_os_string(module_in_cache);
 					arguments.emplace_back(install_argument);
 				}
 				arguments.emplace_back(SILICIUM_OS_STR("link=static"));
@@ -80,8 +79,7 @@ namespace cdm
 				// to lack of RAM.
 				// Thus we do not parallelize the build on travis so that the
 				// compiler can use all of the memory available to the machine.
-				arguments.emplace_back(SILICIUM_OS_STR("-j ") +
-				                    boost::lexical_cast<Si::os_string>(make_parallelism));
+				arguments.emplace_back(SILICIUM_OS_STR("-j ") + boost::lexical_cast<Si::os_string>(make_parallelism));
 #else
 				boost::ignore_unused_variable_warning(make_parallelism);
 #endif

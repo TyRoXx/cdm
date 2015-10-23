@@ -27,7 +27,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		std::vector<Si::os_string> arguments;
 		arguments.emplace_back(SILICIUM_OS_STR("-DGTEST_INCLUDE_DIRS=") + to_os_string(gtest_installed.include));
 		arguments.emplace_back(SILICIUM_OS_STR("-DGTEST_LIBRARIES=") + to_os_string(gtest_installed.library) +
-		                    SILICIUM_OS_STR(";") + to_os_string(gtest_installed.library_main));
+		                       SILICIUM_OS_STR(";") + to_os_string(gtest_installed.library_main));
 #ifdef _MSC_VER
 		arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif

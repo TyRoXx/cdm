@@ -77,9 +77,9 @@ namespace
 				arguments.emplace_back(SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
 			}
 			ventura::absolute_path const modules = repository / "modules";
-			arguments.emplace_back(SILICIUM_OS_STR("-DCDM_CONFIGURE_INCLUDE_DIRS=") +
-			                       to_os_string(application_source) + SILICIUM_OS_STR(";") +
-			                       to_os_string(modules) + SILICIUM_OS_STR(";") + to_os_string(repository));
+			arguments.emplace_back(SILICIUM_OS_STR("-DCDM_CONFIGURE_INCLUDE_DIRS=") + to_os_string(application_source) +
+			                       SILICIUM_OS_STR(";") + to_os_string(modules) + SILICIUM_OS_STR(";") +
+			                       to_os_string(repository));
 			arguments.emplace_back(to_os_string(source));
 #ifdef _MSC_VER
 			arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));

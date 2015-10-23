@@ -77,8 +77,7 @@ namespace cdm
 				arguments.emplace_back(SILICIUM_OS_STR("."));
 				arguments.emplace_back(SILICIUM_OS_STR("--"));
 #ifndef _WIN32
-				arguments.emplace_back(
-				    SILICIUM_OS_STR("-j" + boost::lexical_cast<Si::os_string>(make_parallelism)));
+				arguments.emplace_back(SILICIUM_OS_STR("-j" + boost::lexical_cast<Si::os_string>(make_parallelism)));
 #else
 				boost::ignore_unused_variable_warning(make_parallelism);
 #endif

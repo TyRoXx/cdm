@@ -70,19 +70,15 @@ namespace CDM_CONFIGURE_NAMESPACE
 		arguments.emplace_back(SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
 		arguments.emplace_back(SILICIUM_OS_STR("-DCATCH_INCLUDE_DIRS=") + to_os_string(catch_installed.include));
 		arguments.emplace_back(SILICIUM_OS_STR("-DCPPNETLIB_PREFIX_PATH=") +
-		                    to_os_string(cppnetlib_installed.cmake_prefix_path));
-		arguments.emplace_back(SILICIUM_OS_STR("-DRAPIDJSON_INCLUDE_DIR=") +
-		                    to_os_string(rapidjson_installed.include));
-		arguments.emplace_back(SILICIUM_OS_STR("-DRAPIDXML_INCLUDE_DIR=") +
-		                    to_os_string(rapidxml_installed.include));
+		                       to_os_string(cppnetlib_installed.cmake_prefix_path));
+		arguments.emplace_back(SILICIUM_OS_STR("-DRAPIDJSON_INCLUDE_DIR=") + to_os_string(rapidjson_installed.include));
+		arguments.emplace_back(SILICIUM_OS_STR("-DRAPIDXML_INCLUDE_DIR=") + to_os_string(rapidxml_installed.include));
 		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_INCLUDE_DIR=") + to_os_string(libgit2installed.include));
-		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_LIBRARY_DIR=") +
-		                    to_os_string(libgit2installed.library_dir));
-		arguments.emplace_back(SILICIUM_OS_STR("-DSQLITE3_INCLUDE_DIRS=") +
-		                    to_os_string(sqlite3_installed.include));
+		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_LIBRARY_DIR=") + to_os_string(libgit2installed.library_dir));
+		arguments.emplace_back(SILICIUM_OS_STR("-DSQLITE3_INCLUDE_DIRS=") + to_os_string(sqlite3_installed.include));
 		arguments.emplace_back(SILICIUM_OS_STR("-DSQLITE3_LIBRARIES=") + to_os_string(sqlite3_installed.library));
 		arguments.emplace_back(SILICIUM_OS_STR("-DWEBSOCKETPP_INCLUDE_DIR=") +
-		                    to_os_string(websocketpp_installed.include));
+		                       to_os_string(websocketpp_installed.include));
 #ifdef _MSC_VER
 		arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif

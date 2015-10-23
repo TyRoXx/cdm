@@ -28,8 +28,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		cdm::gtest_paths const gtest_installed =
 		    cdm::install_gtest(gtest_source, module_temporaries, module_permanent, ventura::cmake_exe, output);
 
-		ventura::absolute_path const cppnetlib_source =
-		    *cdm / "original_sources/cpp-netlib-0.11.2-final";
+		ventura::absolute_path const cppnetlib_source = *cdm / "original_sources/cpp-netlib-0.11.2-final";
 		ventura::recreate_directories(module_temporaries, Si::throw_);
 		ventura::absolute_path const boost_source = *cdm / "original_sources/boost_1_59_0";
 		cdm::cppnetlib_paths const cppnetlib_installed =
@@ -38,10 +37,10 @@ namespace CDM_CONFIGURE_NAMESPACE
 
 		std::vector<Si::os_string> arguments;
 		arguments.emplace_back(SILICIUM_OS_STR("-DCPPNETLIB_PREFIX_PATH=") +
-		                    to_os_string(cppnetlib_installed.cmake_prefix_path));
+		                       to_os_string(cppnetlib_installed.cmake_prefix_path));
 		arguments.emplace_back(SILICIUM_OS_STR("-DGTEST_INCLUDE_DIRS=") + to_os_string(gtest_installed.include));
 		arguments.emplace_back(SILICIUM_OS_STR("-DGTEST_LIBRARIES=") + to_os_string(gtest_installed.library) +
-		                    SILICIUM_OS_STR(";") + to_os_string(gtest_installed.library_main));
+		                       SILICIUM_OS_STR(";") + to_os_string(gtest_installed.library_main));
 #ifdef _MSC_VER
 		arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif

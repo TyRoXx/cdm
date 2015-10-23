@@ -24,10 +24,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 		cdm::libgit2_paths const installed = cdm::install_libgit2(original_source, module_temporaries, module_permanent,
 		                                                          ventura::cmake_exe, cpu_parallelism, output);
 		std::vector<Si::os_string> arguments;
-		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_INCLUDE_DIR=") +
-		                    to_os_string(installed.include));
-		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_LIBRARY_DIR=") +
-		                    to_os_string(installed.library_dir));
+		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_INCLUDE_DIR=") + to_os_string(installed.include));
+		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_LIBRARY_DIR=") + to_os_string(installed.library_dir));
 #ifdef _MSC_VER
 		arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
