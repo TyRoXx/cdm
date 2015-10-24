@@ -13,6 +13,7 @@ namespace
 	ventura::absolute_path const repository = *ventura::parent(test);
 }
 
+#if !CDM_TESTS_RUNNING_ON_APPVEYOR
 BOOST_AUTO_TEST_CASE(test_using_many_libs)
 {
 	cdm::travis_keep_alive_printer keep_travis_alive;
@@ -54,3 +55,4 @@ BOOST_AUTO_TEST_CASE(test_using_many_libs)
 		    0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}
 }
+#endif

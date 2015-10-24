@@ -135,11 +135,18 @@ include_directories(${VENTURA_INCLUDE_DIR})
 
 add_definitions("-DSILICIUM_NO_DEPRECATED")
 
-option(CDM_TESTS_RUNNING_ON_TRAVIS_CI "Enable this when running the unit tests on travis-ci.org. It will exclude file system tests that are known to be flaky due to travis issues." OFF)
+option(CDM_TESTS_RUNNING_ON_TRAVIS_CI "Enable this when running the unit tests on travis-ci.org." OFF)
 if(CDM_TESTS_RUNNING_ON_TRAVIS_CI)
 	add_definitions("-DCDM_TESTS_RUNNING_ON_TRAVIS_CI=1")
 else()
 	add_definitions("-DCDM_TESTS_RUNNING_ON_TRAVIS_CI=0")
+endif()
+
+option(CDM_TESTS_RUNNING_ON_APPVEYOR "Enable this when running the unit tests on appveyor." OFF)
+if(CDM_TESTS_RUNNING_ON_APPVEYOR)
+	add_definitions("-DCDM_TESTS_RUNNING_ON_APPVEYOR=1")
+else()
+	add_definitions("-DCDM_TESTS_RUNNING_ON_APPVEYOR=0")
 endif()
 
 file(GLOB formatted "modules/*.hpp")
