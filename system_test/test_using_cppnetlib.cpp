@@ -5,6 +5,7 @@
 #include <silicium/sink/ostream_sink.hpp>
 #include <cdm/locate_cache.hpp>
 
+#if !CDM_TESTS_RUNNING_ON_APPVEYOR
 namespace
 {
 	ventura::absolute_path const this_file = *ventura::absolute_path::create(__FILE__);
@@ -12,7 +13,6 @@ namespace
 	ventura::absolute_path const repository = *ventura::parent(test);
 }
 
-#if !CDM_TESTS_RUNNING_ON_APPVEYOR
 BOOST_AUTO_TEST_CASE(test_using_cppnetlib)
 {
 	cdm::travis_keep_alive_printer keep_travis_alive;
@@ -42,13 +42,13 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib)
 		std::vector<Si::os_string> arguments;
 		ventura::relative_path const relative(
 #ifdef _WIN32
-		    SILICIUM_OS_STR("Debug/")
+		    "Debug/"
 #endif
-		        SILICIUM_OS_STR("using_cppnetlib")
+		    "using_cppnetlib"
 #ifdef _WIN32
-		            SILICIUM_OS_STR(".exe")
+		    ".exe"
 #endif
-		                );
+		    );
 		BOOST_REQUIRE_EQUAL(
 		    0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}

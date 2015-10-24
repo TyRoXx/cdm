@@ -40,13 +40,13 @@ BOOST_AUTO_TEST_CASE(test_using_gtest)
 		std::vector<Si::os_string> arguments;
 		ventura::relative_path const relative(
 #ifdef _MSC_VER
-		    SILICIUM_OS_STR("Debug/")
+		    "Debug/"
 #endif
-		        SILICIUM_OS_STR("using_gtest")
+		    "using_gtest"
 #ifdef _MSC_VER
-		            SILICIUM_OS_STR(".exe")
+		    ".exe"
 #endif
-		                );
+		    );
 		BOOST_REQUIRE_EQUAL(
 		    0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}

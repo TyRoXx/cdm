@@ -94,8 +94,7 @@ namespace cdm
 #else
 				                                    output
 #endif
-				                                    )
-				                   .get();
+				                                    ).get();
 				if (rc != 0)
 				{
 #if CDM_AVOID_CONSOLE_OUTPUT
