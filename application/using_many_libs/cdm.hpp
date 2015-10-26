@@ -26,38 +26,39 @@ namespace CDM_CONFIGURE_NAMESPACE
 		{
 			throw std::runtime_error("expected the applications dir to have a parent");
 		}
+		ventura::absolute_path const sources = *cdm / "original_sources";
 
-		ventura::absolute_path const boost_source = *cdm / "original_sources/boost_1_59_0";
+		ventura::absolute_path const boost_source = sources / "boost_1_59_0";
 		cdm::boost_paths const boost_installed =
 		    cdm::install_boost(boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
 
-		ventura::absolute_path const catch_source = *cdm / "original_sources/Catch-1.2.1";
+		ventura::absolute_path const catch_source = sources / "Catch-1.2.1";
 		cdm::catch_paths const catch_installed =
 		    cdm::install_catch(catch_source, module_temporaries, module_permanent, output);
 
-		ventura::absolute_path const cppnetlib_source = *cdm / "original_sources/cpp-netlib-0.11.2-final";
+		ventura::absolute_path const cppnetlib_source = sources / "cpp-netlib-0.11.2-final";
 		cdm::cppnetlib_paths const cppnetlib_installed =
 		    cdm::install_cppnetlib(cppnetlib_source, boost_source, module_temporaries, module_permanent,
 		                           ventura::cmake_exe, cpu_parallelism, output);
 
-		ventura::absolute_path const libgit2_source = *cdm / "original_sources/libgit2-0.23.2";
+		ventura::absolute_path const libgit2_source = sources / "libgit2-0.23.2";
 		cdm::libgit2_paths const libgit2installed = cdm::install_libgit2(
 		    libgit2_source, module_temporaries, module_permanent, ventura::cmake_exe, cpu_parallelism, output);
 
-		ventura::absolute_path const rapidjson_source = *cdm / "original_sources/rapidjson-1.0.2";
+		ventura::absolute_path const rapidjson_source = sources / "rapidjson-1.0.2";
 		cdm::rapidjson_paths const rapidjson_installed =
 		    cdm::install_rapidjson(rapidjson_source, module_temporaries, module_permanent, output);
 
-		ventura::absolute_path const rapidxml_source = *cdm / "original_sources/rapidxml-1.13";
+		ventura::absolute_path const rapidxml_source = sources / "rapidxml-1.13";
 		cdm::rapidxml_paths const rapidxml_installed =
 		    cdm::install_rapidxml(rapidxml_source, module_temporaries, module_permanent, output);
 
-		ventura::absolute_path const sqlite3_source = *cdm / "original_sources/sqlite-autoconf-3081101";
+		ventura::absolute_path const sqlite3_source = sources / "sqlite-autoconf-3081101";
 		cdm::sqlite_paths const sqlite3_installed =
 		    cdm::install_sqlite(sqlite3_source, module_temporaries, module_permanent, ventura::cmake_exe, output);
 
 		ventura::absolute_path const websocketpp_source =
-		    *cdm / "original_sources/websocketpp-c5510d6de04917812b910a8dd44735c1f17061d9";
+		    sources / "websocketpp-c5510d6de04917812b910a8dd44735c1f17061d9";
 		cdm::websocketpp_paths const websocketpp_installed = cdm::install_websocketpp(
 		    websocketpp_source, boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
 
