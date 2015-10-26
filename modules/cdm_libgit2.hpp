@@ -41,9 +41,9 @@ namespace cdm
 				}
 			}
 			{
+				std::vector<Si::os_string> arguments;
 #ifdef _MSC_VER
 				boost::ignore_unused_variable_warning(make_parallelism);
-				std::vector<Si::os_string> arguments;
 				arguments.emplace_back(SILICIUM_OS_STR("libgit2.sln"));
 				arguments.emplace_back(SILICIUM_OS_STR("/build"));
 				arguments.emplace_back(SILICIUM_OS_STR("Debug"));
@@ -53,27 +53,18 @@ namespace cdm
 				    ventura::run_process(*ventura::absolute_path::create("C:\\Program Files (x86)\\Microsoft Visual "
 				                                                         "Studio 12.0\\Common7\\IDE\\devenv.exe"),
 				                         arguments, build_dir, output).get();
-				if (rc != 0)
-				{
-					throw std::runtime_error("cmake build failed");
-				}
 #else
-				std::vector<Si::os_string> arguments;
 				arguments.emplace_back(SILICIUM_OS_STR("--build"));
 				arguments.emplace_back(SILICIUM_OS_STR("."));
 				arguments.emplace_back(SILICIUM_OS_STR("--"));
-#ifdef _WIN32
-				boost::ignore_unused_variable_warning(make_parallelism);
-#else
-				arguments.emplace_back(SILICIUM_OS_STR("-j" + boost::lexical_cast<Si::os_string>(make_parallelism)));
-#endif
+				arguments.emplace_back(SILICIUM_OS_STR("-j") + boost::lexical_cast<Si::os_string>(make_parallelism));
 				arguments.emplace_back(SILICIUM_OS_STR("install"));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
+#endif
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");
 				}
-#endif
 			}
 		}
 		libgit2_paths result;
