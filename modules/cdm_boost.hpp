@@ -52,14 +52,14 @@ namespace cdm
 #ifdef _MSC_VER
 				arguments.emplace_back(SILICIUM_OS_STR("toolset=msvc-12.0"));
 #endif
-#ifndef CDM_TESTS_RUNNING_ON_TRAVIS_CI
+#if CDM_TESTS_RUNNING_ON_TRAVIS_CI
+				boost::ignore_unused_variable_warning(make_parallelism);
+#else
 				// GCC 4.6 crashes when compiling Boost.Log on travis probably due
 				// to lack of RAM.
 				// Thus we do not parallelize the build on travis so that the
 				// compiler can use all of the memory available to the machine.
 				arguments.emplace_back(SILICIUM_OS_STR("-j ") + boost::lexical_cast<Si::os_string>(make_parallelism));
-#else
-				boost::ignore_unused_variable_warning(make_parallelism);
 #endif
 				int const rc = ventura::run_process(copy_of_boost / "b2"
 #ifdef _WIN32
