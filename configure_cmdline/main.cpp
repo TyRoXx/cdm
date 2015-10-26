@@ -1,16 +1,13 @@
 #include <ventura/absolute_path.hpp>
 #include <silicium/sink/sink.hpp>
-#include <cdm/configure_result.hpp>
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
 	// The forward declaration for the function that has to be implemented by the header
 	// which is #included next.
-	cdm::configure_result configure(ventura::absolute_path const &module_temporaries,
-	                                ventura::absolute_path const &module_permanent,
-	                                ventura::absolute_path const &application_source,
-	                                ventura::absolute_path const &application_build_dir,
-	                                Si::Sink<char, Si::success>::interface &output);
+	void configure(ventura::absolute_path const &module_temporaries, ventura::absolute_path const &module_permanent,
+	               ventura::absolute_path const &application_source,
+	               ventura::absolute_path const &application_build_dir, Si::Sink<char, Si::success>::interface &output);
 }
 
 // This header is provided by the client application and is expected to define the
@@ -104,12 +101,8 @@ int main(int argc, char **argv)
 #else
 		    boost::thread::hardware_concurrency();
 #endif
-		cdm::configure_result const result = CDM_CONFIGURE_NAMESPACE::configure(
-		    module_temporaries, module_permanent, application_source, application_build, cpu_parallelism, output);
-		for (ventura::absolute_path const &dir : result.shared_library_directories)
-		{
-			std::cerr << dir << '\n';
-		}
+		CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, module_permanent, application_source, application_build,
+		                                   cpu_parallelism, output);
 	}
 	catch (std::exception const &ex)
 	{

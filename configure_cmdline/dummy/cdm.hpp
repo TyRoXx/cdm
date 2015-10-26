@@ -1,9 +1,8 @@
 #include <ventura/absolute_path.hpp>
-#include <cdm/configure_result.hpp>
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
-	cdm::configure_result configure(
+	void configure(
 		ventura::absolute_path const &module_temporaries,
 		ventura::absolute_path const &module_permanent,
 		ventura::absolute_path const &application_source,
@@ -18,6 +17,5 @@ namespace CDM_CONFIGURE_NAMESPACE
 		Si::ignore_unused_variable_warning(application_build_dir);
 		Si::ignore_unused_variable_warning(cpu_parallelism);
 		Si::ignore_unused_variable_warning(output);
-		return cdm::configure_result();
 	}
 }
