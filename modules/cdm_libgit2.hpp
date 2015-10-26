@@ -62,10 +62,10 @@ namespace cdm
 				arguments.emplace_back(SILICIUM_OS_STR("--build"));
 				arguments.emplace_back(SILICIUM_OS_STR("."));
 				arguments.emplace_back(SILICIUM_OS_STR("--"));
-#ifndef _WIN32
-				arguments.emplace_back(SILICIUM_OS_STR("-j" + boost::lexical_cast<Si::os_string>(make_parallelism)));
-#else
+#ifdef _WIN32
 				boost::ignore_unused_variable_warning(make_parallelism);
+#else
+				arguments.emplace_back(SILICIUM_OS_STR("-j" + boost::lexical_cast<Si::os_string>(make_parallelism)));
 #endif
 				arguments.emplace_back(SILICIUM_OS_STR("install"));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
