@@ -36,6 +36,5 @@ namespace CDM_CONFIGURE_NAMESPACE
 		{
 			throw std::runtime_error("CMake configure failed");
 		}
-		return void();
 	}
 }
