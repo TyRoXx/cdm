@@ -75,11 +75,11 @@ namespace cdm
 				ventura::absolute_path const lib_dir = construction_site / "lib";
 				ventura::create_directories(lib_dir, Si::throw_);
 				ventura::copy(build_dir / gtest::make_static_lib_build_path(*ventura::path_segment::create("gtest")),
-				              lib_dir / gtest::make_static_lib_install_path(*ventura::path_segment::create(L"gtest")),
+				              lib_dir / gtest::make_static_lib_install_path(*ventura::path_segment::create("gtest")),
 				              Si::throw_);
 				ventura::copy(
 				    build_dir / gtest::make_static_lib_build_path(*ventura::path_segment::create("gtest_main")),
-				    lib_dir / gtest::make_static_lib_install_path(*ventura::path_segment::create(L"gtest_main")),
+				    lib_dir / gtest::make_static_lib_install_path(*ventura::path_segment::create("gtest_main")),
 				    Si::throw_);
 				ventura::copy_recursively(gtest_source / "include", construction_site / "include", &output, Si::throw_);
 			}
@@ -88,9 +88,9 @@ namespace cdm
 		gtest_paths result;
 		result.include = gtest_in_cache / "include";
 		auto lib_dir = gtest_in_cache / "lib";
-		result.library = lib_dir / gtest::make_static_lib_install_path(*ventura::path_segment::create(L"gtest"));
+		result.library = lib_dir / gtest::make_static_lib_install_path(*ventura::path_segment::create("gtest"));
 		result.library_main =
-		    lib_dir / gtest::make_static_lib_install_path(*ventura::path_segment::create(L"gtest_main"));
+		    lib_dir / gtest::make_static_lib_install_path(*ventura::path_segment::create("gtest_main"));
 		return result;
 	}
 }

@@ -100,13 +100,13 @@ namespace
 		}
 		ventura::absolute_path built_executable = build / ventura::relative_path(
 #ifdef _MSC_VER
-		                                                      SILICIUM_OS_STR("Debug/")
+		                                                      "Debug/"
 #endif
-		                                                          SILICIUM_OS_STR("configure")
+		                                                      "configure"
 #ifdef _WIN32
-		                                                              SILICIUM_OS_STR(".exe")
+		                                                      ".exe"
 #endif
-		                                                                  );
+		                                                      );
 		return built_executable;
 	}
 
