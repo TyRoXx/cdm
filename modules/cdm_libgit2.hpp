@@ -52,7 +52,8 @@ namespace cdm
 				int const rc =
 				    ventura::run_process(*ventura::absolute_path::create("C:\\Program Files (x86)\\Microsoft Visual "
 				                                                         "Studio 12.0\\Common7\\IDE\\devenv.exe"),
-				                         arguments, build_dir, output).get();
+				                         arguments, build_dir, output)
+				        .get();
 #else
 				arguments.emplace_back(SILICIUM_OS_STR("--build"));
 				arguments.emplace_back(SILICIUM_OS_STR("."));
