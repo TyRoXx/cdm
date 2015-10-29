@@ -19,21 +19,21 @@
 
 int main(int argc, char **argv)
 {
-	std::string module_permanent_argument;
+	auto module_permanent_argument = to_utf8_string(ventura::get_home() / ".cdm_cache");
 	std::string application_source_argument;
 	std::string application_build_argument;
 	auto temporary_root_argument = to_utf8_string(ventura::temporary_directory(Si::throw_) / "cdm_cmdline");
 
 	boost::program_options::options_description options("options");
-	options.add_options()("help,h", "produce help message")("modules,m",
-	                                                        boost::program_options::value(&module_permanent_argument),
-	                                                        "path to the permanent module binary cache")(
+	options.add_options()("help,h", "produce help message")(
+	    "modules,m", boost::program_options::value(&module_permanent_argument),
+	    ("path to the permanent module binary cache (default " + module_permanent_argument + ")").c_str())(
 	    "application,a", boost::program_options::value(&application_source_argument),
 	    "path to the root of your application source code")("build,b",
 	                                                        boost::program_options::value(&application_build_argument),
 	                                                        "path to the CMake build directory of your application")(
 	    "temporary,t", boost::program_options::value(&temporary_root_argument),
-	    "temporary directory for the generated CMake project (default " + temporary_root_argument + ")");
+	    ("temporary directory for the generated CMake project (default " + temporary_root_argument + ")").c_str());
 	boost::program_options::positional_options_description positional;
 	boost::program_options::variables_map variables;
 	try
