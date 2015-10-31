@@ -1,5 +1,5 @@
 include_directories(.)
-file(GLOB sources "*.cpp" "*.hpp")
+file(GLOB sources "*.cpp" "*.hpp" "../cdm/*.hpp")
 file(GLOB_RECURSE headers "../modules/*.hpp")
 file(GLOB_RECURSE applications "../application/**.hpp")
 
