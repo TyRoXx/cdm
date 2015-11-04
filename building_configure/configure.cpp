@@ -74,6 +74,10 @@ namespace
 			if (boost_root)
 			{
 				arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_ROOT=") + to_os_string(*boost_root));
+#if CDM_TESTS_RUNNING_ON_APPVEYOR
+				arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_LIBRARYDIR=") +
+				                       to_os_string(*boost_root / "lib32-msvc-14.0"));
+#endif
 				arguments.emplace_back(SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
 			}
 			ventura::absolute_path const modules = repository / "modules";

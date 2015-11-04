@@ -41,6 +41,10 @@ namespace cdm
 				cdm::boost_paths const boost_installed =
 				    cdm::install_boost(boost_source, boost_temp, install_root, make_parallelism, output);
 				arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_ROOT=") + to_os_string(boost_installed.root));
+#if CDM_TESTS_RUNNING_ON_APPVEYOR
+				arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_LIBRARYDIR=") +
+				                       to_os_string(boost_installed.root / "lib32-msvc-14.0"));
+#endif
 				arguments.emplace_back(SILICIUM_OS_STR("-DBoost_ADDITIONAL_VERSIONS=1.59"));
 				arguments.emplace_back(SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
 #ifdef _MSC_VER

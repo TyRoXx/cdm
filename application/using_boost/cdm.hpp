@@ -25,6 +25,10 @@ namespace CDM_CONFIGURE_NAMESPACE
 		std::vector<Si::os_string> arguments;
 		Si::os_string const our_boost_root = to_os_string(boost_installed.root);
 		arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_ROOT=") + our_boost_root);
+#if CDM_TESTS_RUNNING_ON_APPVEYOR
+		arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_LIBRARYDIR=") +
+		                       to_os_string(boost_installed.root / "lib32-msvc-14.0"));
+#endif
 		arguments.emplace_back(SILICIUM_OS_STR("-DBoost_ADDITIONAL_VERSIONS=1.59"));
 		arguments.emplace_back(SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
 #ifdef _MSC_VER
