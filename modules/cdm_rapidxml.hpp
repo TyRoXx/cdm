@@ -20,6 +20,7 @@ namespace cdm
 		{
 			ventura::absolute_path const construction = temporarily_writable / "rapidxml";
 			ventura::copy_recursively(original_source, construction, &output, Si::throw_);
+			ventura::create_directories(install_root, Si::throw_);
 			ventura::rename(construction, in_cache, Si::throw_);
 		}
 		rapidxml_paths result;

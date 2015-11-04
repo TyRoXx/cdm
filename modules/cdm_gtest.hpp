@@ -83,6 +83,7 @@ namespace cdm
 				    Si::throw_);
 				ventura::copy_recursively(gtest_source / "include", construction_site / "include", &output, Si::throw_);
 			}
+			ventura::create_directories(install_root, Si::throw_);
 			ventura::rename(construction_site, gtest_in_cache, Si::throw_);
 		}
 		gtest_paths result;

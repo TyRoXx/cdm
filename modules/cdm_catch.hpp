@@ -20,6 +20,7 @@ namespace cdm
 		{
 			ventura::absolute_path const construction = temporarily_writable / "catch";
 			ventura::copy_recursively(original_source / "include", construction, &output, Si::throw_);
+			ventura::create_directories(install_root, Si::throw_);
 			ventura::rename(construction, in_cache, Si::throw_);
 		}
 		catch_paths result;

@@ -34,6 +34,7 @@ namespace cdm
 			ventura::absolute_path const construction_include = construction / "include";
 			ventura::create_directories(construction_include, Si::throw_);
 			ventura::copy_recursively(original_source / "websocketpp", construction_include, &output, Si::throw_);
+			ventura::create_directories(install_root, Si::throw_);
 			ventura::rename(construction, in_cache, Si::throw_);
 		}
 		result.include = in_cache / "include";

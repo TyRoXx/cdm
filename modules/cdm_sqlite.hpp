@@ -125,6 +125,7 @@ namespace cdm
 				ventura::copy(original_source / "sqlite3.h", include_dir / "sqlite3.h", Si::throw_);
 				ventura::copy(original_source / "sqlite3ext.h", include_dir / "sqlite3ext.h", Si::throw_);
 			}
+			ventura::create_directories(install_root, Si::throw_);
 			ventura::rename(construction_site, in_cache, Si::throw_);
 		}
 		sqlite_paths result;

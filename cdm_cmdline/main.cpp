@@ -22,7 +22,8 @@ int main(int argc, char **argv)
 	std::string module_permanent_argument = ventura::to_utf8_string<std::string>(ventura::get_home() / ".cdm_cache");
 	std::string application_source_argument;
 	std::string application_build_argument;
-	std::string temporary_root_argument = ventura::to_utf8_string<std::string>(ventura::temporary_directory(Si::throw_) / "cdm_cmdline");
+	std::string temporary_root_argument =
+	    ventura::to_utf8_string<std::string>(ventura::temporary_directory(Si::throw_) / "cdm_cmdline");
 
 	boost::program_options::options_description options("options");
 	options.add_options()("help,h", "produce help message")(

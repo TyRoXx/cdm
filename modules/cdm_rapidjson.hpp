@@ -22,6 +22,7 @@ namespace cdm
 			ventura::create_directories(construction, Si::throw_);
 			ventura::copy_recursively(original_source / "include/rapidjson", construction / "rapidjson", &output,
 			                          Si::throw_);
+			ventura::create_directories(install_root, Si::throw_);
 			ventura::rename(construction, in_cache, Si::throw_);
 		}
 		rapidjson_paths result;
