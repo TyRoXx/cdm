@@ -6,6 +6,9 @@
 #include <silicium/memory_range.hpp>
 #include <silicium/sink/iterator_sink.hpp>
 #include <boost/lexical_cast.hpp>
+#if BOOST_VERSION >= 105600
+#include <boost/predef.h>
+#endif
 
 namespace cdm
 {
@@ -57,12 +60,17 @@ namespace cdm
 	inline configuration approximate_configuration_of_this_binary()
 	{
 		return configuration(
+#if BOOST_VERSION >= 105600
 #if BOOST_ARCH_X86_32
 		    cpu_architecture::x86
 #elif BOOST_ARCH_X86_64
 		    cpu_architecture::amd64
 #else
 #error unsupported CPU
+#endif
+
+#else
+		    ((sizeof(void *) == 8) ? cpu_architecture::amd64 : cpu_architecture::x86)
 #endif
 		    ,
 #ifdef _MSC_VER
