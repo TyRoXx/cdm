@@ -82,7 +82,7 @@ if(MSVC)
 endif()
 
 if(MSVC)
-	set(Boost_USE_STATIC_LIBS OFF)
+	set(Boost_USE_STATIC_LIBS ON)
 endif()
 if(BOOST_ROOT)
 	set(Boost_NO_SYSTEM_PATHS ON)

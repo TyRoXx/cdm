@@ -15,7 +15,7 @@ before_build:
   - git submodule update --init
   - mkdir build
   - cd build
-  - cmake -G "Visual Studio 14" -DBoost_ADDITIONAL_VERSIONS=1.56 -DBOOST_ROOT=C:\Libraries\boost -DCDM_BOOST_ROOT_FOR_TESTING=C:\Libraries\boost -DCDM_TESTS_RUNNING_ON_APPVEYOR=ON ..
+  - cmake -G "Visual Studio 12" -DBOOST_ROOT=C:\Libraries\boost -DCDM_BOOST_ROOT_FOR_TESTING=C:\Libraries\boost -DCDM_TESTS_RUNNING_ON_APPVEYOR=ON ..
 
 build_script:
   - cmake --build . --config Release
