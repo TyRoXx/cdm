@@ -6,6 +6,7 @@
 #include <ventura/write_file.hpp>
 #include <silicium/sink/iterator_sink.hpp>
 #include <boost/foreach.hpp>
+#include <cdm/cmake_generator.hpp>
 
 namespace cdm
 {
@@ -91,9 +92,7 @@ namespace cdm
 
 			{
 				std::vector<Si::os_string> arguments;
-#ifdef _MSC_VER
-				arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
-#endif
+				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
 				arguments.emplace_back(SILICIUM_OS_STR("."));
 				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)

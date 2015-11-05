@@ -1,4 +1,6 @@
 #include "configure.hpp"
+#include "cdm_boost.hpp"
+#include <cdm/cmake_generator.hpp>
 #include <ventura/file_operations.hpp>
 #include <ventura/cmake.hpp>
 #include <fstream>
@@ -73,21 +75,18 @@ namespace
 			}
 			if (boost_root)
 			{
-				arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_ROOT=") + to_os_string(*boost_root));
+				cdm::generate_cmake_definitions_for_using_boost(Si::make_container_sink(arguments), *boost_root);
 #if CDM_TESTS_RUNNING_ON_APPVEYOR
 				arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_LIBRARYDIR=") +
 				                       to_os_string(*boost_root / "lib32-msvc-14.0"));
 #endif
-				arguments.emplace_back(SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
 			}
 			ventura::absolute_path const modules = repository / "modules";
 			arguments.emplace_back(SILICIUM_OS_STR("-DCDM_CONFIGURE_INCLUDE_DIRS=") + to_os_string(application_source) +
 			                       SILICIUM_OS_STR(";") + to_os_string(modules) + SILICIUM_OS_STR(";") +
 			                       to_os_string(repository));
 			arguments.emplace_back(to_os_string(source));
-#ifdef _MSC_VER
-			arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
-#endif
+			cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
 			if (ventura::run_process(ventura::cmake_exe, arguments, build, output).get() != 0)
 			{
 				throw std::runtime_error("Could not CMake-configure the cdm configure executable");

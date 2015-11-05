@@ -1,5 +1,7 @@
 #include "cdm_libgit2.hpp"
+#include <cdm/cmake_generator.hpp>
 #include <ventura/cmake.hpp>
+#include <silicium/sink/iterator_sink.hpp>
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
@@ -24,9 +26,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		std::vector<Si::os_string> arguments;
 		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_INCLUDE_DIR=") + to_os_string(installed.include));
 		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_LIBRARY_DIR=") + to_os_string(installed.library_dir));
-#ifdef _MSC_VER
-		arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
-#endif
+		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
 		arguments.emplace_back(to_os_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
 		{

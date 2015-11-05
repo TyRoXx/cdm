@@ -1,4 +1,5 @@
 #include "cdm_websocketpp.hpp"
+#include <cdm/cmake_generator.hpp>
 #include <ventura/cmake.hpp>
 
 namespace CDM_CONFIGURE_NAMESPACE
@@ -25,16 +26,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 		    original_source, boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
 		std::vector<Si::os_string> arguments;
 		arguments.emplace_back(SILICIUM_OS_STR("-DWEBSOCKETPP_INCLUDE_DIR=") + to_os_string(installed.include));
-		arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_ROOT=") + to_os_string(installed.boost_root));
-#if CDM_TESTS_RUNNING_ON_APPVEYOR
-		arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_LIBRARYDIR=") +
-		                       to_os_string(installed.boost_root / "lib32-msvc-14.0"));
-#endif
-		arguments.emplace_back(SILICIUM_OS_STR("-DBoost_ADDITIONAL_VERSIONS=1.59"));
-		arguments.emplace_back(SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
-#ifdef _MSC_VER
-		arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
-#endif
+		cdm::generate_cmake_definitions_for_using_boost(Si::make_container_sink(arguments), installed.boost_root);
+		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
 		arguments.emplace_back(to_os_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
 		{

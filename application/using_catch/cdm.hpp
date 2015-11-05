@@ -1,5 +1,7 @@
 #include "cdm_catch.hpp"
+#include <cdm/cmake_generator.hpp>
 #include <ventura/cmake.hpp>
+#include <silicium/sink/iterator_sink.hpp>
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
@@ -23,9 +25,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		cdm::catch_paths const installed = cdm::install_catch(source, module_temporaries, module_permanent, output);
 		std::vector<Si::os_string> arguments;
 		arguments.emplace_back(SILICIUM_OS_STR("-DCATCH_INCLUDE_DIRS=") + to_os_string(installed.include));
-#ifdef _MSC_VER
-		arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
-#endif
+		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
 		arguments.emplace_back(to_os_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
 		{

@@ -3,6 +3,8 @@
 
 #include <ventura/file_operations.hpp>
 #include <ventura/run_process.hpp>
+#include <silicium/sink/iterator_sink.hpp>
+#include <cdm/cmake_generator.hpp>
 
 namespace cdm
 {
@@ -50,8 +52,8 @@ namespace cdm
 #ifdef _MSC_VER
 				arguments.emplace_back(SILICIUM_OS_STR("-DBUILD_SHARED_LIBS=OFF"));
 				arguments.emplace_back(SILICIUM_OS_STR("-Dgtest_force_shared_crt=ON"));
-				arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
+				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
 				arguments.emplace_back(to_os_string(gtest_source));
 				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)

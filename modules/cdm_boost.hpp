@@ -50,7 +50,15 @@ namespace cdm
 				}
 				arguments.emplace_back(SILICIUM_OS_STR("link=static"));
 #ifdef _MSC_VER
-				arguments.emplace_back(SILICIUM_OS_STR("toolset=msvc-12.0"));
+				arguments.emplace_back(
+#if _MSC_VER == 1900
+				    SILICIUM_OS_STR("toolset=msvc-14.0")
+#elif _MSC_VER == 1800
+				    SILICIUM_OS_STR("toolset=msvc-12.0")
+#else
+#error unsupported version of Visual Studio
+#endif
+				        );
 #endif
 #if CDM_TESTS_RUNNING_ON_TRAVIS_CI
 				// GCC 4.6 crashes when compiling Boost.Log on travis probably due
@@ -66,7 +74,8 @@ namespace cdm
 				                                                    ".exe"
 #endif
 				                                    ,
-				                                    arguments, copy_of_boost, output).get();
+				                                    arguments, copy_of_boost, output)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("b2 failed");
@@ -76,6 +85,15 @@ namespace cdm
 		boost_paths result;
 		result.root = module_in_cache;
 		return result;
+	}
+
+	template <class OsStringSink>
+	void generate_cmake_definitions_for_using_boost(OsStringSink &&definitions,
+	                                                ventura::absolute_path const &boost_root)
+	{
+		Si::append(definitions, SILICIUM_OS_STR("-DBOOST_ROOT=") + to_os_string(boost_root));
+		Si::append(definitions, SILICIUM_OS_STR("-DBoost_ADDITIONAL_VERSIONS=1.59"));
+		Si::append(definitions, SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
 	}
 }
 

@@ -4,6 +4,8 @@
 #include <ventura/file_operations.hpp>
 #include <ventura/run_process.hpp>
 #include <boost/lexical_cast.hpp>
+#include <cdm/cmake_generator.hpp>
+#include <silicium/sink/iterator_sink.hpp>
 
 namespace cdm
 {
@@ -31,8 +33,8 @@ namespace cdm
 				arguments.emplace_back(SILICIUM_OS_STR("-DBUILD_CLAR=OFF"));
 #ifdef _MSC_VER
 				arguments.emplace_back(SILICIUM_OS_STR("-DSTATIC_CRT=OFF"));
-				arguments.emplace_back(SILICIUM_OS_STR("-G \"Visual Studio 12 2013\""));
 #endif
+				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
 				arguments.emplace_back(to_os_string(original_source));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
 				if (rc != 0)
@@ -52,7 +54,8 @@ namespace cdm
 				int const rc =
 				    ventura::run_process(*ventura::absolute_path::create("C:\\Program Files (x86)\\Microsoft Visual "
 				                                                         "Studio 12.0\\Common7\\IDE\\devenv.exe"),
-				                         arguments, build_dir, output).get();
+				                         arguments, build_dir, output)
+				        .get();
 #else
 				arguments.emplace_back(SILICIUM_OS_STR("--build"));
 				arguments.emplace_back(SILICIUM_OS_STR("."));

@@ -6,7 +6,6 @@
 #include <ventura/file_operations.hpp>
 #include <cdm/locate_cache.hpp>
 
-#if !CDM_TESTS_RUNNING_ON_APPVEYOR
 namespace
 {
 	ventura::absolute_path const this_file = *ventura::absolute_path::create(__FILE__);
@@ -55,4 +54,3 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 		    0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}
 }
-#endif
