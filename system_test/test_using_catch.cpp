@@ -1,6 +1,7 @@
 #define CDM_CONFIGURE_NAMESPACE a0038899
 #include "../../cdm/application/using_catch/cdm.hpp"
 #include "log.hpp"
+#include "temporary.hpp"
 #include <boost/test/unit_test.hpp>
 #include <silicium/sink/ostream_sink.hpp>
 #include <ventura/file_operations.hpp>
@@ -16,7 +17,7 @@ namespace
 BOOST_AUTO_TEST_CASE(test_using_catch)
 {
 	ventura::absolute_path const app_source = repository / "application/using_catch";
-	ventura::absolute_path const tmp = ventura::temporary_directory(Si::throw_) / "cdm";
+	ventura::absolute_path const tmp = cdm::get_temporary_root_for_testing() / "cdm";
 	ventura::absolute_path const module_temporaries = tmp / "mod";
 	ventura::absolute_path const application_build_dir = tmp / "using_catch";
 	ventura::recreate_directories(module_temporaries, Si::throw_);

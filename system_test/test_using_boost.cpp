@@ -1,6 +1,7 @@
 #define CDM_CONFIGURE_NAMESPACE a0038876
 #include "../../cdm/application/using_boost/cdm.hpp"
 #include "log.hpp"
+#include "temporary.hpp"
 #include <boost/test/unit_test.hpp>
 #include <silicium/sink/ostream_sink.hpp>
 #include <ventura/file_operations.hpp>
@@ -17,7 +18,7 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 {
 	cdm::travis_keep_alive_printer keep_travis_alive;
 	ventura::absolute_path const app_source = repository / "application/using_boost";
-	ventura::absolute_path const tmp = ventura::temporary_directory(Si::throw_) / "cdm_b";
+	ventura::absolute_path const tmp = cdm::get_temporary_root_for_testing() / "cdm_b";
 	ventura::recreate_directories(tmp, Si::throw_);
 	ventura::absolute_path const module_temporaries = tmp / "build";
 	ventura::create_directories(module_temporaries, Si::throw_);

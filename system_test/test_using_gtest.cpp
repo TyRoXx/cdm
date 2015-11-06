@@ -1,6 +1,7 @@
 #define CDM_CONFIGURE_NAMESPACE t1185ace
 #include "../../cdm/application/using_gtest/cdm.hpp"
 #include "log.hpp"
+#include "temporary.hpp"
 #include <boost/test/unit_test.hpp>
 #include <silicium/sink/ostream_sink.hpp>
 #include <cdm/locate_cache.hpp>
@@ -15,7 +16,7 @@ namespace
 BOOST_AUTO_TEST_CASE(test_using_gtest)
 {
 	ventura::absolute_path const app_source = repository / "application/using_gtest";
-	ventura::absolute_path const tmp = ventura::temporary_directory(Si::throw_) / "cdm_test_using_gtest";
+	ventura::absolute_path const tmp = cdm::get_temporary_root_for_testing() / "cdm_test_using_gtest";
 	ventura::absolute_path const module_temporaries = tmp / "module_temporaries";
 	ventura::absolute_path const application_build_dir = tmp / "using_gtest";
 	ventura::recreate_directories(module_temporaries, Si::throw_);

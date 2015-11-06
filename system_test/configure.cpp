@@ -1,5 +1,6 @@
 #include "../../cdm/building_configure/configure.hpp"
 #include "log.hpp"
+#include "temporary.hpp"
 #include "boost_root.hpp"
 #include <boost/test/unit_test.hpp>
 #include <ventura/file_operations.hpp>
@@ -16,7 +17,7 @@ namespace
 
 BOOST_AUTO_TEST_CASE(test_run_configure_command_line)
 {
-	ventura::absolute_path const temporary_root = ventura::temporary_directory(Si::throw_) / "cdm_system_test";
+	ventura::absolute_path const temporary_root = cdm::get_temporary_root_for_testing() / "cdm_system_test";
 	ventura::recreate_directories(temporary_root, Si::throw_);
 	ventura::absolute_path const configure = temporary_root / "configure";
 	ventura::absolute_path const &application = using_gtest_source;

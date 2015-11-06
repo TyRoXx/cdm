@@ -1,6 +1,7 @@
 #define CDM_CONFIGURE_NAMESPACE a0038877
 #include "../../cdm/application/using_websocketpp/cdm.hpp"
 #include "log.hpp"
+#include "temporary.hpp"
 #include <boost/test/unit_test.hpp>
 #include <silicium/sink/ostream_sink.hpp>
 #include <ventura/file_operations.hpp>
@@ -20,7 +21,7 @@ BOOST_AUTO_TEST_CASE(test_using_websocketpp)
 {
 	cdm::travis_keep_alive_printer keep_travis_alive;
 	ventura::absolute_path const app_source = repository / "application/using_websocketpp";
-	ventura::absolute_path const tmp = ventura::temporary_directory(Si::throw_) / "cdm_test_using_websocketpp";
+	ventura::absolute_path const tmp = cdm::get_temporary_root_for_testing() / "cdm_test_using_websocketpp";
 	ventura::absolute_path const module_temporaries = tmp / "module_temporaries";
 	ventura::absolute_path const application_build_dir = tmp / "using_websocketpp";
 	ventura::recreate_directories(module_temporaries, Si::throw_);
