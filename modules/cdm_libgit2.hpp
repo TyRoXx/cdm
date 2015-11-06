@@ -48,7 +48,13 @@ namespace cdm
 				boost::ignore_unused_variable_warning(make_parallelism);
 				arguments.emplace_back(SILICIUM_OS_STR("libgit2.sln"));
 				arguments.emplace_back(SILICIUM_OS_STR("/build"));
-				arguments.emplace_back(SILICIUM_OS_STR("Debug"));
+				arguments.emplace_back(
+#ifdef NDEBUG
+				    SILICIUM_OS_STR("Release")
+#else
+				    SILICIUM_OS_STR("Debug")
+#endif
+				        );
 				arguments.emplace_back(SILICIUM_OS_STR("/project"));
 				arguments.emplace_back(SILICIUM_OS_STR("INSTALL"));
 				int const rc = ventura::run_process(

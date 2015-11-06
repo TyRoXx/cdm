@@ -7,6 +7,9 @@
 #include <ventura/file_operations.hpp>
 #include <cdm/locate_cache.hpp>
 
+#if !defined(_MSC_VER) || (_MSC_VER != 1900)
+// SDL2 does not compile on VC++ 2015 yet (WTF!)
+
 namespace
 {
 	ventura::absolute_path const this_file = *ventura::absolute_path::create(__FILE__);
@@ -55,3 +58,4 @@ BOOST_AUTO_TEST_CASE(test_using_sdl2)
 		    0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}
 }
+#endif

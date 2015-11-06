@@ -17,20 +17,21 @@ namespace cdm
 		ventura::absolute_path runtime_library;
 	};
 
-	inline sdl2_paths install_sdl2(ventura::absolute_path const &sdl2_source,
-	                                         ventura::absolute_path const &temporary,
-	                                         ventura::absolute_path const &install_root,
-	                                         ventura::absolute_path const &cmake_exe, unsigned make_parallelism,
-	                                         Si::Sink<char, Si::success>::interface &output)
+	inline sdl2_paths install_sdl2(ventura::absolute_path const &sdl2_source, ventura::absolute_path const &temporary,
+	                               ventura::absolute_path const &install_root, ventura::absolute_path const &cmake_exe,
+	                               unsigned make_parallelism, Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const module_in_cache = install_root / "sdl2";
 		if (!ventura::file_exists(module_in_cache, Si::throw_))
 		{
-			ventura::absolute_path const &build_dir = temporary;
+			ventura::absolute_path const &build_dir = temporary / "build";
+			ventura::absolute_path const &construction_site = temporary / "construction";
 			ventura::create_directories(build_dir, Si::throw_);
 			{
 				std::vector<Si::os_string> arguments;
-				arguments.emplace_back(SILICIUM_OS_STR("-DCMAKE_INSTALL_PREFIX=") + to_os_string(module_in_cache));
+				arguments.emplace_back(SILICIUM_OS_STR("-DCMAKE_INSTALL_PREFIX=") + to_os_string(construction_site));
+				arguments.emplace_back(SILICIUM_OS_STR("-DSDL_STATIC=OFF"));
+				arguments.emplace_back(SILICIUM_OS_STR("-DSDL_SHARED=ON"));
 				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
 				arguments.emplace_back(to_os_string(sdl2_source));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
@@ -45,7 +46,13 @@ namespace cdm
 				std::vector<Si::os_string> arguments;
 				arguments.emplace_back(SILICIUM_OS_STR("SDL2.sln"));
 				arguments.emplace_back(SILICIUM_OS_STR("/build"));
-				arguments.emplace_back(SILICIUM_OS_STR("Debug"));
+				arguments.emplace_back(
+#ifdef NDEBUG
+				    SILICIUM_OS_STR("Release")
+#else
+				    SILICIUM_OS_STR("Debug")
+#endif
+				        );
 				arguments.emplace_back(SILICIUM_OS_STR("/project"));
 				arguments.emplace_back(SILICIUM_OS_STR("INSTALL"));
 				int const rc = ventura::run_process(
@@ -82,6 +89,7 @@ namespace cdm
 				}
 #endif
 			}
+			ventura::rename(construction_site, module_in_cache, Si::throw_);
 		}
 		sdl2_paths result;
 		result.include = module_in_cache / "include/SDL2";
@@ -89,30 +97,40 @@ namespace cdm
 		{
 			return *ventura::path_segment::create(
 #ifndef _MSC_VER
-				"lib" +
+			    "lib" +
 #endif
-				stem + 
+			    stem +
 #ifdef _MSC_VER
-				".lib"
+			    ".lib"
 #else
-				".a"
+			    ".a"
 #endif
-				);
+			    );
 		};
 		auto lib_dir = module_in_cache / "lib";
 		result.library = lib_dir / make_library_name("SDL2");
 		result.main = lib_dir / make_library_name("SDL2main");
 		result.runtime_library = module_in_cache / "bin" /
 #ifndef _MSC_VER
-			"lib"
+		                         "lib"
 #endif
-			"SDL2."
+		                         "SDL2."
 #ifdef _MSC_VER
-			"dll"
+		                         "dll"
 #else
-			"so"
+		                         "so"
 #endif
-			;
+		    ;
+		auto require_file = [](ventura::absolute_path const &file)
+		{
+			if (!ventura::file_exists(file, Si::throw_))
+			{
+				throw std::runtime_error("Missing from SDL2 installation: " + to_utf8_string(file));
+			}
+		};
+		require_file(result.library);
+		require_file(result.main);
+		require_file(result.runtime_library);
 		return result;
 	}
 }

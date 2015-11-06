@@ -1,7 +1,7 @@
 #include "SDL.h"
 
-int main(int argc, char* argv[])
+int main(int argc, char *argv[])
 {
-    SDL_Delay(30);
-    return 0;
+	SDL_Delay(30);
+	return 0;
 }
