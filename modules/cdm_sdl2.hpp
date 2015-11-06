@@ -65,8 +65,7 @@ namespace cdm
 #error unsupported version
 #endif
 				                       ),
-				                   arguments, build_dir, output)
-				                   .get();
+				                   arguments, build_dir, output).get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");
@@ -93,32 +92,41 @@ namespace cdm
 		}
 		sdl2_paths result;
 		result.include = module_in_cache / "include/SDL2";
-		auto make_library_name = [](ventura::path::underlying_type const &stem)
+		auto make_library_name = [](ventura::path::underlying_type const &stem, bool is_shared_object)
 		{
-			return *ventura::path_segment::create(
-#ifndef _MSC_VER
-			    "lib" +
-#endif
-			    stem +
 #ifdef _MSC_VER
-			    ".lib"
-#else
-			    ".a"
+			Si::ignore_unused_variable_warning(is_shared_object);
 #endif
-			    );
+			auto result =
+#ifndef _MSC_VER
+						"lib" +
+#endif
+						stem +
+#ifdef _MSC_VER
+						".lib"
+#else
+						(is_shared_object ? ".so" : ".a")
+#endif
+						;
+						return *ventura::path_segment::create(result);
 		};
 		auto lib_dir = module_in_cache / "lib";
-		result.library = lib_dir / make_library_name("SDL2");
-		result.main = lib_dir / make_library_name("SDL2main");
-		result.runtime_library = module_in_cache / "bin" /
-#ifndef _MSC_VER
-		                         "lib"
-#endif
-		                         "SDL2."
+		result.library = lib_dir / make_library_name("SDL2", true);
+		result.main = lib_dir / make_library_name("SDL2main", false);
+		result.runtime_library =
 #ifdef _MSC_VER
-		                         "dll"
+		    module_in_cache / "bin" /
+#ifndef _MSC_VER
+		    "lib"
+#endif
+		    "SDL2."
+#ifdef _MSC_VER
+		    "dll"
 #else
-		                         "so"
+		    "so"
+#endif
+#else
+		    result.library
 #endif
 		    ;
 		auto require_file = [](ventura::absolute_path const &file)

@@ -67,8 +67,7 @@ namespace cdm
 #error unsupported version
 #endif
 				                       ),
-				                   arguments, build_dir, output)
-				                   .get();
+				                   arguments, build_dir, output).get();
 #else
 				arguments.emplace_back(SILICIUM_OS_STR("--build"));
 				arguments.emplace_back(SILICIUM_OS_STR("."));

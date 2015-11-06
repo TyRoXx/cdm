@@ -74,8 +74,7 @@ namespace cdm
 				                                                    ".exe"
 #endif
 				                                    ,
-				                                    arguments, copy_of_boost, output)
-				                   .get();
+				                                    arguments, copy_of_boost, output).get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("b2 failed");
