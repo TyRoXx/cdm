@@ -21,7 +21,7 @@ BOOST_AUTO_TEST_CASE(test_using_many_libs)
 	ventura::recreate_directories(tmp, Si::throw_);
 	ventura::absolute_path const module_temporaries = tmp / "build";
 	ventura::create_directories(module_temporaries, Si::throw_);
-	ventura::absolute_path const application_build_dir = tmp / "app_build";
+	ventura::absolute_path const application_build_dir = tmp / "using_many_libs";
 	ventura::create_directories(application_build_dir, Si::throw_);
 	std::unique_ptr<std::ofstream> log_file = cdm::open_log(tmp / "test_using_many_libs.txt");
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(*log_file));

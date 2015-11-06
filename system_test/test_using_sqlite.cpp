@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE(test_using_sqlite)
 	ventura::absolute_path const app_source = repository / "application/using_sqlite";
 	ventura::absolute_path const tmp = ventura::temporary_directory(Si::throw_) / "cdm_test_using_sqlite";
 	ventura::absolute_path const module_temporaries = tmp / "module_temporaries";
-	ventura::absolute_path const application_build_dir = tmp / "application_build_dir";
+	ventura::absolute_path const application_build_dir = tmp / "using_sqlite";
 	ventura::recreate_directories(module_temporaries, Si::throw_);
 	ventura::recreate_directories(application_build_dir, Si::throw_);
 	std::unique_ptr<std::ofstream> log_file = cdm::open_log(tmp / "test_using_sqlite.txt");
