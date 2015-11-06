@@ -6,6 +6,9 @@
 #include <ventura/file_operations.hpp>
 #include <cdm/locate_cache.hpp>
 
+#if !defined(_MSC_VER) || (_MSC_VER != 1900)
+// websocketpp does not compille on VS 2015 yet
+
 namespace
 {
 	ventura::absolute_path const this_file = *ventura::absolute_path::create(__FILE__);
@@ -23,7 +26,7 @@ BOOST_AUTO_TEST_CASE(test_using_many_libs)
 	ventura::create_directories(module_temporaries, Si::throw_);
 	ventura::absolute_path const application_build_dir = tmp / "using_many_libs";
 	ventura::create_directories(application_build_dir, Si::throw_);
-	std::unique_ptr<std::ofstream> log_file = cdm::open_log(tmp / "test_using_many_libs.txt");
+	std::unique_ptr<std::ofstream> log_file = cdm::open_log(application_build_dir / "test_using_many_libs.txt");
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(*log_file));
 	unsigned const cpu_parallelism =
 #if CDM_TESTS_RUNNING_ON_TRAVIS_CI
@@ -54,3 +57,4 @@ BOOST_AUTO_TEST_CASE(test_using_many_libs)
 		    0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
 	}
 }
+#endif

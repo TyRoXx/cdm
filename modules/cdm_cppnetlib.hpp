@@ -60,11 +60,18 @@ namespace cdm
 				arguments.emplace_back(SILICIUM_OS_STR("Debug"));
 				arguments.emplace_back(SILICIUM_OS_STR("/project"));
 				arguments.emplace_back(SILICIUM_OS_STR("INSTALL"));
-				int const rc =
-				    ventura::run_process(*ventura::absolute_path::create("C:\\Program Files (x86)\\Microsoft Visual "
-				                                                         "Studio 12.0\\Common7\\IDE\\devenv.exe"),
-				                         arguments, build_dir, output)
-				        .get();
+				int const rc = ventura::run_process(
+				                   *ventura::absolute_path::create(
+#if _MSC_VER == 1900
+				                       "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe"
+#elif _MSC_VER == 1800
+				                       "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\Common7\\IDE\\devenv.exe"
+#else
+#error unsupported version
+#endif
+				                       ),
+				                   arguments, build_dir, output)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");

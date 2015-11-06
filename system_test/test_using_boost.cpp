@@ -23,7 +23,7 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 	ventura::create_directories(module_temporaries, Si::throw_);
 	ventura::absolute_path const application_build_dir = tmp / "using_boost";
 	ventura::create_directories(application_build_dir, Si::throw_);
-	std::unique_ptr<std::ofstream> log_file = cdm::open_log(tmp / "test_using_boost.txt");
+	std::unique_ptr<std::ofstream> log_file = cdm::open_log(application_build_dir / "test_using_boost.txt");
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(*log_file));
 	unsigned const cpu_parallelism =
 #if CDM_TESTS_RUNNING_ON_TRAVIS_CI
