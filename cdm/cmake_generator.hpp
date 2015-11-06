@@ -2,6 +2,7 @@
 #define CDM_CMAKE_GENERATOR_HPP
 
 #include <silicium/sink/append.hpp>
+#include <silicium/c_string.hpp>
 
 namespace cdm
 {

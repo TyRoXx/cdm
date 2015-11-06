@@ -18,7 +18,7 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 {
 	cdm::travis_keep_alive_printer keep_travis_alive;
 	ventura::absolute_path const app_source = repository / "application/using_boost";
-	ventura::absolute_path const tmp = cdm::get_temporary_root_for_testing() / "cdm_b";
+	ventura::absolute_path const tmp = cdm::get_temporary_root_for_testing() / "test_using_boost";
 	ventura::recreate_directories(tmp, Si::throw_);
 	ventura::absolute_path const module_temporaries = tmp / "build";
 	ventura::create_directories(module_temporaries, Si::throw_);

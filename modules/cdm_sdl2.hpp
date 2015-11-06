@@ -1,0 +1,120 @@
+#ifndef CDM_SDL2_HPP
+#define CDM_SDL2_HPP
+
+#include <cdm/cmake_generator.hpp>
+#include <ventura/file_operations.hpp>
+#include <ventura/run_process.hpp>
+#include <boost/lexical_cast.hpp>
+#include <silicium/sink/iterator_sink.hpp>
+
+namespace cdm
+{
+	struct sdl2_paths
+	{
+		ventura::absolute_path include;
+		ventura::absolute_path library;
+		ventura::absolute_path main;
+		ventura::absolute_path runtime_library;
+	};
+
+	inline sdl2_paths install_sdl2(ventura::absolute_path const &sdl2_source,
+	                                         ventura::absolute_path const &temporary,
+	                                         ventura::absolute_path const &install_root,
+	                                         ventura::absolute_path const &cmake_exe, unsigned make_parallelism,
+	                                         Si::Sink<char, Si::success>::interface &output)
+	{
+		ventura::absolute_path const module_in_cache = install_root / "sdl2";
+		if (!ventura::file_exists(module_in_cache, Si::throw_))
+		{
+			ventura::absolute_path const &build_dir = temporary;
+			ventura::create_directories(build_dir, Si::throw_);
+			{
+				std::vector<Si::os_string> arguments;
+				arguments.emplace_back(SILICIUM_OS_STR("-DCMAKE_INSTALL_PREFIX=") + to_os_string(module_in_cache));
+				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
+				arguments.emplace_back(to_os_string(sdl2_source));
+				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
+				if (rc != 0)
+				{
+					throw std::runtime_error("cmake configure failed");
+				}
+			}
+			{
+#ifdef _MSC_VER
+				boost::ignore_unused_variable_warning(make_parallelism);
+				std::vector<Si::os_string> arguments;
+				arguments.emplace_back(SILICIUM_OS_STR("SDL2.sln"));
+				arguments.emplace_back(SILICIUM_OS_STR("/build"));
+				arguments.emplace_back(SILICIUM_OS_STR("Debug"));
+				arguments.emplace_back(SILICIUM_OS_STR("/project"));
+				arguments.emplace_back(SILICIUM_OS_STR("INSTALL"));
+				int const rc = ventura::run_process(
+				                   *ventura::absolute_path::create(
+#if _MSC_VER == 1900
+				                       "C:\\Program Files (x86)\\Microsoft Visual Studio 14.0\\Common7\\IDE\\devenv.exe"
+#elif _MSC_VER == 1800
+				                       "C:\\Program Files (x86)\\Microsoft Visual Studio 12.0\\Common7\\IDE\\devenv.exe"
+#else
+#error unsupported version
+#endif
+				                       ),
+				                   arguments, build_dir, output)
+				                   .get();
+				if (rc != 0)
+				{
+					throw std::runtime_error("cmake build failed");
+				}
+#else
+				std::vector<Si::os_string> arguments;
+				arguments.emplace_back(SILICIUM_OS_STR("--build"));
+				arguments.emplace_back(SILICIUM_OS_STR("."));
+				arguments.emplace_back(SILICIUM_OS_STR("--"));
+#ifdef _WIN32
+				boost::ignore_unused_variable_warning(make_parallelism);
+#else
+				arguments.emplace_back(SILICIUM_OS_STR("-j" + boost::lexical_cast<Si::os_string>(make_parallelism)));
+#endif
+				arguments.emplace_back(SILICIUM_OS_STR("install"));
+				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
+				if (rc != 0)
+				{
+					throw std::runtime_error("cmake build failed");
+				}
+#endif
+			}
+		}
+		sdl2_paths result;
+		result.include = module_in_cache / "include/SDL2";
+		auto make_library_name = [](ventura::path::underlying_type const &stem)
+		{
+			return *ventura::path_segment::create(
+#ifndef _MSC_VER
+				"lib" +
+#endif
+				stem + 
+#ifdef _MSC_VER
+				".lib"
+#else
+				".a"
+#endif
+				);
+		};
+		auto lib_dir = module_in_cache / "lib";
+		result.library = lib_dir / make_library_name("SDL2");
+		result.main = lib_dir / make_library_name("SDL2main");
+		result.runtime_library = module_in_cache / "bin" /
+#ifndef _MSC_VER
+			"lib"
+#endif
+			"SDL2."
+#ifdef _MSC_VER
+			"dll"
+#else
+			"so"
+#endif
+			;
+		return result;
+	}
+}
+
+#endif
