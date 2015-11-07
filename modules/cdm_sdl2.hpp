@@ -108,7 +108,7 @@ namespace cdm
 						(is_shared_object ? ".so" : ".a")
 #endif
 						;
-						return *ventura::path_segment::create(result);
+						return *ventura::path_segment::create(ventura::path(std::move(result)));
 		};
 		auto lib_dir = module_in_cache / "lib";
 		result.library = lib_dir / make_library_name("SDL2", true);
@@ -133,7 +133,7 @@ namespace cdm
 		{
 			if (!ventura::file_exists(file, Si::throw_))
 			{
-				throw std::runtime_error("Missing from SDL2 installation: " + to_utf8_string(file));
+				throw std::runtime_error("Missing from SDL2 installation: " + ventura::to_utf8_string<std::string>(file));
 			}
 		};
 		require_file(result.library);
