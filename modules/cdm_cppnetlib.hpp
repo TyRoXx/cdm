@@ -76,7 +76,8 @@ namespace cdm
 #error unsupported version
 #endif
 				                       ),
-				                   arguments, build_dir, output).get();
+				                   arguments, build_dir, output)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");
