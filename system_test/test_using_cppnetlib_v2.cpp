@@ -56,8 +56,7 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, build_configure, output,
 		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-		                                            ventura::environment_inheritance::inherit)
-		                           .get());
+		                                            ventura::environment_inheritance::inherit).get());
 	}
 
 	{
@@ -66,8 +65,7 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 		arguments.emplace_back(".");
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, build_configure, output,
 		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-		                                            ventura::environment_inheritance::inherit)
-		                           .get());
+		                                            ventura::environment_inheritance::inherit).get());
 	}
 
 	{
@@ -105,8 +103,7 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 			BOOST_REQUIRE_EQUAL(0,
 			                    ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
 			                                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-			                                         ventura::environment_inheritance::inherit)
-			                        .get());
+			                                         ventura::environment_inheritance::inherit).get());
 		}
 	}
 
@@ -116,8 +113,7 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 		arguments.emplace_back(".");
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
 		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-		                                            ventura::environment_inheritance::inherit)
-		                           .get());
+		                                            ventura::environment_inheritance::inherit).get());
 	}
 
 	{

@@ -57,8 +57,7 @@ namespace cdm
 				arguments.emplace_back(ventura::to_utf8_string(gtest_source));
 				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
 				                              std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                              ventura::environment_inheritance::inherit)
-				             .get();
+				                              ventura::environment_inheritance::inherit).get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake configure failed");
@@ -70,8 +69,7 @@ namespace cdm
 				arguments.emplace_back(".");
 				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
 				                              std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                              ventura::environment_inheritance::inherit)
-				             .get();
+				                              ventura::environment_inheritance::inherit).get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");
