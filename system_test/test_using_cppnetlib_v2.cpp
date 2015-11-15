@@ -83,10 +83,13 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 			    );
 			auto configure_sink =
 			    Si::Sink<char, Si::success>::erase(Si::make_container_sink(generated_cmake_arguments));
-			BOOST_REQUIRE_EQUAL(
-			    0, ventura::run_process(build_configure / relative, arguments, build_configure, configure_sink,
-			                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-			                            ventura::environment_inheritance::inherit));
+			ventura::process_parameters parameters;
+			parameters.executable = build_configure / relative;
+			parameters.arguments = ventura::arguments_to_os_strings(arguments);
+			parameters.current_path = build_configure;
+			parameters.err = &output;
+			parameters.out = &configure_sink;
+			BOOST_REQUIRE_EQUAL(0, ventura::run_process(parameters));
 			BOOST_CHECK(!generated_cmake_arguments.empty());
 		}
 
