@@ -12,7 +12,7 @@ namespace cdm
 		StringSink m_arguments;
 
 		explicit cmake_argument_builder(StringSink arguments)
-			: m_arguments(std::forward<StringSink>(arguments))
+		    : m_arguments(std::forward<StringSink>(arguments))
 		{
 		}
 

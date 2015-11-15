@@ -43,8 +43,8 @@ namespace cdm
 		argument_builder.define("CPPNETLIB_PREFIX_PATH",
 		                        ventura::to_utf8_string(cppnetlib_installed.cmake_prefix_path));
 		argument_builder.define("GTEST_INCLUDE_DIRS", ventura::to_utf8_string(gtest_installed.include));
-		argument_builder.define("GTEST_LIBRARIES", '"' + ventura::to_utf8_string(gtest_installed.library) + ";" +
-		                                               ventura::to_utf8_string(gtest_installed.library_main) + '"');
+		argument_builder.define("GTEST_LIBRARIES", ventura::to_utf8_string(gtest_installed.library) + ";" +
+		                                               ventura::to_utf8_string(gtest_installed.library_main));
 		cdm::generate_default_cmake_generator_arguments(arguments);
 		Si::append(arguments, ventura::to_utf8_string(application_source));
 	}
