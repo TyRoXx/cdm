@@ -24,13 +24,16 @@ namespace CDM_CONFIGURE_NAMESPACE
 		ventura::absolute_path const gtest_source = *cdm / "original_sources/gtest-1.7.0";
 		cdm::gtest_paths const gtest_installed =
 		    cdm::install_gtest(gtest_source, module_temporaries, module_permanent, ventura::cmake_exe, output);
-		std::vector<Si::os_string> arguments;
-		arguments.emplace_back(SILICIUM_OS_STR("-DGTEST_INCLUDE_DIRS=") + to_os_string(gtest_installed.include));
-		arguments.emplace_back(SILICIUM_OS_STR("-DGTEST_LIBRARIES=") + to_os_string(gtest_installed.library) +
-		                       SILICIUM_OS_STR(";") + to_os_string(gtest_installed.library_main));
+		std::vector<Si::noexcept_string> arguments;
+		arguments.emplace_back("-DGTEST_INCLUDE_DIRS=" + ventura::to_utf8_string(gtest_installed.include));
+		arguments.emplace_back("-DGTEST_LIBRARIES=" + ventura::to_utf8_string(gtest_installed.library) + ";" +
+		                       ventura::to_utf8_string(gtest_installed.library_main));
 		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-		arguments.emplace_back(to_os_string(application_source));
-		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
+		arguments.emplace_back(ventura::to_utf8_string(application_source));
+		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
+		                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                         ventura::environment_inheritance::inherit)
+		        .get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");
 		}

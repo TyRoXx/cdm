@@ -23,12 +23,15 @@ namespace CDM_CONFIGURE_NAMESPACE
 		ventura::absolute_path const original_source = *cdm / "original_sources/libgit2-0.23.2";
 		cdm::libgit2_paths const installed = cdm::install_libgit2(original_source, module_temporaries, module_permanent,
 		                                                          ventura::cmake_exe, cpu_parallelism, output);
-		std::vector<Si::os_string> arguments;
-		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_INCLUDE_DIR=") + to_os_string(installed.include));
-		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_LIBRARY_DIR=") + to_os_string(installed.library_dir));
+		std::vector<Si::noexcept_string> arguments;
+		arguments.emplace_back("-DLIBGIT2_INCLUDE_DIR=" + ventura::to_utf8_string(installed.include));
+		arguments.emplace_back("-DLIBGIT2_LIBRARY_DIR=" + ventura::to_utf8_string(installed.library_dir));
 		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-		arguments.emplace_back(to_os_string(application_source));
-		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
+		arguments.emplace_back(ventura::to_utf8_string(application_source));
+		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
+		                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                         ventura::environment_inheritance::inherit)
+		        .get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");
 		}

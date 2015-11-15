@@ -32,43 +32,48 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 	ventura::absolute_path const build_configure = module_temporaries / "build_configure";
 	ventura::recreate_directories(build_configure, Si::throw_);
 	{
-		std::vector<Si::os_string> arguments;
+		std::vector<Si::noexcept_string> arguments;
 		{
 			ventura::absolute_path const include = repository / "dependencies/silicium";
-			arguments.emplace_back(SILICIUM_OS_STR("-DSILICIUM_INCLUDE_DIR=") + to_os_string(include));
+			arguments.emplace_back("-DSILICIUM_INCLUDE_DIR=" + ventura::to_utf8_string(include));
 		}
 		{
 			ventura::absolute_path const include = repository / "dependencies/ventura";
-			arguments.emplace_back(SILICIUM_OS_STR("-DVENTURA_INCLUDE_DIR=") + to_os_string(include));
+			arguments.emplace_back("-DVENTURA_INCLUDE_DIR=" + ventura::to_utf8_string(include));
 		}
 		Si::optional<ventura::absolute_path> const boost_root = cdm::get_boost_root_for_testing();
 		if (boost_root)
 		{
 			cdm::generate_cmake_definitions_for_using_boost(Si::make_container_sink(arguments), *boost_root);
 #if CDM_TESTS_RUNNING_ON_APPVEYOR
-			arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_LIBRARYDIR=") +
-			                       to_os_string(*boost_root / "lib32-msvc-14.0"));
+			arguments.emplace_back("-DBOOST_LIBRARYDIR=" + ventura::to_utf8_string(*boost_root / "lib32-msvc-14.0"));
 #endif
 		}
 		ventura::absolute_path const modules = repository / "modules";
-		arguments.emplace_back(SILICIUM_OS_STR("-DCDM_CONFIGURE_INCLUDE_DIRS=") + to_os_string(modules) +
-		                       SILICIUM_OS_STR(";") + to_os_string(repository));
-		arguments.emplace_back(to_os_string(app_cdm_source));
+		arguments.emplace_back("-DCDM_CONFIGURE_INCLUDE_DIRS=" + ventura::to_utf8_string(modules) + ";" +
+		                       ventura::to_utf8_string(repository));
+		arguments.emplace_back(ventura::to_utf8_string(app_cdm_source));
 		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, build_configure, output).get());
+		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, build_configure, output,
+		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                                            ventura::environment_inheritance::inherit)
+		                           .get());
 	}
 
 	{
-		std::vector<Si::os_string> arguments;
-		arguments.emplace_back(SILICIUM_OS_STR("--build"));
-		arguments.emplace_back(SILICIUM_OS_STR("."));
-		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, build_configure, output).get());
+		std::vector<Si::noexcept_string> arguments;
+		arguments.emplace_back("--build");
+		arguments.emplace_back(".");
+		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, build_configure, output,
+		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                                            ventura::environment_inheritance::inherit)
+		                           .get());
 	}
 
 	{
 		Si::noexcept_string generated_cmake_arguments;
 		{
-			std::vector<Si::os_string> arguments;
+			std::vector<Si::noexcept_string> arguments;
 			ventura::relative_path const relative(
 #ifdef _WIN32
 			    "Debug/"
@@ -81,7 +86,9 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 			auto configure_sink =
 			    Si::Sink<char, Si::success>::erase(Si::make_container_sink(generated_cmake_arguments));
 			BOOST_REQUIRE_EQUAL(
-			    0, ventura::run_process(build_configure / relative, arguments, build_configure, configure_sink));
+			    0, ventura::run_process(build_configure / relative, arguments, build_configure, configure_sink,
+			                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+			                            ventura::environment_inheritance::inherit));
 			BOOST_CHECK(!generated_cmake_arguments.empty());
 		}
 
@@ -95,17 +102,22 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 			BOOST_REQUIRE(arguments.back().empty());
 			arguments.pop_back();
 			cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-			BOOST_REQUIRE_EQUAL(
-			    0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get());
+			BOOST_REQUIRE_EQUAL(0,
+			                    ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
+			                                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+			                                         ventura::environment_inheritance::inherit)
+			                        .get());
 		}
 	}
 
 	{
-		std::vector<Si::os_string> arguments;
-		arguments.emplace_back(SILICIUM_OS_STR("--build"));
-		arguments.emplace_back(SILICIUM_OS_STR("."));
-		BOOST_REQUIRE_EQUAL(0,
-		                    ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get());
+		std::vector<Si::noexcept_string> arguments;
+		arguments.emplace_back("--build");
+		arguments.emplace_back(".");
+		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
+		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                                            ventura::environment_inheritance::inherit)
+		                           .get());
 	}
 
 	{
@@ -119,7 +131,9 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 		    ".exe"
 #endif
 		    );
-		BOOST_REQUIRE_EQUAL(
-		    0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
+		BOOST_REQUIRE_EQUAL(0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir,
+		                                            output,
+		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                                            ventura::environment_inheritance::inherit));
 	}
 }

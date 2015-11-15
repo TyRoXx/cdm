@@ -27,36 +27,39 @@ namespace cdm
 			ventura::absolute_path const &build_dir = temporary;
 			ventura::create_directories(build_dir, Si::throw_);
 			{
-				std::vector<Si::os_string> arguments;
-				arguments.emplace_back(SILICIUM_OS_STR("-DCMAKE_INSTALL_PREFIX=") + to_os_string(module_in_cache));
-				arguments.emplace_back(SILICIUM_OS_STR("-DBUILD_SHARED_LIBS=OFF"));
-				arguments.emplace_back(SILICIUM_OS_STR("-DBUILD_CLAR=OFF"));
+				std::vector<Si::noexcept_string> arguments;
+				arguments.emplace_back("-DCMAKE_INSTALL_PREFIX=" + ventura::to_utf8_string(module_in_cache));
+				arguments.emplace_back("-DBUILD_SHARED_LIBS=OFF");
+				arguments.emplace_back("-DBUILD_CLAR=OFF");
 #ifdef _MSC_VER
-				arguments.emplace_back(SILICIUM_OS_STR("-DSTATIC_CRT=OFF"));
+				arguments.emplace_back("-DSTATIC_CRT=OFF");
 #endif
 				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-				arguments.emplace_back(to_os_string(original_source));
-				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
+				arguments.emplace_back(ventura::to_utf8_string(original_source));
+				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
+				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+				                                    ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake configure failed");
 				}
 			}
 			{
-				std::vector<Si::os_string> arguments;
+				std::vector<Si::noexcept_string> arguments;
 #ifdef _MSC_VER
 				boost::ignore_unused_variable_warning(make_parallelism);
-				arguments.emplace_back(SILICIUM_OS_STR("libgit2.sln"));
-				arguments.emplace_back(SILICIUM_OS_STR("/build"));
+				arguments.emplace_back("libgit2.sln");
+				arguments.emplace_back("/build");
 				arguments.emplace_back(
 #ifdef NDEBUG
-				    SILICIUM_OS_STR("Release")
+				    "Release"
 #else
-				    SILICIUM_OS_STR("Debug")
+				    "Debug"
 #endif
-				        );
-				arguments.emplace_back(SILICIUM_OS_STR("/project"));
-				arguments.emplace_back(SILICIUM_OS_STR("INSTALL"));
+				    );
+				arguments.emplace_back("/project");
+				arguments.emplace_back("INSTALL");
 				int const rc = ventura::run_process(
 				                   *ventura::absolute_path::create(
 #if _MSC_VER == 1900
@@ -67,7 +70,9 @@ namespace cdm
 #error unsupported version
 #endif
 				                       ),
-				                   arguments, build_dir, output)
+				                   arguments, build_dir, output,
+				                   std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+				                   ventura::environment_inheritance::inherit)
 				                   .get();
 #else
 				arguments.emplace_back(SILICIUM_OS_STR("--build"));

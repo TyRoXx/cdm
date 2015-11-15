@@ -34,7 +34,10 @@ namespace cdm
 				arguments.emplace_back(SILICIUM_OS_STR("bash"));
 				arguments.emplace_back(to_os_string(copy_of_boost / "bootstrap.sh"));
 #endif
-				int const rc = ventura::run_process(exe, arguments, copy_of_boost, output).get();
+				int const rc = ventura::run_process(exe, arguments, copy_of_boost, output,
+				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+				                                    ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("bootstrap failed");
@@ -74,7 +77,9 @@ namespace cdm
 				                                                    ".exe"
 #endif
 				                                    ,
-				                                    arguments, copy_of_boost, output)
+				                                    arguments, copy_of_boost, output,
+				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+				                                    ventura::environment_inheritance::inherit)
 				                   .get();
 				if (rc != 0)
 				{
@@ -87,13 +92,12 @@ namespace cdm
 		return result;
 	}
 
-	template <class OsStringSink>
-	void generate_cmake_definitions_for_using_boost(OsStringSink &&definitions,
-	                                                ventura::absolute_path const &boost_root)
+	template <class StringSink>
+	void generate_cmake_definitions_for_using_boost(StringSink &&definitions, ventura::absolute_path const &boost_root)
 	{
-		Si::append(definitions, SILICIUM_OS_STR("-DBOOST_ROOT=") + to_os_string(boost_root));
-		Si::append(definitions, SILICIUM_OS_STR("-DBoost_ADDITIONAL_VERSIONS=1.59"));
-		Si::append(definitions, SILICIUM_OS_STR("-DBoost_NO_SYSTEM_PATHS=ON"));
+		Si::append(definitions, "-DBOOST_ROOT=" + ventura::to_utf8_string(boost_root));
+		Si::append(definitions, "-DBoost_ADDITIONAL_VERSIONS=1.59");
+		Si::append(definitions, "-DBoost_NO_SYSTEM_PATHS=ON");
 	}
 }
 

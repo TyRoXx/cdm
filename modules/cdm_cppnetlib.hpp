@@ -27,15 +27,15 @@ namespace cdm
 			ventura::absolute_path const &build_dir = temporary;
 			ventura::create_directories(build_dir, Si::throw_);
 			{
-				std::vector<Si::os_string> arguments;
-				arguments.emplace_back(SILICIUM_OS_STR("-DCMAKE_INSTALL_PREFIX=") + to_os_string(module_in_cache));
-				arguments.emplace_back(SILICIUM_OS_STR("-DCPP-NETLIB_BUILD_SHARED_LIBS=OFF"));
-				arguments.emplace_back(SILICIUM_OS_STR("-DCPP-NETLIB_BUILD_TESTS=OFF"));
-				arguments.emplace_back(SILICIUM_OS_STR("-DCPP-NETLIB_BUILD_EXPERIMENTS=OFF"));
-				arguments.emplace_back(SILICIUM_OS_STR("-DCPP-NETLIB_BUILD_EXAMPLES=OFF"));
+				std::vector<Si::noexcept_string> arguments;
+				arguments.emplace_back("-DCMAKE_INSTALL_PREFIX=" + ventura::to_utf8_string(module_in_cache));
+				arguments.emplace_back("-DCPP-NETLIB_BUILD_SHARED_LIBS=OFF");
+				arguments.emplace_back("-DCPP-NETLIB_BUILD_TESTS=OFF");
+				arguments.emplace_back("-DCPP-NETLIB_BUILD_EXPERIMENTS=OFF");
+				arguments.emplace_back("-DCPP-NETLIB_BUILD_EXAMPLES=OFF");
 #ifdef _WIN32
 				// TODO: deal with OpenSSL later..
-				arguments.emplace_back(SILICIUM_OS_STR("-DCPP-NETLIB_ENABLE_HTTPS=OFF"));
+				arguments.emplace_back("-DCPP-NETLIB_ENABLE_HTTPS=OFF");
 #endif
 				ventura::absolute_path const boost_temp = temporary / "boost";
 				ventura::create_directories(boost_temp, Si::throw_);
@@ -44,8 +44,11 @@ namespace cdm
 				cdm::generate_cmake_definitions_for_using_boost(Si::make_container_sink(arguments),
 				                                                boost_installed.root);
 				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-				arguments.emplace_back(to_os_string(cppnetlib_source));
-				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
+				arguments.emplace_back(ventura::to_utf8_string(cppnetlib_source));
+				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
+				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+				                                    ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake configure failed");
@@ -54,18 +57,18 @@ namespace cdm
 			{
 #ifdef _MSC_VER
 				boost::ignore_unused_variable_warning(make_parallelism);
-				std::vector<Si::os_string> arguments;
-				arguments.emplace_back(SILICIUM_OS_STR("CPP-NETLIB.sln"));
-				arguments.emplace_back(SILICIUM_OS_STR("/build"));
+				std::vector<Si::noexcept_string> arguments;
+				arguments.emplace_back("CPP-NETLIB.sln");
+				arguments.emplace_back("/build");
 				arguments.emplace_back(
 #ifdef NDEBUG
-				    SILICIUM_OS_STR("Release")
+				    "Release"
 #else
-				    SILICIUM_OS_STR("Debug")
+				    "Debug"
 #endif
-				        );
-				arguments.emplace_back(SILICIUM_OS_STR("/project"));
-				arguments.emplace_back(SILICIUM_OS_STR("INSTALL"));
+				    );
+				arguments.emplace_back("/project");
+				arguments.emplace_back("INSTALL");
 				int const rc = ventura::run_process(
 				                   *ventura::absolute_path::create(
 #if _MSC_VER == 1900
@@ -76,7 +79,9 @@ namespace cdm
 #error unsupported version
 #endif
 				                       ),
-				                   arguments, build_dir, output)
+				                   arguments, build_dir, output,
+				                   std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+				                   ventura::environment_inheritance::inherit)
 				                   .get();
 				if (rc != 0)
 				{

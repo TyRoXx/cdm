@@ -62,22 +62,24 @@ namespace CDM_CONFIGURE_NAMESPACE
 		cdm::websocketpp_paths const websocketpp_installed = cdm::install_websocketpp(
 		    websocketpp_source, boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
 
-		std::vector<Si::os_string> arguments;
+		std::vector<Si::noexcept_string> arguments;
 		cdm::generate_cmake_definitions_for_using_boost(Si::make_container_sink(arguments), boost_installed.root);
-		arguments.emplace_back(SILICIUM_OS_STR("-DCATCH_INCLUDE_DIRS=") + to_os_string(catch_installed.include));
-		arguments.emplace_back(SILICIUM_OS_STR("-DCPPNETLIB_PREFIX_PATH=") +
-		                       to_os_string(cppnetlib_installed.cmake_prefix_path));
-		arguments.emplace_back(SILICIUM_OS_STR("-DRAPIDJSON_INCLUDE_DIR=") + to_os_string(rapidjson_installed.include));
-		arguments.emplace_back(SILICIUM_OS_STR("-DRAPIDXML_INCLUDE_DIR=") + to_os_string(rapidxml_installed.include));
-		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_INCLUDE_DIR=") + to_os_string(libgit2installed.include));
-		arguments.emplace_back(SILICIUM_OS_STR("-DLIBGIT2_LIBRARY_DIR=") + to_os_string(libgit2installed.library_dir));
-		arguments.emplace_back(SILICIUM_OS_STR("-DSQLITE3_INCLUDE_DIRS=") + to_os_string(sqlite3_installed.include));
-		arguments.emplace_back(SILICIUM_OS_STR("-DSQLITE3_LIBRARIES=") + to_os_string(sqlite3_installed.library));
-		arguments.emplace_back(SILICIUM_OS_STR("-DWEBSOCKETPP_INCLUDE_DIR=") +
-		                       to_os_string(websocketpp_installed.include));
+		arguments.emplace_back("-DCATCH_INCLUDE_DIRS=" + ventura::to_utf8_string(catch_installed.include));
+		arguments.emplace_back("-DCPPNETLIB_PREFIX_PATH=" +
+		                       ventura::to_utf8_string(cppnetlib_installed.cmake_prefix_path));
+		arguments.emplace_back("-DRAPIDJSON_INCLUDE_DIR=" + ventura::to_utf8_string(rapidjson_installed.include));
+		arguments.emplace_back("-DRAPIDXML_INCLUDE_DIR=" + ventura::to_utf8_string(rapidxml_installed.include));
+		arguments.emplace_back("-DLIBGIT2_INCLUDE_DIR=" + ventura::to_utf8_string(libgit2installed.include));
+		arguments.emplace_back("-DLIBGIT2_LIBRARY_DIR=" + ventura::to_utf8_string(libgit2installed.library_dir));
+		arguments.emplace_back("-DSQLITE3_INCLUDE_DIRS=" + ventura::to_utf8_string(sqlite3_installed.include));
+		arguments.emplace_back("-DSQLITE3_LIBRARIES=" + ventura::to_utf8_string(sqlite3_installed.library));
+		arguments.emplace_back("-DWEBSOCKETPP_INCLUDE_DIR=" + ventura::to_utf8_string(websocketpp_installed.include));
 		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-		arguments.emplace_back(to_os_string(application_source));
-		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
+		arguments.emplace_back(ventura::to_utf8_string(application_source));
+		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
+		                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                         ventura::environment_inheritance::inherit)
+		        .get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");
 		}

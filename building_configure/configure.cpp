@@ -64,30 +64,32 @@ namespace
 		ventura::absolute_path const build = temporary / "build";
 		ventura::recreate_directories(build, Si::throw_);
 		{
-			std::vector<Si::os_string> arguments;
+			std::vector<Si::noexcept_string> arguments;
 			{
 				ventura::absolute_path const include = repository / "dependencies/silicium";
-				arguments.emplace_back(SILICIUM_OS_STR("-DSILICIUM_INCLUDE_DIR=") + to_os_string(include));
+				arguments.emplace_back("-DSILICIUM_INCLUDE_DIR=" + ventura::to_utf8_string(include));
 			}
 			{
 				ventura::absolute_path const include = repository / "dependencies/ventura";
-				arguments.emplace_back(SILICIUM_OS_STR("-DVENTURA_INCLUDE_DIR=") + to_os_string(include));
+				arguments.emplace_back("-DVENTURA_INCLUDE_DIR=" + ventura::to_utf8_string(include));
 			}
 			if (boost_root)
 			{
 				cdm::generate_cmake_definitions_for_using_boost(Si::make_container_sink(arguments), *boost_root);
 #if CDM_TESTS_RUNNING_ON_APPVEYOR
-				arguments.emplace_back(SILICIUM_OS_STR("-DBOOST_LIBRARYDIR=") +
-				                       to_os_string(*boost_root / "lib32-msvc-14.0"));
+				arguments.emplace_back("-DBOOST_LIBRARYDIR=" +
+				                       ventura::to_utf8_string(*boost_root / "lib32-msvc-14.0"));
 #endif
 			}
 			ventura::absolute_path const modules = repository / "modules";
-			arguments.emplace_back(SILICIUM_OS_STR("-DCDM_CONFIGURE_INCLUDE_DIRS=") + to_os_string(application_source) +
-			                       SILICIUM_OS_STR(";") + to_os_string(modules) + SILICIUM_OS_STR(";") +
-			                       to_os_string(repository));
-			arguments.emplace_back(to_os_string(source));
+			arguments.emplace_back("-DCDM_CONFIGURE_INCLUDE_DIRS=" + ventura::to_utf8_string(application_source) + ";" +
+			                       ventura::to_utf8_string(modules) + ";" + ventura::to_utf8_string(repository));
+			arguments.emplace_back(ventura::to_utf8_string(source));
 			cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-			if (ventura::run_process(ventura::cmake_exe, arguments, build, output).get() != 0)
+			if (ventura::run_process(ventura::cmake_exe, arguments, build, output,
+			                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+			                         ventura::environment_inheritance::inherit)
+			        .get() != 0)
 			{
 				throw std::runtime_error("Could not CMake-configure the cdm configure executable");
 			}
@@ -96,7 +98,10 @@ namespace
 			std::vector<Si::os_string> arguments;
 			arguments.emplace_back(SILICIUM_OS_STR("--build"));
 			arguments.emplace_back(SILICIUM_OS_STR("."));
-			if (ventura::run_process(ventura::cmake_exe, arguments, build, output).get() != 0)
+			if (ventura::run_process(ventura::cmake_exe, arguments, build, output,
+			                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+			                         ventura::environment_inheritance::inherit)
+			        .get() != 0)
 			{
 				throw std::runtime_error("Could not CMake --build the cdm configure executable");
 			}
@@ -127,7 +132,10 @@ namespace
 		arguments.emplace_back(to_os_string(application_source));
 		arguments.emplace_back(SILICIUM_OS_STR("-b"));
 		arguments.emplace_back(to_os_string(application_build_dir));
-		int const rc = ventura::run_process(configure_executable, arguments, application_build_dir, output).get();
+		int const rc = ventura::run_process(configure_executable, arguments, application_build_dir, output,
+		                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                                    ventura::environment_inheritance::inherit)
+		                   .get();
 		if (rc != 0)
 		{
 			throw std::runtime_error("Could not configure the application: " + boost::lexical_cast<std::string>(rc));

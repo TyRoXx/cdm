@@ -25,13 +25,16 @@ namespace CDM_CONFIGURE_NAMESPACE
 		cdm::sdl2_paths const sdl2_installed = cdm::install_sdl2(sdl2_source, module_temporaries, module_permanent,
 		                                                         ventura::cmake_exe, cpu_parallelism, output);
 
-		std::vector<Si::os_string> arguments;
-		arguments.emplace_back(SILICIUM_OS_STR("-DSDL2_INCLUDE_DIR=") + to_os_string(sdl2_installed.include));
-		arguments.emplace_back(SILICIUM_OS_STR("-DSDL2_LIBRARY=") + to_os_string(sdl2_installed.library) +
-		                       SILICIUM_OS_STR(";") + to_os_string(sdl2_installed.main));
+		std::vector<Si::noexcept_string> arguments;
+		arguments.emplace_back("-DSDL2_INCLUDE_DIR=" + ventura::to_utf8_string(sdl2_installed.include));
+		arguments.emplace_back("-DSDL2_LIBRARY=" + ventura::to_utf8_string(sdl2_installed.library) + ";" +
+		                       ventura::to_utf8_string(sdl2_installed.main));
 		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-		arguments.emplace_back(to_os_string(application_source));
-		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
+		arguments.emplace_back(ventura::to_utf8_string(application_source));
+		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
+		                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                         ventura::environment_inheritance::inherit)
+		        .get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");
 		}

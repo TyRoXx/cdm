@@ -28,13 +28,16 @@ namespace cdm
 			ventura::absolute_path const &construction_site = temporary / "construction";
 			ventura::create_directories(build_dir, Si::throw_);
 			{
-				std::vector<Si::os_string> arguments;
-				arguments.emplace_back(SILICIUM_OS_STR("-DCMAKE_INSTALL_PREFIX=") + to_os_string(construction_site));
-				arguments.emplace_back(SILICIUM_OS_STR("-DSDL_STATIC=OFF"));
-				arguments.emplace_back(SILICIUM_OS_STR("-DSDL_SHARED=ON"));
+				std::vector<Si::noexcept_string> arguments;
+				arguments.emplace_back("-DCMAKE_INSTALL_PREFIX=" + ventura::to_utf8_string(construction_site));
+				arguments.emplace_back("-DSDL_STATIC=OFF");
+				arguments.emplace_back("-DSDL_SHARED=ON");
 				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-				arguments.emplace_back(to_os_string(sdl2_source));
-				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
+				arguments.emplace_back(ventura::to_utf8_string(sdl2_source));
+				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
+				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+				                                    ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake configure failed");
@@ -65,7 +68,9 @@ namespace cdm
 #error unsupported version
 #endif
 				                       ),
-				                   arguments, build_dir, output)
+				                   arguments, build_dir, output,
+				                   std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+				                   ventura::environment_inheritance::inherit)
 				                   .get();
 				if (rc != 0)
 				{

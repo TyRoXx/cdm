@@ -23,11 +23,14 @@ namespace CDM_CONFIGURE_NAMESPACE
 		}
 		ventura::absolute_path const source = *cdm / "original_sources/Catch-1.2.1";
 		cdm::catch_paths const installed = cdm::install_catch(source, module_temporaries, module_permanent, output);
-		std::vector<Si::os_string> arguments;
-		arguments.emplace_back(SILICIUM_OS_STR("-DCATCH_INCLUDE_DIRS=") + to_os_string(installed.include));
+		std::vector<Si::noexcept_string> arguments;
+		arguments.emplace_back("-DCATCH_INCLUDE_DIRS=" + ventura::to_utf8_string(installed.include));
 		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-		arguments.emplace_back(to_os_string(application_source));
-		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
+		arguments.emplace_back(ventura::to_utf8_string(application_source));
+		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
+		                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                         ventura::environment_inheritance::inherit)
+		        .get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");
 		}

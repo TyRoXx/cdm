@@ -35,7 +35,9 @@ BOOST_AUTO_TEST_CASE(test_using_libgit2)
 		std::vector<Si::os_string> arguments;
 		arguments.emplace_back(SILICIUM_OS_STR("--build"));
 		arguments.emplace_back(SILICIUM_OS_STR("."));
-		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output));
+		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
+		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                                            ventura::environment_inheritance::inherit));
 	}
 	{
 		std::vector<Si::os_string> arguments;
@@ -48,7 +50,9 @@ BOOST_AUTO_TEST_CASE(test_using_libgit2)
 		    ".exe"
 #endif
 		    );
-		BOOST_REQUIRE_EQUAL(
-		    0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir, output));
+		BOOST_REQUIRE_EQUAL(0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir,
+		                                            output,
+		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                                            ventura::environment_inheritance::inherit));
 	}
 }

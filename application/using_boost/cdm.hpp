@@ -23,11 +23,14 @@ namespace CDM_CONFIGURE_NAMESPACE
 		ventura::absolute_path const boost_source = *cdm / "original_sources/boost_1_59_0";
 		cdm::boost_paths const boost_installed =
 		    cdm::install_boost(boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
-		std::vector<Si::os_string> arguments;
+		std::vector<Si::noexcept_string> arguments;
 		cdm::generate_cmake_definitions_for_using_boost(Si::make_container_sink(arguments), boost_installed.root);
 		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-		arguments.emplace_back(to_os_string(application_source));
-		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output).get() != 0)
+		arguments.emplace_back(ventura::to_utf8_string(application_source));
+		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
+		                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                         ventura::environment_inheritance::inherit)
+		        .get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");
 		}

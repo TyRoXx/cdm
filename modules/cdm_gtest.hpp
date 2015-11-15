@@ -48,24 +48,30 @@ namespace cdm
 			ventura::absolute_path const build_dir = temporarily_writable / "build";
 			ventura::create_directories(build_dir, Si::throw_);
 			{
-				std::vector<Si::os_string> arguments;
+				std::vector<Si::noexcept_string> arguments;
 #ifdef _MSC_VER
-				arguments.emplace_back(SILICIUM_OS_STR("-DBUILD_SHARED_LIBS=OFF"));
-				arguments.emplace_back(SILICIUM_OS_STR("-Dgtest_force_shared_crt=ON"));
+				arguments.emplace_back("-DBUILD_SHARED_LIBS=OFF");
+				arguments.emplace_back("-Dgtest_force_shared_crt=ON");
 #endif
 				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
-				arguments.emplace_back(to_os_string(gtest_source));
-				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
+				arguments.emplace_back(ventura::to_utf8_string(gtest_source));
+				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
+				                              std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+				                              ventura::environment_inheritance::inherit)
+				             .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake configure failed");
 				}
 			}
 			{
-				std::vector<Si::os_string> arguments;
-				arguments.emplace_back(SILICIUM_OS_STR("--build"));
-				arguments.emplace_back(SILICIUM_OS_STR("."));
-				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output).get();
+				std::vector<Si::noexcept_string> arguments;
+				arguments.emplace_back("--build");
+				arguments.emplace_back(".");
+				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
+				                              std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+				                              ventura::environment_inheritance::inherit)
+				             .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");
