@@ -9,6 +9,7 @@
 #include <cdm/locate_cache.hpp>
 #include <ventura/cmake.hpp>
 #include <boost/algorithm/string/split.hpp>
+#include <boost/circular_buffer.hpp>
 
 namespace
 {
@@ -87,10 +88,12 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 			parameters.executable = build_configure / relative;
 			parameters.arguments = ventura::arguments_to_os_strings(arguments);
 			parameters.current_path = build_configure;
-			auto console_output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
-			parameters.err = &console_output;
+			boost::circular_buffer<char> console_output(0xffff);
+			auto console_output_sink = Si::Sink<char, Si::success>::erase(Si::make_container_sink(console_output));
+			parameters.err = &console_output_sink;
 			parameters.out = &configure_sink;
 			BOOST_REQUIRE_EQUAL(0, ventura::run_process(parameters));
+			boost::copy(console_output, std::ostreambuf_iterator<char>(std::cerr));
 			BOOST_REQUIRE(!generated_cmake_arguments.empty());
 		}
 
