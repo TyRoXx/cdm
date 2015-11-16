@@ -90,7 +90,7 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 			parameters.err = &output;
 			parameters.out = &configure_sink;
 			BOOST_REQUIRE_EQUAL(0, ventura::run_process(parameters));
-			BOOST_CHECK(!generated_cmake_arguments.empty());
+			BOOST_REQUIRE(!generated_cmake_arguments.empty());
 		}
 
 		{
