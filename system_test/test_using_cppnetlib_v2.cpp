@@ -87,7 +87,7 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 			parameters.executable = build_configure / relative;
 			parameters.arguments = ventura::arguments_to_os_strings(arguments);
 			parameters.current_path = build_configure;
-			auto console_output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
+			auto console_output = cdm::make_program_output_printer(Si::ostream_ref_sink(std::cerr));
 			parameters.err = &console_output;
 			parameters.out = &configure_sink;
 			BOOST_REQUIRE_EQUAL(0, ventura::run_process(parameters));
