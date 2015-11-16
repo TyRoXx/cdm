@@ -27,8 +27,12 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 	ventura::absolute_path const application_build_dir = tmp / "using_cppnetlib_v2";
 	ventura::recreate_directories(module_temporaries, Si::throw_);
 	ventura::recreate_directories(application_build_dir, Si::throw_);
+#if CDM_TESTS_RUNNING_ON_TRAVIS_CI
+	auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
+#else
 	std::unique_ptr<std::ofstream> log_file = cdm::open_log(application_build_dir / "test_using_cppnetlib_v2.txt");
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(*log_file));
+#endif
 	ventura::absolute_path const build_configure = module_temporaries / "build_configure";
 	ventura::recreate_directories(build_configure, Si::throw_);
 	{
