@@ -108,10 +108,11 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 			BOOST_REQUIRE(arguments.back().empty());
 			arguments.pop_back();
 			cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments), target);
-			BOOST_REQUIRE_EQUAL(0,
-			                    ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
-			                                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-			                                         ventura::environment_inheritance::inherit).get());
+			auto console_output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
+			BOOST_REQUIRE_EQUAL(
+			    0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, console_output,
+			                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+			                            ventura::environment_inheritance::inherit).get());
 		}
 	}
 
