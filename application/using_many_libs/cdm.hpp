@@ -14,7 +14,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 	void configure(ventura::absolute_path const &module_temporaries, ventura::absolute_path const &module_permanent,
 	               ventura::absolute_path const &application_source,
 	               ventura::absolute_path const &application_build_dir, unsigned cpu_parallelism,
-	               Si::Sink<char, Si::success>::interface &output)
+	               cdm::configuration target, Si::Sink<char, Si::success>::interface &output)
 	{
 		Si::optional<ventura::absolute_path> const applications = ventura::parent(application_source);
 		if (!applications)
@@ -30,7 +30,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 
 		ventura::absolute_path const boost_source = sources / "boost_1_59_0";
 		cdm::boost_paths const boost_installed =
-		    cdm::install_boost(boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
+		    cdm::install_boost(boost_source, module_temporaries, module_permanent, cpu_parallelism, target, output);
 
 		ventura::absolute_path const catch_source = sources / "Catch-1.2.1";
 		cdm::catch_paths const catch_installed =
@@ -39,7 +39,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		ventura::absolute_path const cppnetlib_source = sources / "cpp-netlib-0.11.2-final";
 		cdm::cppnetlib_paths const cppnetlib_installed =
 		    cdm::install_cppnetlib(cppnetlib_source, boost_source, module_temporaries, module_permanent,
-		                           ventura::cmake_exe, cpu_parallelism, output);
+		                           ventura::cmake_exe, cpu_parallelism, target, output);
 
 		ventura::absolute_path const libgit2_source = sources / "libgit2-0.23.2";
 		cdm::libgit2_paths const libgit2installed = cdm::install_libgit2(
@@ -60,7 +60,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		ventura::absolute_path const websocketpp_source =
 		    sources / "websocketpp-c5510d6de04917812b910a8dd44735c1f17061d9";
 		cdm::websocketpp_paths const websocketpp_installed = cdm::install_websocketpp(
-		    websocketpp_source, boost_source, module_temporaries, module_permanent, cpu_parallelism, output);
+		    websocketpp_source, boost_source, module_temporaries, module_permanent, cpu_parallelism, target, output);
 
 		std::vector<Si::noexcept_string> arguments;
 		cdm::generate_cmake_definitions_for_using_boost(Si::make_container_sink(arguments), boost_installed.root);
@@ -78,7 +78,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 		arguments.emplace_back(ventura::to_utf8_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
 		                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-		                         ventura::environment_inheritance::inherit).get() != 0)
+		                         ventura::environment_inheritance::inherit)
+		        .get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");
 		}

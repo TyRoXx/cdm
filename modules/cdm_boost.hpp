@@ -5,6 +5,7 @@
 #include <ventura/run_process.hpp>
 #include <silicium/sink/iterator_sink.hpp>
 #include <boost/lexical_cast.hpp>
+#include <cdm/cache_organization.hpp>
 
 namespace cdm
 {
@@ -15,7 +16,7 @@ namespace cdm
 
 	inline boost_paths install_boost(ventura::absolute_path const &source, ventura::absolute_path const &temporary,
 	                                 ventura::absolute_path const &install_root, unsigned make_parallelism,
-	                                 Si::Sink<char, Si::success>::interface &output)
+	                                 cdm::configuration target, Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const module_in_cache = install_root / "boost";
 		if (!ventura::file_exists(module_in_cache, Si::throw_))
@@ -36,7 +37,8 @@ namespace cdm
 #endif
 				int const rc = ventura::run_process(exe, arguments, copy_of_boost, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                                    ventura::environment_inheritance::inherit).get();
+				                                    ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("bootstrap failed");
@@ -51,17 +53,45 @@ namespace cdm
 					arguments.emplace_back(install_argument);
 				}
 				arguments.emplace_back(SILICIUM_OS_STR("link=static"));
-#ifdef _MSC_VER
-				arguments.emplace_back(
-#if _MSC_VER == 1900
-				    SILICIUM_OS_STR("toolset=msvc-14.0")
-#elif _MSC_VER == 1800
-				    SILICIUM_OS_STR("toolset=msvc-12.0")
-#else
-#error unsupported version of Visual Studio
-#endif
-				        );
-#endif
+				Si::visit<void>(target.platform,
+				                [&arguments](windows_flavor windows)
+				                {
+					                switch (windows)
+					                {
+					                case windows_flavor::visual_studio_2013:
+						                arguments.emplace_back(SILICIUM_OS_STR("toolset=msvc-12.0"));
+						                break;
+
+					                case windows_flavor::visual_studio_2015:
+						                arguments.emplace_back(SILICIUM_OS_STR("toolset=msvc-14.0"));
+						                break;
+					                }
+					            },
+				                [&arguments](gcc_version gcc)
+				                {
+					                switch (gcc)
+					                {
+					                case gcc_version::v4_6:
+						                arguments.emplace_back(SILICIUM_OS_STR("toolset=gcc-4.6"));
+						                break;
+
+					                case gcc_version::v4_7:
+						                arguments.emplace_back(SILICIUM_OS_STR("toolset=gcc-4.7"));
+						                break;
+
+					                case gcc_version::v4_8:
+						                arguments.emplace_back(SILICIUM_OS_STR("toolset=gcc-4.8"));
+						                break;
+
+					                case gcc_version::v4_9:
+						                arguments.emplace_back(SILICIUM_OS_STR("toolset=gcc-4.9"));
+						                break;
+
+					                case gcc_version::v5_0:
+						                arguments.emplace_back(SILICIUM_OS_STR("toolset=gcc-5.0"));
+						                break;
+					                }
+					            });
 #if CDM_TESTS_RUNNING_ON_TRAVIS_CI
 				// GCC 4.6 crashes when compiling Boost.Log on travis probably due
 				// to lack of RAM.
@@ -78,7 +108,8 @@ namespace cdm
 				                                    ,
 				                                    arguments, copy_of_boost, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                                    ventura::environment_inheritance::inherit).get();
+				                                    ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("b2 failed");

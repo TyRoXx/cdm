@@ -29,9 +29,9 @@ namespace CDM_CONFIGURE_NAMESPACE
 		ventura::absolute_path const cppnetlib_source = *cdm / "original_sources/cpp-netlib-0.11.2-final";
 		ventura::recreate_directories(module_temporaries, Si::throw_);
 		ventura::absolute_path const boost_source = *cdm / "original_sources/boost_1_59_0";
-		cdm::cppnetlib_paths const cppnetlib_installed =
-		    cdm::install_cppnetlib(cppnetlib_source, boost_source, module_temporaries, module_permanent,
-		                           ventura::cmake_exe, cpu_parallelism, output);
+		cdm::cppnetlib_paths const cppnetlib_installed = cdm::install_cppnetlib(
+		    cppnetlib_source, boost_source, module_temporaries, module_permanent, ventura::cmake_exe, cpu_parallelism,
+		    cdm::approximate_configuration_of_this_binary(), output);
 
 		std::vector<Si::noexcept_string> arguments;
 		arguments.emplace_back("-DCPPNETLIB_PREFIX_PATH=" +
@@ -43,7 +43,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 		arguments.emplace_back(ventura::to_utf8_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
 		                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-		                         ventura::environment_inheritance::inherit).get() != 0)
+		                         ventura::environment_inheritance::inherit)
+		        .get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");
 		}

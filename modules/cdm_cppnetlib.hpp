@@ -19,7 +19,7 @@ namespace cdm
 	                                         ventura::absolute_path const &temporary,
 	                                         ventura::absolute_path const &install_root,
 	                                         ventura::absolute_path const &cmake_exe, unsigned make_parallelism,
-	                                         Si::Sink<char, Si::success>::interface &output)
+	                                         cdm::configuration target, Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const module_in_cache = install_root / "cppnetlib";
 		if (!ventura::file_exists(module_in_cache, Si::throw_))
@@ -40,14 +40,15 @@ namespace cdm
 				ventura::absolute_path const boost_temp = temporary / "boost";
 				ventura::create_directories(boost_temp, Si::throw_);
 				cdm::boost_paths const boost_installed =
-				    cdm::install_boost(boost_source, boost_temp, install_root, make_parallelism, output);
+				    cdm::install_boost(boost_source, boost_temp, install_root, make_parallelism, target, output);
 				cdm::generate_cmake_definitions_for_using_boost(Si::make_container_sink(arguments),
 				                                                boost_installed.root);
 				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
 				arguments.emplace_back(ventura::to_utf8_string(cppnetlib_source));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                                    ventura::environment_inheritance::inherit).get();
+				                                    ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake configure failed");
@@ -80,7 +81,8 @@ namespace cdm
 				                       ),
 				                   arguments, build_dir, output,
 				                   std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                   ventura::environment_inheritance::inherit).get();
+				                   ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");
@@ -98,7 +100,8 @@ namespace cdm
 				arguments.emplace_back("install");
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                                    ventura::environment_inheritance::inherit).get();
+				                                    ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");

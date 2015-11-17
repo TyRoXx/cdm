@@ -88,7 +88,8 @@ namespace
 			cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
 			if (ventura::run_process(ventura::cmake_exe, arguments, build, output,
 			                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-			                         ventura::environment_inheritance::inherit).get() != 0)
+			                         ventura::environment_inheritance::inherit)
+			        .get() != 0)
 			{
 				throw std::runtime_error("Could not CMake-configure the cdm configure executable");
 			}
@@ -99,7 +100,8 @@ namespace
 			arguments.emplace_back(SILICIUM_OS_STR("."));
 			if (ventura::run_process(ventura::cmake_exe, arguments, build, output,
 			                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-			                         ventura::environment_inheritance::inherit).get() != 0)
+			                         ventura::environment_inheritance::inherit)
+			        .get() != 0)
 			{
 				throw std::runtime_error("Could not CMake --build the cdm configure executable");
 			}
@@ -132,7 +134,8 @@ namespace
 		arguments.emplace_back(to_os_string(application_build_dir));
 		int const rc = ventura::run_process(configure_executable, arguments, application_build_dir, output,
 		                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-		                                    ventura::environment_inheritance::inherit).get();
+		                                    ventura::environment_inheritance::inherit)
+		                   .get();
 		if (rc != 0)
 		{
 			throw std::runtime_error("Could not configure the application: " + boost::lexical_cast<std::string>(rc));

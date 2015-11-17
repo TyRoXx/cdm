@@ -12,14 +12,13 @@
 
 namespace cdm
 {
-	struct linux_flavor
+	enum class gcc_version
 	{
-		unsigned libstdcpp_version;
-
-		explicit linux_flavor(unsigned libstdcpp_version)
-		    : libstdcpp_version(libstdcpp_version)
-		{
-		}
+		v4_6,
+		v4_7,
+		v4_8,
+		v4_9,
+		v5_0
 	};
 
 	enum class windows_flavor
@@ -34,7 +33,7 @@ namespace cdm
 		x86
 	};
 
-	typedef Si::variant<windows_flavor, linux_flavor> platform_flavor;
+	typedef Si::variant<windows_flavor, gcc_version> platform_flavor;
 
 	struct configuration
 	{
@@ -98,13 +97,27 @@ namespace cdm
 	char const configuration_element_separator = '&';
 
 	template <class CharSink>
-	inline void format_linux(linux_flavor linux, CharSink &&output)
+	inline void format_gcc(gcc_version gcc, CharSink &&output)
 	{
-		Si::append(output, "linux");
-		Si::append(output, configuration_element_separator);
-		Si::append(output, "libstdc++_");
-		// TODO: format the number efficiently
-		Si::append(output, boost::lexical_cast<std::string>(linux.libstdcpp_version));
+		Si::append(output, "gcc-");
+		switch (gcc)
+		{
+		case gcc_version::v4_6:
+			Si::append(output, "4.6");
+			break;
+		case gcc_version::v4_7:
+			Si::append(output, "4.7");
+			break;
+		case gcc_version::v4_8:
+			Si::append(output, "4.8");
+			break;
+		case gcc_version::v4_9:
+			Si::append(output, "4.9");
+			break;
+		case gcc_version::v5_0:
+			Si::append(output, "5.0");
+			break;
+		}
 	}
 
 	inline Si::memory_range format_windows(windows_flavor windows)
@@ -134,9 +147,9 @@ namespace cdm
 		}
 		Si::append(output, configuration_element_separator);
 		Si::visit<void>(config.platform,
-		                [&output](linux_flavor linux)
+		                [&output](gcc_version gcc)
 		                {
-			                format_linux(linux, output);
+			                format_gcc(gcc, output);
 			            },
 		                [&output](windows_flavor windows)
 		                {
