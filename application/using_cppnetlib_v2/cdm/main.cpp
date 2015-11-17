@@ -15,7 +15,8 @@ namespace cdm
 	void generate_cmake_application_arguments(StringSink &&arguments, ventura::absolute_path const &module_temporaries,
 	                                          ventura::absolute_path const &module_permanent,
 	                                          ventura::absolute_path const &application_source,
-	                                          unsigned cpu_parallelism, cdm::configuration target, Si::Sink<char, Si::success>::interface &output)
+	                                          unsigned cpu_parallelism, cdm::configuration target,
+	                                          Si::Sink<char, Si::success>::interface &output)
 	{
 		Si::optional<ventura::absolute_path> const applications = ventura::parent(application_source);
 		if (!applications)
@@ -77,6 +78,7 @@ int main()
 			        std::cout << argument;
 		        }
 		    }),
-	    module_temporaries, cdm::locate_cache_for_this_binary(), application, cpu_parallelism, cdm::approximate_configuration_of_this_binary(), output);
+	    module_temporaries, cdm::locate_cache_for_this_binary(), application, cpu_parallelism,
+	    cdm::approximate_configuration_of_this_binary(), output);
 	std::cout << '\n';
 }

@@ -91,6 +91,14 @@ namespace cdm
 						                break;
 					                }
 					            });
+				if (target.is_debug)
+				{
+					arguments.emplace_back(SILICIUM_OS_STR("variant=debug"));
+				}
+				else
+				{
+					arguments.emplace_back(SILICIUM_OS_STR("variant=release"));
+				}
 #if CDM_TESTS_RUNNING_ON_TRAVIS_CI
 				// GCC 4.6 crashes when compiling Boost.Log on travis probably due
 				// to lack of RAM.
