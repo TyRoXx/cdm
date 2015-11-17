@@ -125,6 +125,9 @@ namespace
 		ventura::create_directories(module_permanent, Si::throw_);
 		ventura::create_directories(application_build_dir, Si::throw_);
 		std::vector<Si::os_string> arguments;
+#if CDM_TESTS_RUNNING_ON_APPVEYOR || CDM_TESTS_RUNNING_ON_TRAVIS_CI
+		arguments.emplace_back(SILICIUM_OS_STR("--ci"));
+#endif
 		arguments.emplace_back(SILICIUM_OS_STR("-m"));
 		arguments.emplace_back(to_os_string(module_permanent));
 		arguments.emplace_back(SILICIUM_OS_STR("-a"));

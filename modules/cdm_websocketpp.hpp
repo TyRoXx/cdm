@@ -16,7 +16,7 @@ namespace cdm
 	                                             ventura::absolute_path const &boost_source,
 	                                             ventura::absolute_path const &temporarily_writable,
 	                                             ventura::absolute_path const &install_root, unsigned cpu_parallelism,
-	                                             cdm::configuration target,
+	                                             cdm::operating_system const &system, cdm::configuration const &target,
 	                                             Si::Sink<char, Si::success>::interface &output)
 	{
 		websocketpp_paths result;
@@ -24,7 +24,7 @@ namespace cdm
 			ventura::absolute_path const boost_temp = temporarily_writable / "boost";
 			ventura::create_directories(boost_temp, Si::throw_);
 			cdm::boost_paths const boost_installed =
-			    cdm::install_boost(boost_source, boost_temp, install_root, cpu_parallelism, target, output);
+			    cdm::install_boost(boost_source, boost_temp, install_root, cpu_parallelism, system, target, output);
 			result.boost_root = boost_installed.root;
 		}
 

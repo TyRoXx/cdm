@@ -9,7 +9,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 	void configure(ventura::absolute_path const &module_temporaries, ventura::absolute_path const &module_permanent,
 	               ventura::absolute_path const &application_source,
 	               ventura::absolute_path const &application_build_dir, unsigned cpu_parallelism,
-	               cdm::configuration const &target, Si::Sink<char, Si::success>::interface &output)
+	               cdm::operating_system const &system, cdm::configuration const &target,
+	               Si::Sink<char, Si::success>::interface &output)
 	{
 		Si::optional<ventura::absolute_path> const applications = ventura::parent(application_source);
 		if (!applications)
@@ -31,7 +32,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		ventura::absolute_path const boost_source = *cdm / "original_sources/boost_1_59_0";
 		cdm::cppnetlib_paths const cppnetlib_installed =
 		    cdm::install_cppnetlib(cppnetlib_source, boost_source, module_temporaries, module_permanent,
-		                           ventura::cmake_exe, cpu_parallelism, target, output);
+		                           ventura::cmake_exe, cpu_parallelism, system, target, output);
 
 		std::vector<Si::noexcept_string> arguments;
 		arguments.emplace_back("-DCPPNETLIB_PREFIX_PATH=" +

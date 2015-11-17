@@ -54,6 +54,12 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 		ventura::absolute_path const modules = repository / "modules";
 		arguments.emplace_back("-DCDM_CONFIGURE_INCLUDE_DIRS=" + ventura::to_utf8_string(modules) + ";" +
 		                       ventura::to_utf8_string(repository));
+#if CDM_TESTS_RUNNING_ON_TRAVIS_CI
+		arguments.emplace_back("-DCDM_TESTS_RUNNING_ON_TRAVIS_CI=ON");
+#endif
+#if CDM_TESTS_RUNNING_ON_APPVEYOR
+		arguments.emplace_back("-DCDM_TESTS_RUNNING_ON_APPVEYOR=ON");
+#endif
 		arguments.emplace_back(ventura::to_utf8_string(app_cdm_source));
 		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments), target);
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, build_configure, output,

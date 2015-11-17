@@ -14,11 +14,13 @@ namespace cdm
 		ventura::absolute_path cmake_prefix_path;
 	};
 
-	inline cppnetlib_paths
-	install_cppnetlib(ventura::absolute_path const &cppnetlib_source, ventura::absolute_path const &boost_source,
-	                  ventura::absolute_path const &temporary, ventura::absolute_path const &install_root,
-	                  ventura::absolute_path const &cmake_exe, unsigned make_parallelism,
-	                  cdm::configuration const &target, Si::Sink<char, Si::success>::interface &output)
+	inline cppnetlib_paths install_cppnetlib(ventura::absolute_path const &cppnetlib_source,
+	                                         ventura::absolute_path const &boost_source,
+	                                         ventura::absolute_path const &temporary,
+	                                         ventura::absolute_path const &install_root,
+	                                         ventura::absolute_path const &cmake_exe, unsigned make_parallelism,
+	                                         operating_system const &system, cdm::configuration const &target,
+	                                         Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const module_in_cache = install_root / "cppnetlib";
 		if (!ventura::file_exists(module_in_cache, Si::throw_))
@@ -38,8 +40,8 @@ namespace cdm
 #endif
 				ventura::absolute_path const boost_temp = temporary / "boost";
 				ventura::create_directories(boost_temp, Si::throw_);
-				cdm::boost_paths const boost_installed =
-				    cdm::install_boost(boost_source, boost_temp, install_root, make_parallelism, target, output);
+				cdm::boost_paths const boost_installed = cdm::install_boost(boost_source, boost_temp, install_root,
+				                                                            make_parallelism, system, target, output);
 				cdm::generate_cmake_definitions_for_using_boost(Si::make_container_sink(arguments),
 				                                                boost_installed.root);
 				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments), target);
@@ -106,17 +108,21 @@ namespace cdm
 			}
 		}
 		cppnetlib_paths result;
-		result.cmake_prefix_path = module_in_cache /
-#ifdef __linux__
-		                           "lib/"
-#if !CDM_TESTS_RUNNING_ON_TRAVIS_CI
-		                           "x86_64-linux-gnu/"
-#endif
-		                           "cmake"
-#else
-		                           "CMake"
-#endif
-		    ;
+		result.cmake_prefix_path =
+		    module_in_cache /
+		    Si::visit<ventura::relative_path>(
+		        system,
+		        [](cdm::ubuntu const &ubuntu)
+		        {
+			        return ventura::relative_path(
+			            Si::noexcept_string("lib/") +
+			            (ubuntu.is_travis_ci ? Si::noexcept_string() : Si::noexcept_string("x86_64-linux-gnu/")) +
+			            "cmake");
+			    },
+		        [](cdm::windows const &)
+		        {
+			        return ventura::relative_path("CMake");
+			    });
 		return result;
 	}
 }

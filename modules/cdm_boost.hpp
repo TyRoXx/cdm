@@ -6,6 +6,7 @@
 #include <silicium/sink/iterator_sink.hpp>
 #include <boost/lexical_cast.hpp>
 #include <cdm/cache_organization.hpp>
+#include <cdm/operating_system.hpp>
 
 namespace cdm
 {
@@ -16,7 +17,8 @@ namespace cdm
 
 	inline boost_paths install_boost(ventura::absolute_path const &source, ventura::absolute_path const &temporary,
 	                                 ventura::absolute_path const &install_root, unsigned make_parallelism,
-	                                 cdm::configuration target, Si::Sink<char, Si::success>::interface &output)
+	                                 operating_system const &system, cdm::configuration const &target,
+	                                 Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const module_in_cache = install_root / "boost";
 		if (!ventura::file_exists(module_in_cache, Si::throw_))
@@ -99,15 +101,23 @@ namespace cdm
 				{
 					arguments.emplace_back(SILICIUM_OS_STR("variant=release"));
 				}
-#if CDM_TESTS_RUNNING_ON_TRAVIS_CI
-				// GCC 4.6 crashes when compiling Boost.Log on travis probably due
-				// to lack of RAM.
-				// Thus we do not parallelize the build on travis so that the
-				// compiler can use all of the memory available to the machine.
-				boost::ignore_unused_variable_warning(make_parallelism);
-#else
-				arguments.emplace_back(SILICIUM_OS_STR("-j ") + boost::lexical_cast<Si::os_string>(make_parallelism));
-#endif
+				if (Si::visit<bool>(system,
+				                    [](cdm::ubuntu const &ubuntu) -> bool
+				                    {
+					                    // GCC 4.6 crashes when compiling Boost.Log on travis probably due
+					                    // to lack of RAM.
+					                    // Thus we do not parallelize the build on travis so that the
+					                    // compiler can use all of the memory available to the machine.
+					                    return !ubuntu.is_travis_ci;
+					                },
+				                    [](cdm::windows const &) -> bool
+				                    {
+					                    return true;
+					                }))
+				{
+					arguments.emplace_back(SILICIUM_OS_STR("-j ") +
+					                       boost::lexical_cast<Si::os_string>(make_parallelism));
+				}
 				int const rc = ventura::run_process(copy_of_boost / "b2"
 #ifdef _WIN32
 				                                                    ".exe"

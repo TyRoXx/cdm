@@ -29,9 +29,10 @@ BOOST_AUTO_TEST_CASE(test_using_libgit2)
 #else
 	    boost::thread::hardware_concurrency();
 #endif
-	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache_for_this_binary(), app_source,
-	                                   application_build_dir, cpu_parallelism,
-	                                   cdm::approximate_configuration_of_this_binary(), output);
+	CDM_CONFIGURE_NAMESPACE::configure(
+	    module_temporaries, cdm::locate_cache_for_this_binary(), app_source, application_build_dir, cpu_parallelism,
+	    cdm::detect_this_binary_operating_system(CDM_TESTS_RUNNING_ON_TRAVIS_CI, CDM_TESTS_RUNNING_ON_APPVEYOR),
+	    cdm::approximate_configuration_of_this_binary(), output);
 	{
 		std::vector<Si::os_string> arguments;
 		arguments.emplace_back(SILICIUM_OS_STR("--build"));

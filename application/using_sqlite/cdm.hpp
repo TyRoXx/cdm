@@ -1,5 +1,6 @@
 #include "cdm_sqlite.hpp"
 #include <cdm/cmake_generator.hpp>
+#include <cdm/operating_system.hpp>
 #include <ventura/cmake.hpp>
 
 namespace CDM_CONFIGURE_NAMESPACE
@@ -7,7 +8,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 	void configure(ventura::absolute_path const &module_temporaries, ventura::absolute_path const &module_permanent,
 	               ventura::absolute_path const &application_source,
 	               ventura::absolute_path const &application_build_dir, unsigned cpu_parallelism,
-	               cdm::configuration const &target, Si::Sink<char, Si::success>::interface &output)
+	               cdm::operating_system const &, cdm::configuration const &target,
+	               Si::Sink<char, Si::success>::interface &output)
 	{
 		boost::ignore_unused_variable_warning(cpu_parallelism);
 		Si::optional<ventura::absolute_path> const applications = ventura::parent(application_source);

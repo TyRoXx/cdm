@@ -2,13 +2,15 @@
 #include <ventura/cmake.hpp>
 #include <ventura/file_operations.hpp>
 #include <boost/thread/thread.hpp>
+#include <cdm/operating_system.hpp>
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
 	void configure(ventura::absolute_path const &module_temporaries, ventura::absolute_path const &module_permanent,
 	               ventura::absolute_path const &application_source,
 	               ventura::absolute_path const &application_build_dir, unsigned cpu_parallelism,
-	               cdm::configuration const &target, Si::Sink<char, Si::success>::interface &output)
+	               cdm::operating_system const &, cdm::configuration const &target,
+	               Si::Sink<char, Si::success>::interface &output)
 	{
 		Si::optional<ventura::absolute_path> const applications = ventura::parent(application_source);
 		if (!applications)

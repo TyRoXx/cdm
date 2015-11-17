@@ -1,6 +1,7 @@
 #include <ventura/absolute_path.hpp>
 #include <silicium/sink/sink.hpp>
 #include <cdm/cache_organization.hpp>
+#include <cdm/operating_system.hpp>
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
@@ -8,7 +9,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 	// which is #included next.
 	void configure(ventura::absolute_path const &module_temporaries, ventura::absolute_path const &module_permanent,
 	               ventura::absolute_path const &application_source,
-	               ventura::absolute_path const &application_build_dir, cdm::configuration const &target,
+	               ventura::absolute_path const &application_build_dir, unsigned cpu_parallelism,
+	               cdm::operating_system const &system, cdm::configuration const &target,
 	               Si::Sink<char, Si::success>::interface &output);
 }
 
@@ -41,6 +43,7 @@ int main(int argc, char **argv)
 	std::string module_permanent_argument;
 	std::string application_source_argument;
 	std::string application_build_argument;
+	bool is_continuous_integration = false;
 
 	boost::program_options::options_description options("options");
 	options.add_options()("help,h", "produce help message")("modules,m",
@@ -49,7 +52,8 @@ int main(int argc, char **argv)
 	    "application,a", boost::program_options::value(&application_source_argument),
 	    "absolute path to the root of your application source code")(
 	    "build,b", boost::program_options::value(&application_build_argument),
-	    "absolute path to the CMake build directory of your application");
+	    "absolute path to the CMake build directory of your application")(
+	    "ci", boost::program_options::value(&is_continuous_integration), "is this running on Travis CI or Appveyor?");
 	boost::program_options::positional_options_description positional;
 	boost::program_options::variables_map variables;
 	try
@@ -103,8 +107,16 @@ int main(int argc, char **argv)
 #else
 		    boost::thread::hardware_concurrency();
 #endif
+		cdm::operating_system const system((
+#ifdef _WIN32
+		    cdm::windows(is_continuous_integration)
+#else
+		    cdm::ubuntu(is_continuous_integration)
+#endif
+		        ));
 		CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, module_permanent, application_source, application_build,
-		                                   cpu_parallelism, cdm::approximate_configuration_of_this_binary(), output);
+		                                   cpu_parallelism, system, cdm::approximate_configuration_of_this_binary(),
+		                                   output);
 	}
 	catch (std::exception const &ex)
 	{
