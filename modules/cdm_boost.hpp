@@ -87,7 +87,7 @@ namespace cdm
 						                break;
 
 					                case gcc_version::v5:
-						                arguments.emplace_back(SILICIUM_OS_STR("toolset=gcc-5.0"));
+						                arguments.emplace_back(SILICIUM_OS_STR("toolset=gcc-5"));
 						                break;
 					                }
 					            });
