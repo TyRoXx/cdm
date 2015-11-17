@@ -103,17 +103,20 @@ namespace cdm
 #ifdef _MSC_VER
 			Si::ignore_unused_variable_warning(is_shared_object);
 #endif
+			// clang-format 3.7 mis-formats the following expression.
+			// clang-format off
 			auto result =
 #ifndef _MSC_VER
-			    "lib" +
+					"lib" +
 #endif
-			    stem +
+					stem +
 #ifdef _MSC_VER
-			    ".lib"
+					".lib"
 #else
-			    (is_shared_object ? ".so" : ".a")
+					(is_shared_object ? ".so" : ".a")
 #endif
-			    ;
+					;
+			// clang-format on
 			return *ventura::path_segment::create(ventura::path(std::move(result)));
 		};
 		auto lib_dir = module_in_cache / "lib";

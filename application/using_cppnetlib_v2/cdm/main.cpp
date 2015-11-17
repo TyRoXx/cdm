@@ -15,7 +15,7 @@ namespace cdm
 	void generate_cmake_application_arguments(StringSink &&arguments, ventura::absolute_path const &module_temporaries,
 	                                          ventura::absolute_path const &module_permanent,
 	                                          ventura::absolute_path const &application_source,
-	                                          unsigned cpu_parallelism, Si::Sink<char, Si::success>::interface &output)
+	                                          unsigned cpu_parallelism, cdm::configuration target, Si::Sink<char, Si::success>::interface &output)
 	{
 		Si::optional<ventura::absolute_path> const applications = ventura::parent(application_source);
 		if (!applications)
@@ -37,7 +37,7 @@ namespace cdm
 		ventura::absolute_path const boost_source = *cdm / "original_sources/boost_1_59_0";
 		cdm::cppnetlib_paths const cppnetlib_installed =
 		    cdm::install_cppnetlib(cppnetlib_source, boost_source, module_temporaries, module_permanent,
-		                           ventura::cmake_exe, cpu_parallelism, output);
+		                           ventura::cmake_exe, cpu_parallelism, target, output);
 
 		cmake_argument_builder<decltype(arguments) &> argument_builder(arguments);
 		argument_builder.define("CPPNETLIB_PREFIX_PATH",
@@ -77,6 +77,6 @@ int main()
 			        std::cout << argument;
 		        }
 		    }),
-	    module_temporaries, cdm::locate_cache_for_this_binary(), application, cpu_parallelism, output);
+	    module_temporaries, cdm::locate_cache_for_this_binary(), application, cpu_parallelism, cdm::approximate_configuration_of_this_binary(), output);
 	std::cout << '\n';
 }

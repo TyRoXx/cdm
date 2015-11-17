@@ -37,8 +37,7 @@ namespace cdm
 #endif
 				int const rc = ventura::run_process(exe, arguments, copy_of_boost, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                                    ventura::environment_inheritance::inherit)
-				                   .get();
+				                                    ventura::environment_inheritance::inherit).get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("bootstrap failed");
@@ -87,7 +86,7 @@ namespace cdm
 						                arguments.emplace_back(SILICIUM_OS_STR("toolset=gcc-4.9"));
 						                break;
 
-					                case gcc_version::v5_0:
+					                case gcc_version::v5:
 						                arguments.emplace_back(SILICIUM_OS_STR("toolset=gcc-5.0"));
 						                break;
 					                }
@@ -108,8 +107,7 @@ namespace cdm
 				                                    ,
 				                                    arguments, copy_of_boost, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                                    ventura::environment_inheritance::inherit)
-				                   .get();
+				                                    ventura::environment_inheritance::inherit).get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("b2 failed");

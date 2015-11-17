@@ -18,7 +18,7 @@ namespace cdm
 		v4_7,
 		v4_8,
 		v4_9,
-		v5_0
+		v5
 	};
 
 	enum class windows_flavor
@@ -80,8 +80,24 @@ namespace cdm
 #else
 #error unsupported version of Visual Studio
 #endif
-#elif defined(__linux__)
-		    linux_flavor(__GLIBCXX__)
+#elif defined(__GNUC__)
+#if __GNUC__ == 4
+#if __GNUC_MINOR__ == 6
+		    gcc_version::v4_6
+#elif __GNUC_MINOR__ == 7
+		    gcc_version::v4_7
+#elif __GNUC_MINOR__ == 8
+		    gcc_version::v4_8
+#elif __GNUC_MINOR__ == 9
+		    gcc_version::v4_9
+#else
+#error unsupported GCC 4 minor version
+#endif
+#elif __GNUC__ == 5
+		    gcc_version::v5
+#else
+#error unsupported GCC version
+#endif
 #else
 #error unsupported compiler or operating system
 #endif
@@ -114,8 +130,8 @@ namespace cdm
 		case gcc_version::v4_9:
 			Si::append(output, "4.9");
 			break;
-		case gcc_version::v5_0:
-			Si::append(output, "5.0");
+		case gcc_version::v5:
+			Si::append(output, "5");
 			break;
 		}
 	}
