@@ -98,6 +98,8 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 			BOOST_REQUIRE(!generated_cmake_arguments.empty());
 		}
 
+		std::cerr << generated_cmake_arguments << "\n";
+
 		{
 			std::vector<Si::noexcept_string> arguments;
 			boost::algorithm::split(arguments, generated_cmake_arguments, [](char c)
