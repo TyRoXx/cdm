@@ -31,7 +31,8 @@ BOOST_AUTO_TEST_CASE(test_using_rapidjson)
 	    boost::thread::hardware_concurrency();
 #endif
 	CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, cdm::locate_cache_for_this_binary(), app_source,
-	                                   application_build_dir, cpu_parallelism, output);
+	                                   application_build_dir, cpu_parallelism,
+	                                   cdm::approximate_configuration_of_this_binary(), output);
 	{
 		std::vector<Si::os_string> arguments;
 		arguments.emplace_back(SILICIUM_OS_STR("--build"));

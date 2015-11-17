@@ -10,6 +10,7 @@ namespace
 	ventura::absolute_path build_configure(ventura::absolute_path const &application_source,
 	                                       ventura::absolute_path const &temporary,
 	                                       Si::optional<ventura::absolute_path> const &boost_root,
+	                                       cdm::configuration const &target,
 	                                       Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const repository =
@@ -85,7 +86,7 @@ namespace
 			arguments.emplace_back("-DCDM_CONFIGURE_INCLUDE_DIRS=" + ventura::to_utf8_string(application_source) + ";" +
 			                       ventura::to_utf8_string(modules) + ";" + ventura::to_utf8_string(repository));
 			arguments.emplace_back(ventura::to_utf8_string(source));
-			cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
+			cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments), target);
 			if (ventura::run_process(ventura::cmake_exe, arguments, build, output,
 			                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
 			                         ventura::environment_inheritance::inherit).get() != 0)
@@ -145,11 +146,11 @@ namespace cdm
 	void do_configure(ventura::absolute_path const &temporary, ventura::absolute_path const &module_permanent,
 	                  ventura::absolute_path const &application_source,
 	                  ventura::absolute_path const &application_build_dir,
-	                  Si::optional<ventura::absolute_path> const &boost_root,
+	                  Si::optional<ventura::absolute_path> const &boost_root, cdm::configuration const &target,
 	                  Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const configure_executable =
-		    build_configure(application_source, temporary, boost_root, output);
+		    build_configure(application_source, temporary, boost_root, target, output);
 		run_configure(configure_executable, module_permanent, application_source, application_build_dir, output);
 	}
 }

@@ -1,5 +1,6 @@
 #include <ventura/absolute_path.hpp>
 #include <silicium/sink/sink.hpp>
+#include <cdm/cache_organization.hpp>
 
 namespace CDM_CONFIGURE_NAMESPACE
 {
@@ -7,7 +8,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 	// which is #included next.
 	void configure(ventura::absolute_path const &module_temporaries, ventura::absolute_path const &module_permanent,
 	               ventura::absolute_path const &application_source,
-	               ventura::absolute_path const &application_build_dir, Si::Sink<char, Si::success>::interface &output);
+	               ventura::absolute_path const &application_build_dir, cdm::configuration const &target,
+	               Si::Sink<char, Si::success>::interface &output);
 }
 
 // This header is provided by the client application and is expected to define the
@@ -102,7 +104,7 @@ int main(int argc, char **argv)
 		    boost::thread::hardware_concurrency();
 #endif
 		CDM_CONFIGURE_NAMESPACE::configure(module_temporaries, module_permanent, application_source, application_build,
-		                                   cpu_parallelism, output);
+		                                   cpu_parallelism, cdm::approximate_configuration_of_this_binary(), output);
 	}
 	catch (std::exception const &ex)
 	{

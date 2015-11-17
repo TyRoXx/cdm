@@ -14,12 +14,11 @@ namespace cdm
 		ventura::absolute_path cmake_prefix_path;
 	};
 
-	inline cppnetlib_paths install_cppnetlib(ventura::absolute_path const &cppnetlib_source,
-	                                         ventura::absolute_path const &boost_source,
-	                                         ventura::absolute_path const &temporary,
-	                                         ventura::absolute_path const &install_root,
-	                                         ventura::absolute_path const &cmake_exe, unsigned make_parallelism,
-	                                         cdm::configuration target, Si::Sink<char, Si::success>::interface &output)
+	inline cppnetlib_paths
+	install_cppnetlib(ventura::absolute_path const &cppnetlib_source, ventura::absolute_path const &boost_source,
+	                  ventura::absolute_path const &temporary, ventura::absolute_path const &install_root,
+	                  ventura::absolute_path const &cmake_exe, unsigned make_parallelism,
+	                  cdm::configuration const &target, Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const module_in_cache = install_root / "cppnetlib";
 		if (!ventura::file_exists(module_in_cache, Si::throw_))
@@ -43,7 +42,7 @@ namespace cdm
 				    cdm::install_boost(boost_source, boost_temp, install_root, make_parallelism, target, output);
 				cdm::generate_cmake_definitions_for_using_boost(Si::make_container_sink(arguments),
 				                                                boost_installed.root);
-				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
+				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments), target);
 				arguments.emplace_back(ventura::to_utf8_string(cppnetlib_source));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),

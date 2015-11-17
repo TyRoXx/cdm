@@ -87,7 +87,8 @@ int main(int argc, char **argv)
 			                  throw std::invalid_argument("The temporary directory argument must be an absolute path.");
 			              });
 		auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
-		cdm::do_configure(temporary_root, module_permanent, application_source, application_build, Si::none, output);
+		cdm::do_configure(temporary_root, module_permanent, application_source, application_build, Si::none,
+		                  cdm::approximate_configuration_of_this_binary(), output);
 		LOG("Your application has been configured.");
 	}
 	catch (std::exception const &ex)

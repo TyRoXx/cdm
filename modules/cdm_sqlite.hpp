@@ -65,7 +65,7 @@ namespace cdm
 	inline sqlite_paths install_sqlite(ventura::absolute_path const &original_source,
 	                                   ventura::absolute_path const &temporarily_writable,
 	                                   ventura::absolute_path const &install_root,
-	                                   ventura::absolute_path const &cmake_exe,
+	                                   ventura::absolute_path const &cmake_exe, cdm::configuration const &target,
 	                                   Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const in_cache = install_root / "sqlite3";
@@ -92,7 +92,7 @@ namespace cdm
 
 			{
 				std::vector<Si::noexcept_string> arguments;
-				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
+				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments), target);
 				arguments.emplace_back(".");
 				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
 				                              std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),

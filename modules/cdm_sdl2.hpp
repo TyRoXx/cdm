@@ -19,7 +19,8 @@ namespace cdm
 
 	inline sdl2_paths install_sdl2(ventura::absolute_path const &sdl2_source, ventura::absolute_path const &temporary,
 	                               ventura::absolute_path const &install_root, ventura::absolute_path const &cmake_exe,
-	                               unsigned make_parallelism, Si::Sink<char, Si::success>::interface &output)
+	                               unsigned make_parallelism, cdm::configuration const &target,
+	                               Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const module_in_cache = install_root / "sdl2";
 		if (!ventura::file_exists(module_in_cache, Si::throw_))
@@ -32,7 +33,7 @@ namespace cdm
 				arguments.emplace_back("-DCMAKE_INSTALL_PREFIX=" + ventura::to_utf8_string(construction_site));
 				arguments.emplace_back("-DSDL_STATIC=OFF");
 				arguments.emplace_back("-DSDL_SHARED=ON");
-				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
+				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments), target);
 				arguments.emplace_back(ventura::to_utf8_string(sdl2_source));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),

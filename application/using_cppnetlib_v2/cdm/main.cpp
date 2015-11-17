@@ -15,7 +15,7 @@ namespace cdm
 	void generate_cmake_application_arguments(StringSink &&arguments, ventura::absolute_path const &module_temporaries,
 	                                          ventura::absolute_path const &module_permanent,
 	                                          ventura::absolute_path const &application_source,
-	                                          unsigned cpu_parallelism, cdm::configuration target,
+	                                          unsigned cpu_parallelism, cdm::configuration const &target,
 	                                          Si::Sink<char, Si::success>::interface &output)
 	{
 		Si::optional<ventura::absolute_path> const applications = ventura::parent(application_source);
@@ -31,7 +31,7 @@ namespace cdm
 
 		ventura::absolute_path const gtest_source = *cdm / "original_sources/gtest-1.7.0";
 		cdm::gtest_paths const gtest_installed =
-		    cdm::install_gtest(gtest_source, module_temporaries, module_permanent, ventura::cmake_exe, output);
+		    cdm::install_gtest(gtest_source, module_temporaries, module_permanent, ventura::cmake_exe, target, output);
 
 		ventura::absolute_path const cppnetlib_source = *cdm / "original_sources/cpp-netlib-0.11.2-final";
 		ventura::recreate_directories(module_temporaries, Si::throw_);
@@ -46,7 +46,7 @@ namespace cdm
 		argument_builder.define("GTEST_INCLUDE_DIRS", ventura::to_utf8_string(gtest_installed.include));
 		argument_builder.define("GTEST_LIBRARIES", ventura::to_utf8_string(gtest_installed.library) + ";" +
 		                                               ventura::to_utf8_string(gtest_installed.library_main));
-		cdm::generate_default_cmake_generator_arguments(arguments);
+		cdm::generate_default_cmake_generator_arguments(arguments, target);
 		Si::append(arguments, ventura::to_utf8_string(application_source));
 	}
 }

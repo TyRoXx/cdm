@@ -19,6 +19,7 @@ namespace cdm
 	                                     ventura::absolute_path const &temporary,
 	                                     ventura::absolute_path const &install_root,
 	                                     ventura::absolute_path const &cmake_exe, unsigned make_parallelism,
+	                                     cdm::configuration const &target,
 	                                     Si::Sink<char, Si::success>::interface &output)
 	{
 		ventura::absolute_path const module_in_cache = install_root / "libgit2";
@@ -34,7 +35,7 @@ namespace cdm
 #ifdef _MSC_VER
 				arguments.emplace_back("-DSTATIC_CRT=OFF");
 #endif
-				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
+				cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments), target);
 				arguments.emplace_back(ventura::to_utf8_string(original_source));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),

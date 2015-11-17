@@ -5,7 +5,7 @@
 #include <silicium/variant.hpp>
 #include <silicium/memory_range.hpp>
 #include <silicium/sink/iterator_sink.hpp>
-#include <boost/lexical_cast.hpp>
+#include <silicium/sink/append.hpp>
 #if BOOST_VERSION >= 105600
 #include <boost/predef.h>
 #endif

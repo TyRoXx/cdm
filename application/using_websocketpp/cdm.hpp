@@ -27,7 +27,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		std::vector<Si::noexcept_string> arguments;
 		arguments.emplace_back("-DWEBSOCKETPP_INCLUDE_DIR=" + ventura::to_utf8_string(installed.include));
 		cdm::generate_cmake_definitions_for_using_boost(Si::make_container_sink(arguments), installed.boost_root);
-		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
+		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments), target);
 		arguments.emplace_back(ventura::to_utf8_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
 		                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),

@@ -14,7 +14,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 	void configure(ventura::absolute_path const &module_temporaries, ventura::absolute_path const &module_permanent,
 	               ventura::absolute_path const &application_source,
 	               ventura::absolute_path const &application_build_dir, unsigned cpu_parallelism,
-	               cdm::configuration target, Si::Sink<char, Si::success>::interface &output)
+	               cdm::configuration const &target, Si::Sink<char, Si::success>::interface &output)
 	{
 		Si::optional<ventura::absolute_path> const applications = ventura::parent(application_source);
 		if (!applications)
@@ -43,7 +43,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 
 		ventura::absolute_path const libgit2_source = sources / "libgit2-0.23.2";
 		cdm::libgit2_paths const libgit2installed = cdm::install_libgit2(
-		    libgit2_source, module_temporaries, module_permanent, ventura::cmake_exe, cpu_parallelism, output);
+		    libgit2_source, module_temporaries, module_permanent, ventura::cmake_exe, cpu_parallelism, target, output);
 
 		ventura::absolute_path const rapidjson_source = sources / "rapidjson-1.0.2";
 		cdm::rapidjson_paths const rapidjson_installed =
@@ -54,8 +54,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 		    cdm::install_rapidxml(rapidxml_source, module_temporaries, module_permanent, output);
 
 		ventura::absolute_path const sqlite3_source = sources / "sqlite-autoconf-3081101";
-		cdm::sqlite_paths const sqlite3_installed =
-		    cdm::install_sqlite(sqlite3_source, module_temporaries, module_permanent, ventura::cmake_exe, output);
+		cdm::sqlite_paths const sqlite3_installed = cdm::install_sqlite(
+		    sqlite3_source, module_temporaries, module_permanent, ventura::cmake_exe, target, output);
 
 		ventura::absolute_path const websocketpp_source =
 		    sources / "websocketpp-c5510d6de04917812b910a8dd44735c1f17061d9";
@@ -74,7 +74,7 @@ namespace CDM_CONFIGURE_NAMESPACE
 		arguments.emplace_back("-DSQLITE3_INCLUDE_DIRS=" + ventura::to_utf8_string(sqlite3_installed.include));
 		arguments.emplace_back("-DSQLITE3_LIBRARIES=" + ventura::to_utf8_string(sqlite3_installed.library));
 		arguments.emplace_back("-DWEBSOCKETPP_INCLUDE_DIR=" + ventura::to_utf8_string(websocketpp_installed.include));
-		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments));
+		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments), target);
 		arguments.emplace_back(ventura::to_utf8_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
 		                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
