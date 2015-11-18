@@ -127,6 +127,7 @@ namespace
 		std::vector<Si::os_string> arguments;
 #if CDM_TESTS_RUNNING_ON_APPVEYOR || CDM_TESTS_RUNNING_ON_TRAVIS_CI
 		arguments.emplace_back(SILICIUM_OS_STR("--ci"));
+		arguments.emplace_back(SILICIUM_OS_STR("1"));
 #endif
 		arguments.emplace_back(SILICIUM_OS_STR("-m"));
 		arguments.emplace_back(to_os_string(module_permanent));
