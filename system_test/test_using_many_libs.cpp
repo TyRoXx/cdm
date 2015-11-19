@@ -7,8 +7,10 @@
 #include <ventura/file_operations.hpp>
 #include <cdm/locate_cache.hpp>
 
-#if !defined(_MSC_VER) || (_MSC_VER != 1900)
-// websocketpp does not compille on VS 2015 yet
+#if (!defined(_MSC_VER) || (_MSC_VER != 1900)) && !SILICIUM_GCC46
+// websocketpp does not compille on VS 2015 yet.
+// GCC 4.6 is excluded because Catch requires C++11 for GCC 5 while websocketpp does not
+// compile with C++11 on GCC 4.6. Ignoring the ancient compiler is the best option here.
 
 namespace
 {
