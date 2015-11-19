@@ -16,7 +16,7 @@ namespace cdm
 			                switch (windows)
 			                {
 			                case windows_flavor::visual_studio_2013:
-				                Si::append(arguments, "-G \"Visual Studio 14 2013\"");
+				                Si::append(arguments, "-G \"Visual Studio 12 2013\"");
 				                break;
 
 			                case windows_flavor::visual_studio_2015:
