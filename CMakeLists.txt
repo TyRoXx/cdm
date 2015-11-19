@@ -153,6 +153,8 @@ if(WIN32)
 	else()
 		add_definitions("-DCDM_TEST_SDL2=0")
 	endif()
+else()
+	add_definitions("-DCDM_TEST_SDL2=1")
 endif()
 
 file(GLOB formatted "modules/*.hpp")
