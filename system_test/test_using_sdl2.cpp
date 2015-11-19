@@ -7,7 +7,7 @@
 #include <ventura/file_operations.hpp>
 #include <cdm/locate_cache.hpp>
 
-#if !defined(_MSC_VER) || (_MSC_VER != 1900)
+#if (!defined(_MSC_VER) || (_MSC_VER != 1900)) && CDM_TEST_SDL2
 // SDL2 does not compile on VC++ 2015 yet (WTF!)
 
 namespace
