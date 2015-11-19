@@ -8,6 +8,9 @@ find_package(Boost REQUIRED filesystem system)
 include_directories(${Boost_INCLUDE_DIR})
 
 include_directories(${CATCH_INCLUDE_DIRS})
+if(UNIX)
+	add_definitions("-std=c++0x")
+endif()
 
 include_directories(${RAPIDJSON_INCLUDE_DIR})
 
