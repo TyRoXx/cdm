@@ -1,3 +1,7 @@
+//Catch assumes that std::nullptr_t is available on GCC 5 without including
+//the corresponding header.
+#include <cstddef>
+
 #include <websocketpp/server.hpp>
 #include <websocketpp/config/asio_no_tls.hpp>
 #include <boost/network/protocol/http.hpp>
