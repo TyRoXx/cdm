@@ -39,7 +39,8 @@ namespace cdm
 #endif
 				int const rc = ventura::run_process(exe, arguments, copy_of_boost, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                                    ventura::environment_inheritance::inherit).get();
+				                                    ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("bootstrap failed");
@@ -125,7 +126,8 @@ namespace cdm
 				                                    ,
 				                                    arguments, copy_of_boost, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                                    ventura::environment_inheritance::inherit).get();
+				                                    ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("b2 failed");

@@ -41,23 +41,15 @@ BOOST_AUTO_TEST_CASE(test_using_sdl2)
 	    cdm::approximate_configuration_of_this_binary(), output);
 	{
 		std::vector<Si::os_string> arguments;
-		arguments.emplace_back(SILICIUM_OS_STR("--build"));
-		arguments.emplace_back(SILICIUM_OS_STR("."));
+		cdm::generate_cmake_build_arguments(Si::make_container_sink(arguments), target);
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
 		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
 		                                            ventura::environment_inheritance::inherit));
 	}
 	{
 		std::vector<Si::os_string> arguments;
-		ventura::relative_path const relative(
-#ifdef _MSC_VER
-		    "Debug/"
-#endif
-		    "using_sdl2"
-#ifdef _MSC_VER
-		    ".exe"
-#endif
-		    );
+		ventura::relative_path const relative =
+		    cdm::make_default_path_of_executable(*ventura::path_segment::create("using_sdl2"), target);
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir,
 		                                            output,
 		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),

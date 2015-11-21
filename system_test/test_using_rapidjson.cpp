@@ -30,29 +30,22 @@ BOOST_AUTO_TEST_CASE(test_using_rapidjson)
 #else
 	    boost::thread::hardware_concurrency();
 #endif
+	cdm::configuration const target = cdm::approximate_configuration_of_this_binary();
 	CDM_CONFIGURE_NAMESPACE::configure(
-	    module_temporaries, cdm::locate_cache_for_this_binary(), app_source, application_build_dir, cpu_parallelism,
-	    cdm::detect_this_binary_operating_system(CDM_TESTS_RUNNING_ON_TRAVIS_CI, CDM_TESTS_RUNNING_ON_APPVEYOR),
-	    cdm::approximate_configuration_of_this_binary(), output);
+	    module_temporaries, cdm::locate_cache(target), app_source, application_build_dir, cpu_parallelism,
+	    cdm::detect_this_binary_operating_system(CDM_TESTS_RUNNING_ON_TRAVIS_CI, CDM_TESTS_RUNNING_ON_APPVEYOR), target,
+	    output);
 	{
-		std::vector<Si::os_string> arguments;
-		arguments.emplace_back(SILICIUM_OS_STR("--build"));
-		arguments.emplace_back(SILICIUM_OS_STR("."));
+		std::vector<Si::noexcept_string> arguments;
+		cdm::generate_cmake_build_arguments(Si::make_container_sink(arguments), target);
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
 		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
 		                                            ventura::environment_inheritance::inherit));
 	}
 	{
 		std::vector<Si::os_string> arguments;
-		ventura::relative_path const relative(
-#ifdef _MSC_VER
-		    "Debug/"
-#endif
-		    "using_rapidjson"
-#ifdef _MSC_VER
-		    ".exe"
-#endif
-		    );
+		ventura::relative_path const relative =
+		    cdm::make_default_path_of_executable(*ventura::path_segment::create("using_rapidjson"), target);
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir,
 		                                            output,
 		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),

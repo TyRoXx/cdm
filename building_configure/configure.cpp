@@ -89,31 +89,26 @@ namespace
 			cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments), target);
 			if (ventura::run_process(ventura::cmake_exe, arguments, build, output,
 			                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-			                         ventura::environment_inheritance::inherit).get() != 0)
+			                         ventura::environment_inheritance::inherit)
+			        .get() != 0)
 			{
 				throw std::runtime_error("Could not CMake-configure the cdm configure executable");
 			}
 		}
 		{
-			std::vector<Si::os_string> arguments;
-			arguments.emplace_back(SILICIUM_OS_STR("--build"));
-			arguments.emplace_back(SILICIUM_OS_STR("."));
+			std::vector<Si::noexcept_string> arguments;
+			cdm::generate_cmake_build_arguments(Si::make_container_sink(arguments), target);
 			if (ventura::run_process(ventura::cmake_exe, arguments, build, output,
 			                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-			                         ventura::environment_inheritance::inherit).get() != 0)
+			                         ventura::environment_inheritance::inherit)
+			        .get() != 0)
 			{
 				throw std::runtime_error("Could not CMake --build the cdm configure executable");
 			}
 		}
-		ventura::absolute_path built_executable = build / ventura::relative_path(
-#ifdef _MSC_VER
-		                                                      "Debug/"
-#endif
-		                                                      "configure"
-#ifdef _WIN32
-		                                                      ".exe"
-#endif
-		                                                      );
+		ventura::relative_path const relative =
+		    cdm::make_default_path_of_executable(*ventura::path_segment::create("configure"), target);
+		ventura::absolute_path built_executable = build / relative;
 		return built_executable;
 	}
 
@@ -137,7 +132,8 @@ namespace
 		arguments.emplace_back(to_os_string(application_build_dir));
 		int const rc = ventura::run_process(configure_executable, arguments, application_build_dir, output,
 		                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-		                                    ventura::environment_inheritance::inherit).get();
+		                                    ventura::environment_inheritance::inherit)
+		                   .get();
 		if (rc != 0)
 		{
 			throw std::runtime_error("Could not configure the application: " + boost::lexical_cast<std::string>(rc));

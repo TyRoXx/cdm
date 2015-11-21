@@ -1,5 +1,5 @@
-//Catch assumes that std::nullptr_t is available on GCC 5 without including
-//the corresponding header.
+// Catch assumes that std::nullptr_t is available on GCC 5 without including
+// the corresponding header.
 #include <cstddef>
 
 #include <websocketpp/server.hpp>

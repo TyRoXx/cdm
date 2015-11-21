@@ -55,6 +55,55 @@ namespace cdm
 			                }
 			            });
 	}
+
+	template <class StringSink>
+	void generate_cmake_build_arguments(StringSink &&arguments, configuration const &target)
+	{
+		Si::append(arguments, "--build");
+		Si::append(arguments, ".");
+		Si::visit<void>(target.platform,
+		                [&arguments, &target](windows_flavor const &)
+		                {
+			                Si::append(arguments, "--config");
+			                Si::append(arguments, target.is_debug ? "Debug" : "Release");
+			            },
+		                [](gcc_version)
+		                {
+			            });
+	}
+
+	inline ventura::relative_path make_default_path_of_executable(ventura::path_segment const &name,
+	                                                              configuration const &target)
+	{
+		return Si::visit<ventura::relative_path>(target.platform,
+		                                         [&target, &name](windows_flavor const &)
+		                                         {
+			                                         return ventura::relative_path(target.is_debug ? "Debug"
+			                                                                                       : "Release") /
+			                                                (name + *ventura::path_segment::create(".exe"));
+			                                     },
+		                                         [&name](gcc_version)
+		                                         {
+			                                         return ventura::relative_path(name);
+			                                     });
+	}
+
+	inline ventura::relative_path make_default_path_of_static_library(ventura::path_segment const &name,
+	                                                                  configuration const &target)
+	{
+		return Si::visit<ventura::relative_path>(
+		    target.platform,
+		    [&target, &name](windows_flavor const &)
+		    {
+			    return ventura::relative_path(target.is_debug ? "Debug" : "Release") /
+			           (name + *ventura::path_segment::create(".lib"));
+			},
+		    [&name](gcc_version)
+		    {
+			    return ventura::relative_path(*ventura::path_segment::create("lib") + name +
+			                                  *ventura::path_segment::create(".a"));
+			});
+	}
 }
 
 #endif

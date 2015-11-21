@@ -1,5 +1,5 @@
-//Catch assumes that std::nullptr_t is available on GCC 5 without including
-//the corresponding header.
+// Catch assumes that std::nullptr_t is available on GCC 5 without including
+// the corresponding header.
 #include <cstddef>
 
 #define CATCH_CONFIG_MAIN // This tells Catch to provide a main() - only do this in one cpp file

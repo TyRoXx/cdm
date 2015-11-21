@@ -64,31 +64,25 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 		cdm::generate_default_cmake_generator_arguments(Si::make_container_sink(arguments), target);
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, build_configure, output,
 		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-		                                            ventura::environment_inheritance::inherit).get());
+		                                            ventura::environment_inheritance::inherit)
+		                           .get());
 	}
 
 	{
 		std::vector<Si::noexcept_string> arguments;
-		arguments.emplace_back("--build");
-		arguments.emplace_back(".");
+		cdm::generate_cmake_build_arguments(Si::make_container_sink(arguments), target);
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, build_configure, output,
 		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-		                                            ventura::environment_inheritance::inherit).get());
+		                                            ventura::environment_inheritance::inherit)
+		                           .get());
 	}
 
 	{
 		Si::noexcept_string generated_cmake_arguments;
 		{
 			std::vector<Si::noexcept_string> arguments;
-			ventura::relative_path const relative(
-#ifdef _WIN32
-			    "Debug/"
-#endif
-			    "configure"
-#ifdef _WIN32
-			    ".exe"
-#endif
-			    );
+			ventura::relative_path const relative =
+			    cdm::make_default_path_of_executable(*ventura::path_segment::create("configure"), target);
 			auto configure_sink =
 			    Si::Sink<char, Si::success>::erase(Si::make_container_sink(generated_cmake_arguments));
 			ventura::process_parameters parameters;
@@ -121,30 +115,24 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 			BOOST_REQUIRE_EQUAL(
 			    0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, console_output,
 			                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-			                            ventura::environment_inheritance::inherit).get());
+			                            ventura::environment_inheritance::inherit)
+			           .get());
 		}
 	}
 
 	{
 		std::vector<Si::noexcept_string> arguments;
-		arguments.emplace_back("--build");
-		arguments.emplace_back(".");
+		cdm::generate_cmake_build_arguments(Si::make_container_sink(arguments), target);
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
 		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-		                                            ventura::environment_inheritance::inherit).get());
+		                                            ventura::environment_inheritance::inherit)
+		                           .get());
 	}
 
 	{
 		std::vector<Si::os_string> arguments;
-		ventura::relative_path const relative(
-#ifdef _WIN32
-		    "Debug/"
-#endif
-		    "using_cppnetlib_v2"
-#ifdef _WIN32
-		    ".exe"
-#endif
-		    );
+		ventura::relative_path const relative =
+		    cdm::make_default_path_of_executable(*ventura::path_segment::create("using_cppnetlib_v2"), target);
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir,
 		                                            output,
 		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),

@@ -34,7 +34,8 @@ namespace CDM_CONFIGURE_NAMESPACE
 		arguments.emplace_back(ventura::to_utf8_string(application_source));
 		if (ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
 		                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-		                         ventura::environment_inheritance::inherit).get() != 0)
+		                         ventura::environment_inheritance::inherit)
+		        .get() != 0)
 		{
 			throw std::runtime_error("CMake configure failed");
 		}

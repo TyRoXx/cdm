@@ -25,6 +25,7 @@ BOOST_AUTO_TEST_CASE(test_run_configure_command_line)
 	auto output = cdm::make_program_output_printer(Si::ostream_ref_sink(*log_file));
 	ventura::absolute_path const application_build = temporary_root / "application_build";
 	ventura::create_directories(application_build, Si::throw_);
-	cdm::do_configure(temporary_root, cdm::locate_cache_for_this_binary(), application, application_build,
-	                  cdm::get_boost_root_for_testing(), cdm::approximate_configuration_of_this_binary(), output);
+	cdm::configuration const target = cdm::approximate_configuration_of_this_binary();
+	cdm::do_configure(temporary_root, cdm::locate_cache(target), application, application_build,
+	                  cdm::get_boost_root_for_testing(), target, output);
 }

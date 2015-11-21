@@ -48,7 +48,8 @@ namespace cdm
 				arguments.emplace_back(ventura::to_utf8_string(cppnetlib_source));
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                                    ventura::environment_inheritance::inherit).get();
+				                                    ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake configure failed");
@@ -81,15 +82,15 @@ namespace cdm
 				                       ),
 				                   arguments, build_dir, output,
 				                   std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                   ventura::environment_inheritance::inherit).get();
+				                   ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");
 				}
 #else
 				std::vector<Si::noexcept_string> arguments;
-				arguments.emplace_back("--build");
-				arguments.emplace_back(".");
+				cdm::generate_cmake_build_arguments(Si::make_container_sink(arguments), target);
 				arguments.emplace_back("--");
 #ifdef _WIN32
 				boost::ignore_unused_variable_warning(make_parallelism);
@@ -99,7 +100,8 @@ namespace cdm
 				arguments.emplace_back("install");
 				int const rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
 				                                    std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                                    ventura::environment_inheritance::inherit).get();
+				                                    ventura::environment_inheritance::inherit)
+				                   .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");

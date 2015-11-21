@@ -65,6 +65,7 @@ int main()
 #endif
 	auto output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
 	bool needs_space = false;
+	cdm::configuration const target = cdm::approximate_configuration_of_this_binary();
 	cdm::generate_cmake_application_arguments(
 	    Si::make_function_sink<Si::noexcept_string>(
 	        [&needs_space](Si::iterator_range<Si::noexcept_string const *> arguments)
@@ -79,8 +80,8 @@ int main()
 			        std::cout << argument;
 		        }
 		    }),
-	    module_temporaries, cdm::locate_cache_for_this_binary(), application, cpu_parallelism,
+	    module_temporaries, cdm::locate_cache(target), application, cpu_parallelism,
 	    cdm::detect_this_binary_operating_system(CDM_TESTS_RUNNING_ON_TRAVIS_CI, CDM_TESTS_RUNNING_ON_APPVEYOR),
-	    cdm::approximate_configuration_of_this_binary(), output);
+	    target, output);
 	std::cout << '\n';
 }

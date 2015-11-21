@@ -10,11 +10,6 @@ namespace cdm
 	{
 		return ventura::get_home() / ventura::relative_path(".cdm_cache") / get_configuration_in_cache(config);
 	}
-
-	inline ventura::absolute_path locate_cache_for_this_binary()
-	{
-		return locate_cache(approximate_configuration_of_this_binary());
-	}
 }
 
 #endif

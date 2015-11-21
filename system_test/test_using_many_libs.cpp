@@ -43,8 +43,7 @@ BOOST_AUTO_TEST_CASE(test_using_many_libs)
 	    cdm::approximate_configuration_of_this_binary(), output);
 	{
 		std::vector<Si::os_string> arguments;
-		arguments.emplace_back(SILICIUM_OS_STR("--build"));
-		arguments.emplace_back(SILICIUM_OS_STR("."));
+		cdm::generate_cmake_build_arguments(Si::make_container_sink(arguments), target);
 		auto console_output = Si::Sink<char, Si::success>::erase(Si::ostream_ref_sink(std::cerr));
 		BOOST_REQUIRE_EQUAL(0,
 		                    ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, console_output,
@@ -53,15 +52,8 @@ BOOST_AUTO_TEST_CASE(test_using_many_libs)
 	}
 	{
 		std::vector<Si::os_string> arguments;
-		ventura::relative_path const relative(
-#ifdef _MSC_VER
-		    "Debug/"
-#endif
-		    "using_many_libs"
-#ifdef _MSC_VER
-		    ".exe"
-#endif
-		    );
+		ventura::relative_path const relative =
+		    cdm::make_default_path_of_executable(*ventura::path_segment::create("using_many_libs"), target);
 		BOOST_REQUIRE_EQUAL(0, ventura::run_process(application_build_dir / relative, arguments, application_build_dir,
 		                                            output,
 		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),

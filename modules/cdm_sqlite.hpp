@@ -18,15 +18,6 @@ namespace cdm
 
 	namespace sqlite3
 	{
-		inline ventura::relative_path make_static_lib_build_path(ventura::path_segment const &name_base)
-		{
-#ifdef _WIN32
-			return ventura::relative_path("Debug") / (name_base + *ventura::path_segment::create(".lib"));
-#else
-			return ventura::relative_path("lib" + name_base.underlying() + ".a");
-#endif
-		}
-
 		inline ventura::relative_path make_static_lib_install_path(ventura::path_segment const &name_base)
 		{
 #ifdef _WIN32
@@ -96,7 +87,8 @@ namespace cdm
 				arguments.emplace_back(".");
 				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
 				                              std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                              ventura::environment_inheritance::inherit).get();
+				                              ventura::environment_inheritance::inherit)
+				             .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake configure failed");
@@ -104,11 +96,11 @@ namespace cdm
 			}
 			{
 				std::vector<Si::noexcept_string> arguments;
-				arguments.emplace_back("--build");
-				arguments.emplace_back(".");
+				cdm::generate_cmake_build_arguments(Si::make_container_sink(arguments), target);
 				int rc = ventura::run_process(cmake_exe, arguments, build_dir, output,
 				                              std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-				                              ventura::environment_inheritance::inherit).get();
+				                              ventura::environment_inheritance::inherit)
+				             .get();
 				if (rc != 0)
 				{
 					throw std::runtime_error("cmake build failed");
@@ -120,7 +112,8 @@ namespace cdm
 				ventura::absolute_path const lib_dir = construction_site / "lib";
 				ventura::create_directories(lib_dir, Si::throw_);
 				ventura::copy(
-				    build_dir / sqlite3::make_static_lib_build_path(*ventura::path_segment::create("sqlite3")),
+				    build_dir /
+				        cdm::make_default_path_of_static_library(*ventura::path_segment::create("sqlite3"), target),
 				    lib_dir / sqlite3::make_static_lib_install_path(*ventura::path_segment::create("sqlite3")),
 				    Si::throw_);
 				ventura::absolute_path const include_dir = construction_site / "include";
