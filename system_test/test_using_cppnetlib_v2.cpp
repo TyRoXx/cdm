@@ -99,8 +99,9 @@ BOOST_AUTO_TEST_CASE(test_using_cppnetlib_v2)
 			auto console_output_sink = Si::Sink<char, Si::success>::erase(Si::make_container_sink(console_output));
 			parameters.err = &console_output_sink;
 			parameters.out = &configure_sink;
-			BOOST_REQUIRE_EQUAL(0, ventura::run_process(parameters));
+			Si::error_or<int> rc = ventura::run_process(parameters);
 			boost::copy(console_output, std::ostreambuf_iterator<char>(std::cerr));
+			BOOST_REQUIRE_EQUAL(0, rc.get());
 			BOOST_REQUIRE(!generated_cmake_arguments.empty());
 		}
 

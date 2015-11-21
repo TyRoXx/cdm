@@ -6,6 +6,7 @@
 #include <silicium/sink/ostream_sink.hpp>
 #include <ventura/file_operations.hpp>
 #include <cdm/locate_cache.hpp>
+#include <boost/circular_buffer.hpp>
 
 namespace
 {
@@ -40,9 +41,14 @@ BOOST_AUTO_TEST_CASE(test_using_boost)
 		std::vector<Si::os_string> arguments;
 		arguments.emplace_back(SILICIUM_OS_STR("--build"));
 		arguments.emplace_back(SILICIUM_OS_STR("."));
-		BOOST_REQUIRE_EQUAL(0, ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, output,
-		                                            std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
-		                                            ventura::environment_inheritance::inherit));
+		boost::circular_buffer<char> console_output(0xffff);
+		auto console_output_sink = Si::Sink<char, Si::success>::erase(Si::make_container_sink(console_output));
+		Si::error_or<int> rc =
+		    ventura::run_process(ventura::cmake_exe, arguments, application_build_dir, console_output_sink,
+		                         std::vector<std::pair<Si::os_char const *, Si::os_char const *>>(),
+		                         ventura::environment_inheritance::inherit);
+		boost::copy(console_output, std::ostreambuf_iterator<char>(std::cerr));
+		BOOST_REQUIRE_EQUAL(0, rc.get());
 	}
 	{
 		std::vector<Si::os_string> arguments;
