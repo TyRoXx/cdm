@@ -2,6 +2,8 @@
 An experimental application for managing C or C++ headers and pre-built
 libraries.
 
+You can find a more serious approach here: https://github.com/conan-io/conan
+
 # Continuous Integration
 * GCC on Ubuntu 12.04: [![Build Status](https://travis-ci.org/TyRoXx/cdm.svg)](https://travis-ci.org/TyRoXx/cdm)
 * Visual C++ 2013: [![Build status](https://ci.appveyor.com/api/projects/status/gicp12vo9mldy1fa?svg=true)](https://ci.appveyor.com/project/TyRoXx/cdm)
